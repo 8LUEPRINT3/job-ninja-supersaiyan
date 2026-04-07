@@ -493,7 +493,7 @@ async function loadJobsCache() {
   if (JOBS_CACHE) return JOBS_CACHE
   try {
     const controller = new AbortController()
-    const timer = setTimeout(() => controller.abort(), 8000)
+    const timer = setTimeout(() => controller.abort(), 15000)
     const r = await fetch('./jobs.json?v=' + Date.now(), { signal: controller.signal })
     clearTimeout(timer)
     if (!r.ok) throw new Error('no cache')
@@ -554,14 +554,17 @@ async function search() {
     return
   }
 
-  // Fallback: live API
+  // Fallback: live API (with timeout)
   const tag = rawQ ? normalizeTag(rawQ) : ''
   let url = 'https://jobicy.com/api/v2/remote-jobs?count=50'
   if (tag) url += '&tag=' + encodeURIComponent(tag)
   if (industry) url += '&industry=' + encodeURIComponent(industry)
 
   try {
-    const r = await fetch(url)
+    const ac = new AbortController()
+    const t = setTimeout(() => ac.abort(), 10000)
+    const r = await fetch(url, { signal: ac.signal })
+    clearTimeout(t)
     if (!r.ok) throw new Error('HTTP ' + r.status)
     const d = await r.json()
     let list = (d.jobs || []).map(j => ({
@@ -593,15 +596,13 @@ async function search() {
       else geoNote = `No ${geo} listings — showing all locations`
     }
 
-    if (!list.length) {
-      const r2 = await fetch('https://jobicy.com/api/v2/remote-jobs?count=30')
-      const d2 = await r2.json()
-      renderResults((d2.jobs||[]).map(j => ({title:j.jobTitle,company:j.companyName,location:j.jobGeo||'Worldwide',url:j.url,remote:true,date:j.pubDate,source:'Jobicy',excerpt:(j.jobExcerpt||'').replace(/<[^>]*>/g,'').slice(0,200)})), `No results for "${rawQ}" — showing latest`, '⚡ Live API')
-    } else {
+    if (list.length) {
       renderResults(list, geoNote, '⚡ Live API')
+    } else {
+      el.innerHTML = '<div class="empty"><h3>No results found</h3><p>Try simpler keywords</p></div>'
     }
   } catch(e) {
-    el.innerHTML = `<div class="empty"><h3>⚠️ Search failed</h3><p style="font-size:.8rem;margin-top:.4rem">${e.message}</p></div>`
+    el.innerHTML = `<div class="empty"><h3>⚠️ Could not load jobs</h3><p style="font-size:.8rem;margin-top:.4rem">Check your connection and try again.<br><small>${e.message}</small></p><br><button class="btn btn-gold" onclick="search()">🔄 Retry</button></div>`
   }
 }
 
