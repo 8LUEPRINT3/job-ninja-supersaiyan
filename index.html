@@ -194,12 +194,47 @@
     <input class="search-input" id="q" placeholder="Search — e.g. IT support, security, devops, data analyst..." onkeydown="if(event.key==='Enter')search()" />
     <select class="filter-sel" id="industry">
       <option value="">All Industries</option>
-      <option value="Technical Support">IT / Tech Support</option>
-      <option value="Software Engineering">Software Engineering</option>
-      <option value="DevOps">DevOps / Sysadmin</option>
-      <option value="Data Analysis">Data Analysis</option>
-      <option value="Cybersecurity">Cybersecurity</option>
-      <option value="AI / ML">AI / ML</option>
+      <optgroup label="🖥️ Tech">
+        <option value="Technical Support">IT / Tech Support</option>
+        <option value="Software Engineering">Software Engineering</option>
+        <option value="DevOps">DevOps / Sysadmin</option>
+        <option value="Cybersecurity">Cybersecurity</option>
+        <option value="Data Analysis">Data / Analytics</option>
+        <option value="AI / ML">AI / Machine Learning</option>
+        <option value="Mobile">Mobile Development</option>
+        <option value="QA">QA / Testing</option>
+      </optgroup>
+      <optgroup label="💼 Business">
+        <option value="Project Management">Project Management</option>
+        <option value="Product Management">Product Management</option>
+        <option value="Business Development">Business Development</option>
+        <option value="Sales">Sales</option>
+        <option value="Finance">Finance / Accounting</option>
+        <option value="Legal">Legal</option>
+        <option value="Operations">Operations</option>
+        <option value="Consulting">Consulting</option>
+      </optgroup>
+      <optgroup label="🎨 Creative">
+        <option value="Design">Design / UX</option>
+        <option value="Marketing">Marketing</option>
+        <option value="Content">Content / Writing</option>
+        <option value="Social Media">Social Media</option>
+        <option value="Video">Video / Media</option>
+      </optgroup>
+      <optgroup label="🤝 People">
+        <option value="Human Resources">Human Resources</option>
+        <option value="Customer Support">Customer Support</option>
+        <option value="Recruiting">Recruiting</option>
+        <option value="Education">Education / Training</option>
+        <option value="Community">Community Management</option>
+      </optgroup>
+      <optgroup label="🏥 Other">
+        <option value="Healthcare">Healthcare</option>
+        <option value="Research">Research / Science</option>
+        <option value="Real Estate">Real Estate</option>
+        <option value="Logistics">Logistics / Supply Chain</option>
+        <option value="Non-profit">Non-profit / NGO</option>
+      </optgroup>
     </select>
     <select class="filter-sel" id="geo">
       <option value="">Anywhere</option>

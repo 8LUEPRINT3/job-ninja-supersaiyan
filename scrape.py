@@ -8,10 +8,21 @@ import json, urllib.request, urllib.error, time, os
 from datetime import datetime, timezone
 
 TAGS = [
+    # Tech
     'support', 'security', 'devops', 'cloud', 'network',
     'data', 'python', 'javascript', 'backend', 'fullstack',
-    'product', 'project', 'finance', 'design', 'marketing',
-    'hr', 'writing', 'ai', 'ml', 'mobile',
+    'ai', 'ml', 'mobile', 'qa', 'ios', 'android',
+    # Business
+    'sales', 'finance', 'accounting', 'legal', 'operations',
+    'product', 'project', 'business', 'consulting', 'strategy',
+    # Creative
+    'design', 'marketing', 'content', 'writing', 'social',
+    'video', 'ux', 'brand', 'seo', 'copywriting',
+    # People
+    'hr', 'recruiting', 'customer', 'education', 'community',
+    'coaching', 'training',
+    # Other
+    'healthcare', 'research', 'logistics', 'nonprofit', 'real estate',
 ]
 
 def fetch(url, timeout=15):
@@ -76,8 +87,11 @@ def scrape_remotive():
     seen = set()
 
     categories = [
-        'software-development', 'devops', 'data',
-        'product', 'design', 'marketing', 'finance',
+        'software-development', 'devops-sysadmin', 'data',
+        'product', 'design', 'marketing', 'finance-legal',
+        'customer-support', 'sales', 'human-resources',
+        'project-management', 'business', 'writing',
+        'qa', 'medical-health', 'teaching-education',
         'all-others',
     ]
 
