@@ -191,7 +191,7 @@
 <!-- SEARCH -->
 <div class="page active" id="page-search">
   <div class="search-row">
-    <input class="search-input" id="q" placeholder="Search jobs — e.g. cybersecurity, sysadmin, IT support..." onkeydown="if(event.key==='Enter')search()" />
+    <input class="search-input" id="q" placeholder="Search — e.g. IT support, security, devops, data analyst..." onkeydown="if(event.key==='Enter')search()" />
     <select class="filter-sel" id="industry">
       <option value="">All Industries</option>
       <option value="Technical Support">IT / Tech Support</option>
@@ -208,6 +208,13 @@
       <option value="worldwide">Worldwide</option>
     </select>
     <button class="btn btn-gold" onclick="search()">Search</button>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;font-size:.8rem;color:#555577">
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+      <input type="checkbox" id="remote-only" checked style="accent-color:#7c7cff;width:15px;height:15px" onchange="search()" />
+      Remote only
+    </label>
+    <span id="cache-status" style="color:#333355"></span>
   </div>
   <div id="search-results">
     <div class="loading"><div class="spinner"></div><br>Loading jobs...</div>
@@ -400,18 +407,75 @@ function normalizeTag(q) {
   return TAG_MAP[lower] || lower.split(' ')[0] // fallback to first word
 }
 
+// ── JOB CACHE ───────────────────────────────────────────────
+let JOBS_CACHE = null
+let CACHE_UPDATED = null
+
+async function loadJobsCache() {
+  if (JOBS_CACHE) return JOBS_CACHE
+  try {
+    const r = await fetch('./jobs.json?v=' + Date.now())
+    if (!r.ok) throw new Error('no cache')
+    const d = await r.json()
+    JOBS_CACHE = d.jobs || []
+    CACHE_UPDATED = d.updated
+    console.log(`📦 Loaded ${JOBS_CACHE.length} jobs from cache (updated: ${CACHE_UPDATED})`)
+    return JOBS_CACHE
+  } catch {
+    console.log('No local cache — will use live API')
+    return null
+  }
+}
+
+function searchCache(jobs, q, industry, geo, remoteOnly) {
+  const qLow = q.toLowerCase()
+  return jobs.filter(j => {
+    const text = `${j.title} ${j.company} ${j.industry} ${j.tags?.join(' ')||''}`.toLowerCase()
+    if (q && !text.includes(qLow)) return false
+    if (industry && !`${j.industry} ${j.title}`.toLowerCase().includes(industry.toLowerCase())) return false
+    if (geo) {
+      const loc = (j.location||'').toLowerCase()
+      if (!loc.includes(geo.toLowerCase()) && !loc.includes('worldwide') && !loc.includes('anywhere') && !loc.includes('global')) return false
+    }
+    if (remoteOnly && !j.remote) return false
+    return true
+  })
+}
+
 // ── SEARCH ─────────────────────────────────────────────────
 async function search() {
   const rawQ = document.getElementById('q').value.trim()
   const industry = document.getElementById('industry').value
   const geo = document.getElementById('geo').value
+  const remoteOnly = document.getElementById('remote-only').checked
   const el = document.getElementById('search-results')
 
   el.innerHTML = '<div class="loading"><div class="spinner"></div><br>Hunting jobs...</div>'
 
-  // NOTE: Jobicy breaks when tag+geo combined. Fetch by tag/industry only, filter geo client-side.
-  let url = 'https://jobicy.com/api/v2/remote-jobs?count=50'
+  // Try local cache first
+  const cache = await loadJobsCache()
+  if (cache && cache.length) {
+    let results = searchCache(cache, rawQ, industry, geo, remoteOnly)
+    const updatedStr = CACHE_UPDATED ? `Last updated: ${new Date(CACHE_UPDATED).toLocaleString()}` : ''
+    if (results.length) {
+      renderResults(results, '', updatedStr)
+      return
+    }
+    // If geo filter caused 0 results, try without geo
+    if (geo) {
+      const noGeo = searchCache(cache, rawQ, industry, '', remoteOnly)
+      if (noGeo.length) {
+        renderResults(noGeo, `No ${geo} listings found — showing all locations`, updatedStr)
+        return
+      }
+    }
+    renderResults(cache.slice(0, 40), `No results for "${rawQ}" — showing latest jobs`, updatedStr)
+    return
+  }
+
+  // Fallback: live API
   const tag = rawQ ? normalizeTag(rawQ) : ''
+  let url = 'https://jobicy.com/api/v2/remote-jobs?count=50'
   if (tag) url += '&tag=' + encodeURIComponent(tag)
   if (industry) url += '&industry=' + encodeURIComponent(industry)
 
@@ -419,66 +483,80 @@ async function search() {
     const r = await fetch(url)
     if (!r.ok) throw new Error('HTTP ' + r.status)
     const d = await r.json()
-    let list = d.jobs || []
+    let list = (d.jobs || []).map(j => ({
+      id: `jcy-${j.id}`,
+      source: 'Jobicy',
+      title: j.jobTitle,
+      company: j.companyName,
+      logo: j.companyLogo,
+      location: j.jobGeo || 'Worldwide',
+      type: (j.jobType||[]).join(', '),
+      level: j.jobLevel || '',
+      industry: (j.jobIndustry||[]).join(', '),
+      salary_min: j.salaryMin,
+      salary_max: j.salaryMax,
+      salary_currency: j.salaryCurrency || 'USD',
+      excerpt: (j.jobExcerpt||'').replace(/<[^>]*>/g,'').slice(0,300),
+      url: j.url,
+      remote: true,
+      date: j.pubDate,
+    }))
 
-    // Client-side geo filter
     let geoNote = ''
     if (geo && list.length) {
-      const geoLower = geo.toLowerCase()
       const filtered = list.filter(j => {
-        const g = (j.jobGeo || '').toLowerCase()
-        return g.includes(geoLower) || g.includes('anywhere') || g.includes('worldwide')
+        const g = (j.location||'').toLowerCase()
+        return g.includes(geo.toLowerCase()) || g.includes('anywhere') || g.includes('worldwide')
       })
-      if (filtered.length) {
-        list = filtered
-      } else {
-        geoNote = `No ${geo} listings found for this search — showing all locations`
-      }
+      if (filtered.length) list = filtered
+      else geoNote = `No ${geo} listings — showing all locations`
     }
 
     if (!list.length) {
-      // Fallback: fetch latest jobs, no filters
       const r2 = await fetch('https://jobicy.com/api/v2/remote-jobs?count=30')
       const d2 = await r2.json()
-      renderResults(d2.jobs || [], `No results for "${rawQ}" — showing latest jobs`)
+      renderResults((d2.jobs||[]).map(j => ({title:j.jobTitle,company:j.companyName,location:j.jobGeo||'Worldwide',url:j.url,remote:true,date:j.pubDate,source:'Jobicy',excerpt:(j.jobExcerpt||'').replace(/<[^>]*>/g,'').slice(0,200)})), `No results for "${rawQ}" — showing latest`, '⚡ Live API')
     } else {
-      renderResults(list, geoNote)
+      renderResults(list, geoNote, '⚡ Live API')
     }
   } catch(e) {
     el.innerHTML = `<div class="empty"><h3>⚠️ Search failed</h3><p style="font-size:.8rem;margin-top:.4rem">${e.message}</p></div>`
   }
 }
 
-function renderResults(list, note) {
+function renderResults(list, note, cacheInfo) {
   const el = document.getElementById('search-results')
+  if (cacheInfo) document.getElementById('cache-status').textContent = `📦 ${cacheInfo}`
   if (!list.length) {
     el.innerHTML = '<div class="empty"><h3>No results found</h3><p>Try simpler keywords e.g. "support", "security", "devops"</p></div>'
     return
   }
-  const noteHTML = note ? `<div style="font-size:.75rem;color:#555577;margin-bottom:10px;padding:6px 10px;background:#0e0e22;border-radius:6px;border-left:3px solid #3333aa">⚡ ${note}</div>` : ''
+  const noteHTML = note ? `<div style="font-size:.75rem;color:#888844;margin-bottom:10px;padding:6px 10px;background:#1a1a0a;border-radius:6px;border-left:3px solid #aaaa33">⚠️ ${note}</div>` : ''
   el.innerHTML = noteHTML + `<div style="font-size:.75rem;color:#444466;margin-bottom:8px">${list.length} jobs found</div>` + '<div class="jobs-list">' + list.map(jobCard).join('') + '</div>'
 }
 
 function jobCard(j) {
-  const salary = (j.salaryMin && j.salaryMax)
-    ? `<span class="pill pill-salary">💰 $${(j.salaryMin/1000).toFixed(0)}k–$${(j.salaryMax/1000).toFixed(0)}k/yr</span>` : ''
-  const level = j.jobLevel ? `<span class="pill pill-level">${j.jobLevel}</span>` : ''
-  const geoStr = j.jobGeo || 'Worldwide'
-  const isCanada = geoStr.toLowerCase().includes('canada')
-  const isUSA = geoStr.toLowerCase().includes('usa') || geoStr.toLowerCase().includes('united states')
+  const salary = (j.salary_min && j.salary_max)
+    ? `<span class="pill pill-salary">💰 $${(j.salary_min/1000).toFixed(0)}k–$${(j.salary_max/1000).toFixed(0)}k/yr</span>` : ''
+  const level = j.level ? `<span class="pill pill-level">${j.level}</span>` : ''
+  const loc = j.location || 'Worldwide'
+  const isCanada = loc.toLowerCase().includes('canada')
+  const isUSA = loc.toLowerCase().includes('usa') || loc.toLowerCase().includes('united states')
   const geoColor = isCanada ? 'color:#44ee88;border-color:rgba(68,204,136,.3);background:rgba(68,204,136,.08)' : isUSA ? 'color:#6688ff;border-color:rgba(102,136,255,.3);background:rgba(102,136,255,.08)' : ''
-  const geo = `<span class="pill" style="${geoColor}">📍 ${geoStr}</span>`
-  const date = j.pubDate ? new Date(j.pubDate).toLocaleDateString('en-CA',{month:'short',day:'numeric'}) : ''
-  const t = (j.jobTitle||'').replace(/'/g,"\\'").replace(/"/g,'&quot;')
-  const c = (j.companyName||'').replace(/'/g,"\\'").replace(/"/g,'&quot;')
-  const industries = Array.isArray(j.jobIndustry) ? j.jobIndustry.map(i=>`<span class="pill">${i}</span>`).join('') : ''
+  const remotePill = j.remote ? '<span class="pill pill-remote">🌍 Remote</span>' : ''
+  const geo = `<span class="pill" style="${geoColor}">📍 ${loc}</span>`
+  const src = j.source ? `<span class="pill" style="color:#444466">${j.source}</span>` : ''
+  const date = j.date ? new Date(j.date).toLocaleDateString('en-CA',{month:'short',day:'numeric'}) : ''
+  const t = (j.title||'').replace(/'/g,"\\'").replace(/"/g,'&quot;')
+  const c = (j.company||'').replace(/'/g,"\\'").replace(/"/g,'&quot;')
+  const industry = j.industry ? `<span class="pill">${j.industry.split(',')[0]}</span>` : ''
 
   return `<div class="job-card">
     <div class="job-card-top">
       <div style="flex:1">
-        <div class="job-title">${j.jobTitle||'Untitled'}</div>
-        <div class="job-company">${j.companyName||''}</div>
-        <div class="job-meta">${geo}${salary}${level}${industries}${date?`<span class="pill">📅 ${date}</span>`:''}</div>
+        <div class="job-title">${j.title||'Untitled'}</div>
+        <div class="job-company">${j.company||''}</div>
+        <div class="job-meta">${geo}${remotePill}${salary}${level}${industry}${src}${date?`<span class="pill">📅 ${date}</span>`:''}</div>
       </div>
       <div class="job-actions">
         <button class="btn btn-ghost btn-sm" onclick="quickScore('${t}','${c}')">⚡ Score</button>
@@ -486,7 +564,7 @@ function jobCard(j) {
         <a href="${j.url||'#'}" target="_blank" class="btn btn-gold btn-sm">Apply ↗</a>
       </div>
     </div>
-    ${j.jobExcerpt?`<div style="font-size:.78rem;color:#555577;margin-top:8px;line-height:1.5">${j.jobExcerpt.replace(/<[^>]*>/g,'').slice(0,180)}...</div>`:''}
+    ${j.excerpt?`<div style="font-size:.78rem;color:#555577;margin-top:8px;line-height:1.5">${j.excerpt.replace(/<[^>]*>/g,'').slice(0,200)}</div>`:''}
   </div>`
 }
 
