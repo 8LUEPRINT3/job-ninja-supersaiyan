@@ -668,13 +668,14 @@
         <input type="text" id="search-input" placeholder="Search jobs — e.g. cybersecurity, IT support, sysadmin..." />
       </div>
       <select id="search-cat">
-        <option value="">All Categories</option>
-        <option value="devops">DevOps / Sysadmin</option>
-        <option value="software-development">Software Development</option>
-        <option value="data">Data Analysis</option>
-        <option value="ai-ml">AI / ML</option>
-        <option value="product">Product</option>
-        <option value="finance">Finance</option>
+        <option value="">All Industries</option>
+        <option value="Technical Support">IT / Technical Support</option>
+        <option value="Software Engineering">Software Engineering</option>
+        <option value="DevOps">DevOps / Sysadmin</option>
+        <option value="Data Analysis">Data Analysis</option>
+        <option value="Cybersecurity">Cybersecurity</option>
+        <option value="AI / ML">AI / ML</option>
+        <option value="Finance">Finance</option>
       </select>
       <button class="btn btn-gold" onclick="searchJobs()">Search</button>
     </div>
@@ -928,15 +929,16 @@ function showPage(id) {
 
 // ── JOB SEARCH ───────────────────────────────────────────
 async function searchJobs() {
-  const q = document.getElementById('search-input').value.trim() || 'IT'
-  const cat = document.getElementById('search-cat').value
+  const q = document.getElementById('search-input').value.trim()
+  const industry = document.getElementById('search-cat').value
   const container = document.getElementById('jobs-container')
 
   container.innerHTML = `<div class="loading"><div class="spinner"></div><br>Hunting jobs...</div>`
 
   try {
-    let url = `https://remotive.com/api/remote-jobs?limit=40&search=${encodeURIComponent(q)}`
-    if (cat) url += `&category=${encodeURIComponent(cat)}`
+    let url = `https://jobicy.com/api/v2/remote-jobs?count=40`
+    if (q) url += `&tag=${encodeURIComponent(q)}`
+    if (industry) url += `&industry=${encodeURIComponent(industry)}`
 
     const res = await fetch(url)
     const data = await res.json()
@@ -957,25 +959,28 @@ function renderJobs(jobs) {
 }
 
 function jobCardHTML(j) {
-  const salary = j.salary ? `<span class="pill salary">💰 ${j.salary}</span>` : ''
-  const tags = (j.tags || []).slice(0,4).map(t => `<span class="pill">${t}</span>`).join('')
-  const date = new Date(j.publication_date).toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })
+  const salary = (j.salaryMin && j.salaryMax)
+    ? `<span class="pill salary">💰 $${(j.salaryMin/1000).toFixed(0)}k–$${(j.salaryMax/1000).toFixed(0)}k</span>`
+    : ''
+  const geo = j.jobGeo ? `<span class="pill">📍 ${j.jobGeo}</span>` : '<span class="pill remote">🌍 Remote</span>'
+  const level = j.jobLevel ? `<span class="pill">${j.jobLevel}</span>` : ''
+  const date = new Date(j.pubDate).toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })
+  const titleSafe = (j.jobTitle||'').replace(/'/g,"\\'")
+  const companySafe = (j.companyName||'').replace(/'/g,"\\'")
 
   return `
     <div class="job-card">
       <div class="job-card-top">
         <div style="flex:1">
-          <div class="job-title">${j.title}</div>
-          <div class="job-company">${j.company_name}</div>
+          <div class="job-title">${j.jobTitle}</div>
+          <div class="job-company">${j.companyName}</div>
           <div class="job-meta">
-            <span class="pill remote">🌍 Remote</span>
-            ${salary}
-            ${tags}
+            ${geo}${salary}${level}
             <span class="pill">📅 ${date}</span>
           </div>
         </div>
         <div class="job-card-actions">
-          <button class="btn btn-ghost btn-sm" onclick="quickScore('${j.title.replace(/'/g,"\\'")}','${j.company_name.replace(/'/g,"\\'")}')">Score</button>
+          <button class="btn btn-ghost btn-sm" onclick="quickScore('${titleSafe}','${companySafe}')">Score</button>
           <a href="${j.url}" target="_blank" class="btn btn-gold btn-sm">Apply ↗</a>
         </div>
       </div>
@@ -1231,6 +1236,7 @@ document.querySelectorAll('.modal-overlay').forEach(el => {
 document.getElementById('search-input').addEventListener('keydown', e => { if (e.key === 'Enter') searchJobs() })
 
 init()
+document.getElementById('search-input').value = 'IT administrator'
 searchJobs()
 </script>
 </body>
