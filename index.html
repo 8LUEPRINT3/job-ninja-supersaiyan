@@ -154,9 +154,22 @@
     @media(max-width:600px){
       .kanban{grid-template-columns:1fr}
       .input-grid{grid-template-columns:1fr}
-      .dim-info{width:120px}
-      nav{flex-wrap:wrap;height:auto;padding:8px}
-      .nav-tabs{overflow-x:auto}
+      .dim-info{width:110px}
+      nav{flex-wrap:wrap;height:auto;padding:8px 12px;gap:6px}
+      .nav-tabs{overflow-x:auto;gap:2px}
+      .nav-tab{padding:5px 8px;font-size:.78rem}
+      .nav-badge{font-size:.55rem;padding:2px 5px}
+      .search-row{flex-direction:column}
+      .search-input,.filter-sel{width:100%;font-size:16px;min-height:42px}
+      .btn{min-height:42px}
+      .job-card-top{flex-direction:column;gap:8px}
+      .job-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;width:100%}
+      .job-actions .btn{justify-content:center;font-size:.72rem;padding:6px 4px}
+      .stats{grid-template-columns:1fr 1fr}
+      .scorer-wrap{padding:0}
+      .dim-row{flex-wrap:nowrap}
+      .modal{padding:1rem}
+      .modal-form .fg input,.modal-form .fg select{font-size:16px;min-height:42px}
     }
   </style>
 </head>
@@ -370,47 +383,72 @@ function updateNav() {
   document.getElementById('offer-count').textContent = jobs.filter(j => j.status === 'offer').length
 }
 
+// Tag normalization — Jobicy only supports simple tags
+const TAG_MAP = {
+  'it support': 'support', 'tech support': 'support', 'helpdesk': 'support', 'help desk': 'support',
+  'cybersecurity': 'security', 'cyber security': 'security', 'information security': 'security', 'infosec': 'security',
+  'sysadmin': 'devops', 'system administrator': 'devops', 'systems admin': 'devops',
+  'cloud security': 'cloud', 'cloud admin': 'cloud',
+  'network administrator': 'network', 'networking': 'network',
+  'data analyst': 'data', 'data analysis': 'data', 'data engineer': 'data',
+  'machine learning': 'ml', 'artificial intelligence': 'ai',
+  'full stack': 'fullstack', 'frontend': 'frontend', 'backend': 'backend',
+}
+
+function normalizeTag(q) {
+  const lower = q.toLowerCase().trim()
+  return TAG_MAP[lower] || lower.split(' ')[0] // fallback to first word
+}
+
 // ── SEARCH ─────────────────────────────────────────────────
 async function search() {
-  const q = document.getElementById('q').value.trim()
+  const rawQ = document.getElementById('q').value.trim()
   const industry = document.getElementById('industry').value
   const geo = document.getElementById('geo').value
   const el = document.getElementById('search-results')
 
   el.innerHTML = '<div class="loading"><div class="spinner"></div><br>Hunting jobs...</div>'
 
-  // Build Jobicy URL
-  let url = 'https://jobicy.com/api/v2/remote-jobs?count=40'
-  if (q) url += '&tag=' + encodeURIComponent(q)
+  // NOTE: Jobicy breaks when tag+geo combined. Fetch by tag/industry only, filter geo client-side.
+  let url = 'https://jobicy.com/api/v2/remote-jobs?count=50'
+  const tag = rawQ ? normalizeTag(rawQ) : ''
+  if (tag) url += '&tag=' + encodeURIComponent(tag)
   if (industry) url += '&industry=' + encodeURIComponent(industry)
-  if (geo) url += '&geo=' + encodeURIComponent(geo)
 
   try {
     const r = await fetch(url)
-    if (!r.ok) throw new Error('API error ' + r.status)
+    if (!r.ok) throw new Error('HTTP ' + r.status)
     const d = await r.json()
-    const list = d.jobs || []
+    let list = d.jobs || []
+
+    // Client-side geo filter
+    if (geo && list.length) {
+      const geoLower = geo.toLowerCase()
+      const filtered = list.filter(j => (j.jobGeo||'').toLowerCase().includes(geoLower))
+      list = filtered.length ? filtered : list // keep all if filter empties results
+    }
+
     if (!list.length) {
-      // Fallback: try without filters
-      const r2 = await fetch('https://jobicy.com/api/v2/remote-jobs?count=20')
+      // Fallback: fetch latest jobs, no filters
+      const r2 = await fetch('https://jobicy.com/api/v2/remote-jobs?count=30')
       const d2 = await r2.json()
-      renderResults(d2.jobs || [], true)
+      renderResults(d2.jobs || [], `No results for "${rawQ}" — showing latest jobs instead`)
     } else {
-      renderResults(list, false)
+      renderResults(list, '')
     }
   } catch(e) {
     el.innerHTML = `<div class="empty"><h3>⚠️ Search failed</h3><p style="font-size:.8rem;margin-top:.4rem">${e.message}</p></div>`
   }
 }
 
-function renderResults(list, fallback) {
+function renderResults(list, note) {
   const el = document.getElementById('search-results')
   if (!list.length) {
-    el.innerHTML = '<div class="empty"><h3>No results found</h3><p>Try different keywords</p></div>'
+    el.innerHTML = '<div class="empty"><h3>No results found</h3><p>Try simpler keywords e.g. "support", "security", "devops"</p></div>'
     return
   }
-  const note = fallback ? '<div style="font-size:.78rem;color:#555577;margin-bottom:10px">⚡ Showing latest jobs — try different search terms for specific results</div>' : ''
-  el.innerHTML = note + '<div class="jobs-list">' + list.map(jobCard).join('') + '</div>'
+  const noteHTML = note ? `<div style="font-size:.75rem;color:#555577;margin-bottom:10px;padding:6px 10px;background:#0e0e22;border-radius:6px;border-left:3px solid #3333aa">⚡ ${note}</div>` : ''
+  el.innerHTML = noteHTML + `<div style="font-size:.75rem;color:#444466;margin-bottom:8px">${list.length} jobs found</div>` + '<div class="jobs-list">' + list.map(jobCard).join('') + '</div>'
 }
 
 function jobCard(j) {
