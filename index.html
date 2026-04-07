@@ -264,7 +264,7 @@
   </div>
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;font-size:.8rem;color:#555577">
     <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
-      <input type="checkbox" id="remote-only" checked style="accent-color:#7c7cff;width:15px;height:15px" onchange="search()" />
+      <input type="checkbox" id="remote-only" style="accent-color:#7c7cff;width:15px;height:15px" onchange="search()" />
       Remote only
     </label>
     <span id="cache-status" style="color:#333355"></span>
@@ -547,7 +547,7 @@ async function search() {
         return
       }
     }
-    renderResults(cache.slice(0, 40), `No results for "${rawQ}" — showing latest jobs`, updatedStr)
+    renderResults(cache.slice(0, 100), `No results for "${rawQ}" — showing latest jobs`, updatedStr)
     return
   }
 
