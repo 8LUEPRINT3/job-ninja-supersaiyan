@@ -422,19 +422,27 @@ async function search() {
     let list = d.jobs || []
 
     // Client-side geo filter
+    let geoNote = ''
     if (geo && list.length) {
       const geoLower = geo.toLowerCase()
-      const filtered = list.filter(j => (j.jobGeo||'').toLowerCase().includes(geoLower))
-      list = filtered.length ? filtered : list // keep all if filter empties results
+      const filtered = list.filter(j => {
+        const g = (j.jobGeo || '').toLowerCase()
+        return g.includes(geoLower) || g.includes('anywhere') || g.includes('worldwide')
+      })
+      if (filtered.length) {
+        list = filtered
+      } else {
+        geoNote = `No ${geo} listings found for this search — showing all locations`
+      }
     }
 
     if (!list.length) {
       // Fallback: fetch latest jobs, no filters
       const r2 = await fetch('https://jobicy.com/api/v2/remote-jobs?count=30')
       const d2 = await r2.json()
-      renderResults(d2.jobs || [], `No results for "${rawQ}" — showing latest jobs instead`)
+      renderResults(d2.jobs || [], `No results for "${rawQ}" — showing latest jobs`)
     } else {
-      renderResults(list, '')
+      renderResults(list, geoNote)
     }
   } catch(e) {
     el.innerHTML = `<div class="empty"><h3>⚠️ Search failed</h3><p style="font-size:.8rem;margin-top:.4rem">${e.message}</p></div>`
@@ -455,7 +463,11 @@ function jobCard(j) {
   const salary = (j.salaryMin && j.salaryMax)
     ? `<span class="pill pill-salary">💰 $${(j.salaryMin/1000).toFixed(0)}k–$${(j.salaryMax/1000).toFixed(0)}k/yr</span>` : ''
   const level = j.jobLevel ? `<span class="pill pill-level">${j.jobLevel}</span>` : ''
-  const geo = j.jobGeo ? `<span class="pill">${j.jobGeo}</span>` : '<span class="pill pill-remote">🌍 Remote</span>'
+  const geoStr = j.jobGeo || 'Worldwide'
+  const isCanada = geoStr.toLowerCase().includes('canada')
+  const isUSA = geoStr.toLowerCase().includes('usa') || geoStr.toLowerCase().includes('united states')
+  const geoColor = isCanada ? 'color:#44ee88;border-color:rgba(68,204,136,.3);background:rgba(68,204,136,.08)' : isUSA ? 'color:#6688ff;border-color:rgba(102,136,255,.3);background:rgba(102,136,255,.08)' : ''
+  const geo = `<span class="pill" style="${geoColor}">📍 ${geoStr}</span>`
   const date = j.pubDate ? new Date(j.pubDate).toLocaleDateString('en-CA',{month:'short',day:'numeric'}) : ''
   const t = (j.jobTitle||'').replace(/'/g,"\\'").replace(/"/g,'&quot;')
   const c = (j.companyName||'').replace(/'/g,"\\'").replace(/"/g,'&quot;')
