@@ -669,11 +669,12 @@
       </div>
       <select id="search-cat">
         <option value="">All Categories</option>
-        <option value="devops">DevOps / Security</option>
-        <option value="system-administration">Sys Admin</option>
-        <option value="software-dev">Software Dev</option>
-        <option value="data">Data / Analytics</option>
-        <option value="all-others">Other</option>
+        <option value="devops">DevOps / Sysadmin</option>
+        <option value="software-development">Software Development</option>
+        <option value="data">Data Analysis</option>
+        <option value="ai-ml">AI / ML</option>
+        <option value="product">Product</option>
+        <option value="finance">Finance</option>
       </select>
       <button class="btn btn-gold" onclick="searchJobs()">Search</button>
     </div>
@@ -1230,6 +1231,7 @@ document.querySelectorAll('.modal-overlay').forEach(el => {
 document.getElementById('search-input').addEventListener('keydown', e => { if (e.key === 'Enter') searchJobs() })
 
 init()
+searchJobs()
 </script>
 </body>
 </html>
