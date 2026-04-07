@@ -125,6 +125,23 @@
     .verdict-consider{background:#2a2a10;color:#cccc44}
     .verdict-skip{background:#3a1a1a;color:#ff6666}
 
+    /* AI Companies */
+    .ai-card{background:#12122a;border:1px solid #1e1e3a;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px;transition:border-color .15s}
+    .ai-card:hover{border-color:#4444cc}
+    .ai-card-top{display:flex;align-items:flex-start;gap:12px}
+    .ai-logo{width:44px;height:44px;border-radius:10px;background:#0a0a22;border:1px solid #2a2a4a;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+    .ai-name{font-size:.95rem;font-weight:700;color:#e0e0f0;margin-bottom:2px}
+    .ai-url{font-size:.73rem;color:#5555aa}
+    .ai-desc{font-size:.8rem;color:#666688;line-height:1.5}
+    .ai-tags{display:flex;flex-wrap:wrap;gap:5px}
+    .ai-tag{font-size:.66rem;font-weight:600;padding:2px 8px;border-radius:100px;background:#0e0e22;border:1px solid #2a2a4a;color:#7777bb;text-transform:uppercase;letter-spacing:.04em}
+    .ai-tag.ann{color:#44cc88;border-color:rgba(68,204,136,.3);background:rgba(68,204,136,.08)}
+    .ai-tag.res{color:#aa88ff;border-color:rgba(170,136,255,.3);background:rgba(170,136,255,.08)}
+    .ai-tag.saas{color:#6688ff;border-color:rgba(102,136,255,.3);background:rgba(102,136,255,.08)}
+    .ai-tag.infra{color:#ff9944;border-color:rgba(255,153,68,.3);background:rgba(255,153,68,.08)}
+    .ai-tag.health{color:#ff6688;border-color:rgba(255,102,136,.3);background:rgba(255,102,136,.08)}
+    .ai-actions{display:flex;gap:6px;margin-top:auto}
+
     /* Stats page */
     .grade-breakdown{background:#12122a;border:1px solid #1e1e3a;border-radius:10px;padding:16px}
     .g-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
@@ -183,6 +200,7 @@
     <button class="nav-tab" onclick="nav('scorer',this)">⚡ Scorer</button>
     <button class="nav-tab" onclick="nav('tracker',this)">📋 Tracker</button>
     <button class="nav-tab" onclick="nav('stats',this)">📊 Stats</button>
+    <button class="nav-tab" onclick="nav('ai',this)">🤖 AI Companies</button>
   </div>
   <div class="nav-spacer"></div>
   <div class="nav-stat">Tracked: <b id="total-count">0</b> &nbsp;|&nbsp; Offers: <b id="offer-count">0</b></div>
@@ -332,6 +350,30 @@
   </div>
 </div>
 
+<!-- AI COMPANIES -->
+<div class="page" id="page-ai">
+  <div style="margin-bottom:18px">
+    <div style="font-size:1rem;font-weight:700;margin-bottom:4px">🤖 AI Companies Hiring</div>
+    <div style="font-size:.8rem;color:#555588">Curated list of AI-first companies — many hire for annotation, RLHF, research, and remote roles.</div>
+  </div>
+
+  <!-- Filter bar -->
+  <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
+    <input id="ai-search" class="search-input" style="max-width:300px" placeholder="Search companies..." oninput="filterAI()" />
+    <select class="filter-sel" id="ai-cat" onchange="filterAI()">
+      <option value="">All Categories</option>
+      <option value="annotation">Data Annotation / RLHF</option>
+      <option value="research">Research & Development</option>
+      <option value="saas">AI SaaS</option>
+      <option value="infra">AI Infrastructure</option>
+      <option value="health">AI Health</option>
+      <option value="other">Other</option>
+    </select>
+  </div>
+
+  <div id="ai-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px"></div>
+</div>
+
 <!-- MODALS -->
 <div class="overlay" id="add-modal">
   <div class="modal">
@@ -418,6 +460,7 @@ function nav(id, btn) {
   btn.classList.add('active')
   if (id === 'stats') renderStats()
   if (id === 'tracker') renderTracker()
+  if (id === 'ai') initAI()
 }
 
 function updateNav() {
@@ -789,6 +832,127 @@ function clearAll() {
 document.querySelectorAll('.overlay').forEach(el => {
   el.addEventListener('click', e => { if (e.target === el) closeModal(el.id) })
 })
+
+// ─── AI COMPANIES ──────────────────────────────────────────────
+const AI_COMPANIES = [
+  // Data Annotation / RLHF
+  { name:'Alignerr', url:'https://www.alignerr.com/', emoji:'🎯', cat:'annotation',
+    desc:'AI training platform — hire human experts to review and rate AI outputs. Strong demand for annotators, domain experts, and RLHF trainers.',
+    tags:['annotation','RLHF','remote','flexible'], tagClass:'ann' },
+  { name:'Scale AI', url:'https://scale.com/jobs', emoji:'⚖️', cat:'annotation',
+    desc:'Powers AI training data for leading foundation model labs. Hires for data labeling, QA, and enterprise AI ops.',
+    tags:['annotation','data ops','remote'], tagClass:'ann' },
+  { name:'Remotasks', url:'https://www.remotasks.com/', emoji:'🌐', cat:'annotation',
+    desc:'Crowdsourced AI training tasks — annotate images, audio, text. Flexible hours, no experience needed to start.',
+    tags:['annotation','beginner-friendly','remote'], tagClass:'ann' },
+  { name:'Surge AI', url:'https://www.surgehq.ai/', emoji:'⚡', cat:'annotation',
+    desc:'High-quality human data labeling for ML teams. Focus on nuanced tasks: safety, sentiment, instruction tuning.',
+    tags:['annotation','RLHF','safety'], tagClass:'ann' },
+  { name:'Outlier AI', url:'https://outlier.ai/', emoji:'📐', cat:'annotation',
+    desc:'Freelance AI trainer marketplace. Pays well for coding, math, and writing experts to improve AI responses.',
+    tags:['annotation','RLHF','high pay','freelance'], tagClass:'ann' },
+  { name:'DataAnnotation', url:'https://www.dataannotation.tech/', emoji:'📝', cat:'annotation',
+    desc:'Ongoing contracts for AI model training — coding, creative writing, Q&A. $15–$30/hr range.',
+    tags:['annotation','coding','writing','remote'], tagClass:'ann' },
+
+  // Research & Development
+  { name:'SynapseMind', url:'http://synapsemind.io/', emoji:'🧠', cat:'research',
+    desc:'AI-native research and development company focused on cognitive AI systems and neural architecture innovation.',
+    tags:['research','AI','neural networks'], tagClass:'res' },
+  { name:'Tendem AI', url:'https://tendem.ai/', emoji:'🤝', cat:'research',
+    desc:'Collaborative AI platform focused on human-AI teaming and co-intelligence workflows for enterprise teams.',
+    tags:['research','enterprise','collaboration'], tagClass:'res' },
+  { name:'Anthropic', url:'https://www.anthropic.com/jobs', emoji:'🔬', cat:'research',
+    desc:'Safety-focused AI research company behind Claude. Hires ML researchers, engineers, policy analysts.',
+    tags:['research','safety','LLM'], tagClass:'res' },
+  { name:'OpenAI', url:'https://openai.com/jobs', emoji:'🌀', cat:'research',
+    desc:'Leading AI lab (GPT, DALL-E, Sora). Engineering, research, policy, and ops roles.',
+    tags:['research','LLM','top tier'], tagClass:'res' },
+  { name:'Mistral AI', url:'https://mistral.ai/jobs/', emoji:'🌬️', cat:'research',
+    desc:'European open-weights AI lab. Builds efficient, open-source language models. Growing team.',
+    tags:['research','open source','EU'], tagClass:'res' },
+
+  // AI SaaS
+  { name:'EvolvaAI', url:'http://evolvaai.io/', emoji:'🧬', cat:'saas',
+    desc:'AI-powered evolution platform — adaptive AI solutions for businesses. Remote-first startup looking for builders.',
+    tags:['saas','startup','remote'], tagClass:'saas' },
+  { name:'Jasper', url:'https://www.jasper.ai/jobs', emoji:'✍️', cat:'saas',
+    desc:'AI writing assistant for marketing teams. Hires for product, engineering, customer success.',
+    tags:['saas','marketing AI','remote'], tagClass:'saas' },
+  { name:'Harvey AI', url:'https://www.harvey.ai/careers', emoji:'⚖️', cat:'saas',
+    desc:'AI legal assistant backed by top law firms. Fast-growing, well-funded. Eng, legal ops, and research roles.',
+    tags:['saas','legal','high growth'], tagClass:'saas' },
+  { name:'Perplexity AI', url:'https://www.perplexity.ai/hub/careers', emoji:'🔍', cat:'saas',
+    desc:'AI-powered search engine. Hires ML engineers, product designers, and data scientists.',
+    tags:['saas','search','fast growing'], tagClass:'saas' },
+  { name:'Cohere', url:'https://cohere.com/about#careers', emoji:'🔗', cat:'saas',
+    desc:'Enterprise LLM platform. Hires applied ML engineers, solutions architects, and enterprise sales.',
+    tags:['saas','enterprise','LLM'], tagClass:'saas' },
+  { name:'Runway ML', url:'https://runwayml.com/careers', emoji:'🎬', cat:'saas',
+    desc:'Generative AI for video and creative media. Product, engineering, and creative tech roles.',
+    tags:['saas','video AI','creative'], tagClass:'saas' },
+
+  // AI Infrastructure
+  { name:'Together AI', url:'https://www.together.ai/careers', emoji:'🖥️', cat:'infra',
+    desc:'Cloud platform for training and running open-source AI models at scale. Infra and ML engineering roles.',
+    tags:['infra','cloud','open source'], tagClass:'infra' },
+  { name:'Replicate', url:'https://replicate.com/jobs', emoji:'♻️', cat:'infra',
+    desc:'Run ML models via API — deploy and scale AI models in the cloud. Small team, big impact.',
+    tags:['infra','API','ML ops'], tagClass:'infra' },
+  { name:'Modal Labs', url:'https://modal.com/careers', emoji:'☁️', cat:'infra',
+    desc:'Cloud compute platform built for AI/ML workloads. Fast, serverless GPU infrastructure.',
+    tags:['infra','serverless','GPU'], tagClass:'infra' },
+  { name:'Hugging Face', url:'https://huggingface.co/jobs', emoji:'🤗', cat:'infra',
+    desc:'The GitHub of AI — model hub, datasets, and tooling. ML engineers, DevRel, and community roles.',
+    tags:['infra','open source','community'], tagClass:'infra' },
+
+  // AI Health
+  { name:'Nabla', url:'https://www.nabla.com/careers/', emoji:'🏥', cat:'health',
+    desc:'AI medical assistant for clinicians. Real-time ambient AI for doctor notes and patient summaries.',
+    tags:['health','clinical AI','remote'], tagClass:'health' },
+  { name:'Abridge', url:'https://www.abridge.com/careers', emoji:'🩺', cat:'health',
+    desc:'AI-powered medical conversation platform. Converts clinical conversations into structured notes.',
+    tags:['health','NLP','enterprise'], tagClass:'health' },
+]
+
+let aiFiltered = [...AI_COMPANIES]
+
+function renderAI(list) {
+  const grid = document.getElementById('ai-grid')
+  if (!list.length) { grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><h3>No companies found</h3></div>'; return }
+  grid.innerHTML = list.map(c => `
+  <div class="ai-card" data-cat="${c.cat}">
+    <div class="ai-card-top">
+      <div class="ai-logo">${c.emoji}</div>
+      <div>
+        <div class="ai-name">${c.name}</div>
+        <div class="ai-url">${c.url.replace(/https?:\/\//,'')}</div>
+      </div>
+    </div>
+    <div class="ai-desc">${c.desc}</div>
+    <div class="ai-tags">${c.tags.map(t=>`<span class="ai-tag ${c.tagClass}">${t}</span>`).join('')}</div>
+    <div class="ai-actions">
+      <a href="${c.url}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">🔗 Visit & Apply</a>
+    </div>
+  </div>`).join('')
+}
+
+function filterAI() {
+  const q = document.getElementById('ai-search').value.toLowerCase()
+  const cat = document.getElementById('ai-cat').value
+  aiFiltered = AI_COMPANIES.filter(c => {
+    const matchQ = !q || c.name.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q) || c.tags.some(t=>t.includes(q))
+    const matchCat = !cat || c.cat === cat
+    return matchQ && matchCat
+  })
+  renderAI(aiFiltered)
+}
+
+// Init AI section once on first nav
+let aiInit = false
+function initAI() { if (!aiInit) { renderAI(AI_COMPANIES); aiInit = true } }
+
+// ─── END AI COMPANIES ──────────────────────────────────────────
 
 // Init
 initDims()
