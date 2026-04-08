@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate"/>
+  <meta http-equiv="Pragma" content="no-cache"/>
   <title>🥷 Job Ninja SuperSaiyan</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
@@ -204,7 +206,57 @@
   </div>
   <div class="nav-spacer"></div>
   <div class="nav-stat">Tracked: <b id="total-count">0</b> &nbsp;|&nbsp; Offers: <b id="offer-count">0</b></div>
+  <button class="btn btn-ghost btn-sm" id="login-btn" onclick="openProfile()" style="margin-left:6px">👤 Sign In</button>
 </nav>
+
+<!-- PROFILE MODAL -->
+<div class="overlay" id="profile-modal">
+  <div class="modal" style="max-width:420px">
+    <div id="profile-view-login">
+      <div class="modal-title">👤 Your Profile</div>
+      <p style="font-size:.8rem;color:#555588;margin-bottom:14px">Sign in to save your job preferences across sessions.</p>
+      <div class="modal-form">
+        <div class="fg"><label>Display Name</label><input id="p-name" placeholder="e.g. Asauce" /></div>
+        <div class="fg"><label>Email (used as your ID)</label><input id="p-email" type="email" placeholder="you@example.com" /></div>
+        <div style="font-size:.72rem;color:#444466;margin-top:4px">No password needed — your data stays in your browser.</div>
+      </div>
+      <div class="modal-actions" style="margin-top:14px">
+        <button class="btn btn-ghost" onclick="closeModal('profile-modal')">Cancel</button>
+        <button class="btn btn-gold" onclick="profileLogin()">Save Profile</button>
+      </div>
+    </div>
+    <div id="profile-view-main" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div class="modal-title">👤 <span id="p-display-name"></span></div>
+        <button class="btn btn-ghost btn-sm" onclick="profileLogout()">Sign Out</button>
+      </div>
+      <div class="modal-form">
+        <div class="fg"><label>Default Keywords</label>
+          <input id="p-pref-keywords" placeholder="e.g. python, support, devops" />
+        </div>
+        <div class="fg"><label>Preferred Industry</label>
+          <select id="p-pref-industry"></select>
+        </div>
+        <div class="fg"><label>Preferred Location</label>
+          <select id="p-pref-geo">
+            <option value="">Anywhere</option>
+            <option value="canada">Canada</option>
+            <option value="usa">USA</option>
+            <option value="worldwide">Worldwide</option>
+          </select>
+        </div>
+        <div class="fg" style="display:flex;align-items:center;gap:8px;flex-direction:row">
+          <input type="checkbox" id="p-pref-remote" style="accent-color:#7c7cff;width:15px;height:15px" />
+          <label style="font-weight:400;cursor:pointer" for="p-pref-remote">Remote jobs only</label>
+        </div>
+      </div>
+      <div class="modal-actions" style="margin-top:14px">
+        <button class="btn btn-ghost" onclick="closeModal('profile-modal')">Close</button>
+        <button class="btn btn-gold" onclick="savePrefs()">Save &amp; Apply</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- SEARCH -->
 <div class="page active" id="page-search">
@@ -491,18 +543,25 @@ let CACHE_UPDATED = null
 
 async function loadJobsCache() {
   if (JOBS_CACHE) return JOBS_CACHE
-  try {
-    const r = await fetch('./jobs.json?v=' + Date.now())
-    if (!r.ok) throw new Error('no cache')
-    const d = await r.json()
-    JOBS_CACHE = d.jobs || []
-    CACHE_UPDATED = d.updated
-    console.log(`📦 Loaded ${JOBS_CACHE.length} jobs from cache (updated: ${CACHE_UPDATED})`)
-    return JOBS_CACHE
-  } catch {
-    console.log('No local cache — will use live API')
-    return null
+  const urls = [
+    'https://raw.githubusercontent.com/8LUEPRINT3/job-ninja-supersaiyan/main/jobs.json',
+    './jobs.json'
+  ]
+  for (const url of urls) {
+    try {
+      console.log('🔍 Fetching jobs from:', url)
+      const r = await fetch(url + '?v=' + Date.now())
+      if (!r.ok) throw new Error('HTTP ' + r.status)
+      const d = await r.json()
+      JOBS_CACHE = d.jobs || []
+      CACHE_UPDATED = d.updated
+      console.log(`📦 Loaded ${JOBS_CACHE.length} jobs`)
+      return JOBS_CACHE
+    } catch(e) {
+      console.warn('⚠️ Failed to load from', url, e.message)
+    }
   }
+  return null
 }
 
 function searchCache(jobs, q, industry, geo, remoteOnly) {
@@ -596,7 +655,7 @@ async function search() {
       el.innerHTML = '<div class="empty"><h3>No results found</h3><p>Try simpler keywords</p></div>'
     }
   } catch(e) {
-    el.innerHTML = `<div class="empty"><h3>⚠️ Could not load jobs</h3><p style="font-size:.8rem;margin-top:.4rem">Check your connection and try again.<br><small>${e.message}</small></p><br><button class="btn btn-gold" onclick="search()">🔄 Retry</button></div>`
+    el.innerHTML = `<div class="empty"><h3>⚠️ Could not load jobs</h3><p style="font-size:.8rem;margin-top:.4rem">Error: ${e.message}</p><br><button class="btn btn-gold" onclick="JOBS_CACHE=null;search()">🔄 Retry</button></div>`
   }
 }
 
@@ -952,10 +1011,99 @@ function initAI() { if (!aiInit) { renderAI(AI_COMPANIES); aiInit = true } }
 
 // ─── END AI COMPANIES ──────────────────────────────────────────
 
+// ─── USER PROFILE ──────────────────────────────────────────────
+function getProfile() {
+  try { return JSON.parse(localStorage.getItem('jnss_profile') || 'null') } catch { return null }
+}
+function saveProfile(p) { localStorage.setItem('jnss_profile', JSON.stringify(p)) }
+
+function openProfile() {
+  const p = getProfile()
+  if (p) {
+    document.getElementById('profile-view-login').style.display = 'none'
+    document.getElementById('profile-view-main').style.display = ''
+    document.getElementById('p-display-name').textContent = p.name || p.email
+    document.getElementById('p-pref-keywords').value = p.prefs?.keywords || ''
+    document.getElementById('p-pref-geo').value = p.prefs?.geo || ''
+    document.getElementById('p-pref-remote').checked = p.prefs?.remote || false
+    // Populate industry select
+    const ind = document.getElementById('p-pref-industry')
+    ind.innerHTML = document.getElementById('industry').innerHTML
+    ind.value = p.prefs?.industry || ''
+  } else {
+    document.getElementById('profile-view-login').style.display = ''
+    document.getElementById('profile-view-main').style.display = 'none'
+  }
+  document.getElementById('profile-modal').classList.add('active')
+}
+
+function profileLogin() {
+  const name = document.getElementById('p-name').value.trim()
+  const email = document.getElementById('p-email').value.trim()
+  if (!name && !email) { alert('Enter at least a name or email'); return }
+  saveProfile({ name, email, prefs: {} })
+  updateLoginBtn()
+  // Switch to main view
+  document.getElementById('profile-view-login').style.display = 'none'
+  document.getElementById('profile-view-main').style.display = ''
+  document.getElementById('p-display-name').textContent = name || email
+  document.getElementById('p-pref-industry').innerHTML = document.getElementById('industry').innerHTML
+}
+
+function profileLogout() {
+  localStorage.removeItem('jnss_profile')
+  updateLoginBtn()
+  closeModal('profile-modal')
+}
+
+function savePrefs() {
+  const p = getProfile() || {}
+  p.prefs = {
+    keywords: document.getElementById('p-pref-keywords').value.trim(),
+    industry: document.getElementById('p-pref-industry').value,
+    geo: document.getElementById('p-pref-geo').value,
+    remote: document.getElementById('p-pref-remote').checked
+  }
+  saveProfile(p)
+  // Apply to search
+  document.getElementById('q').value = p.prefs.keywords
+  document.getElementById('industry').value = p.prefs.industry
+  document.getElementById('geo').value = p.prefs.geo
+  document.getElementById('remote-only').checked = p.prefs.remote
+  closeModal('profile-modal')
+  search()
+}
+
+function updateLoginBtn() {
+  const p = getProfile()
+  const btn = document.getElementById('login-btn')
+  if (p) {
+    btn.textContent = '👤 ' + (p.name || p.email).split(' ')[0]
+    btn.style.color = '#7c7cff'
+    btn.style.borderColor = '#3333aa'
+  } else {
+    btn.textContent = '👤 Sign In'
+    btn.style.color = ''
+    btn.style.borderColor = ''
+  }
+}
+
+function applyProfilePrefs() {
+  const p = getProfile()
+  if (!p?.prefs) return
+  if (p.prefs.keywords) document.getElementById('q').value = p.prefs.keywords
+  if (p.prefs.industry) document.getElementById('industry').value = p.prefs.industry
+  if (p.prefs.geo) document.getElementById('geo').value = p.prefs.geo
+  if (p.prefs.remote) document.getElementById('remote-only').checked = true
+}
+// ─── END USER PROFILE ──────────────────────────────────────────
+
 // Init
 initDims()
 renderTracker()
 updateNav()
+updateLoginBtn()
+applyProfilePrefs()
 search() // auto-load on open
 </script>
 </body>
