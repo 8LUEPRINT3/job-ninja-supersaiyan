@@ -1185,7 +1185,95 @@ function renderATSResult(r) {
       <div><div class="ats-section-title">💪 Strengths</div><ul style="font-size:.78rem;color:#666688;padding-left:14px;line-height:1.6">${strHTML}</ul></div>
       <div><div class="ats-section-title">🔧 Improve</div><ul style="font-size:.78rem;color:#666688;padding-left:14px;line-height:1.6">${impHTML}</ul></div>
     </div>
+    <div style="margin-top:18px;padding-top:14px;border-top:1px solid #1e1e3a">
+      <div style="font-size:.78rem;color:#555588;margin-bottom:10px">Ready to level up? Let AI rewrite your resume — tailored to this exact job, ATS-optimised, impact-driven bullet points.</div>
+      <button class="btn btn-gold" onclick="rewriteResume()" id="rewrite-btn">✨ Rewrite My Resume for This Job</button>
+      <span id="rewrite-loading" style="font-size:.78rem;color:#555588;display:none;margin-left:10px">Rewriting... this takes ~15 seconds</span>
+    </div>
+  </div>
+  <div id="rewrite-result"></div>`
+}
+
+// ── RESUME REWRITER ──
+async function rewriteResume() {
+  const jd = document.getElementById('ats-jd').value.trim()
+  const resume = document.getElementById('ats-resume').value.trim()
+  if (!jd || !resume) { alert('Make sure both job description and resume are filled in'); return }
+
+  document.getElementById('rewrite-btn').disabled = true
+  document.getElementById('rewrite-loading').style.display = ''
+  document.getElementById('rewrite-result').innerHTML = ''
+
+  const prompt = `You are an elite career coach and resume writer. Rewrite the candidate's resume tailored specifically to the job description below. Follow this exact methodology:
+
+1. DECONSTRUCT THE JOB: Extract mandatory technical skills, required tools, soft skills, tone, and the core problems this hire must solve.
+2. MAP EXPERIENCE: Find direct overlaps and transferable skills from the candidate's background.
+3. REWRITE STRATEGICALLY:
+   - Write a powerful 3-4 sentence Professional Summary that hooks the reader immediately
+   - Rewrite each work experience using strong action verbs + what was done + measurable result (e.g. "Reduced ticket resolution time by 30% by implementing...")
+   - Truthfully reframe existing experience — never fabricate
+   - Add a Skills section with keywords from the job description
+   - Keep it ATS-friendly: no columns, no graphics, clean structure
+
+JOB DESCRIPTION:
+${jd.slice(0, 2500)}
+
+CANDIDATE'S CURRENT RESUME:
+${resume.slice(0, 2500)}
+
+Output the full rewritten resume in clean plain text with clear section headers (PROFESSIONAL SUMMARY, SKILLS, EXPERIENCE, EDUCATION). Make it compelling, specific, and laser-focused on this role.`
+
+  try {
+    const result = await groqChat([{ role:'user', content: prompt }], 'llama-3.3-70b-versatile')
+    renderRewriteResult(result)
+  } catch(e) {
+    document.getElementById('rewrite-result').innerHTML = `<div class="empty" style="margin-top:12px"><h3>⚠️ Rewrite failed</h3><p style="font-size:.8rem;margin-top:4px">${e.message}</p></div>`
+  }
+  document.getElementById('rewrite-btn').disabled = false
+  document.getElementById('rewrite-loading').style.display = 'none'
+}
+
+function renderRewriteResult(text) {
+  // Format sections nicely
+  const formatted = text
+    .replace(/^(PROFESSIONAL SUMMARY|SKILLS|EXPERIENCE|EDUCATION|CERTIFICATIONS|PROJECTS|SUMMARY|HIGHLIGHTS)(.*?)$/gm,
+      '<div class="ats-section-title" style="margin-top:18px;margin-bottom:8px;font-size:.76rem">$1$2</div>')
+    .replace(/\n\n/g, '<br><br>')
+    .replace(/\n/g, '<br>')
+
+  document.getElementById('rewrite-result').innerHTML = `
+  <div class="ats-result" style="margin-top:14px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div style="font-size:.9rem;font-weight:700;color:#e0e0f0">✨ Tailored Resume</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost btn-sm" onclick="copyResume()">📋 Copy</button>
+        <button class="btn btn-primary btn-sm" onclick="downloadResume()">⬇ Download .txt</button>
+      </div>
+    </div>
+    <div id="rewrite-text" style="font-size:.82rem;color:#ccccee;line-height:1.7;white-space:pre-wrap;font-family:'Segoe UI',sans-serif;background:#070714;padding:16px;border-radius:8px;border:1px solid #1e1e3a">${formatted}</div>
+    <div style="margin-top:12px;font-size:.73rem;color:#444466">💡 Tip: Copy this into Google Docs or Word, then format with your preferred style. All content is tailored to the job above.</div>
   </div>`
+
+  // Store raw text for copy/download
+  window._rewrittenResume = text
+}
+
+function copyResume() {
+  if (!window._rewrittenResume) return
+  navigator.clipboard.writeText(window._rewrittenResume).then(() => {
+    const btn = event.target
+    btn.textContent = '✅ Copied!'
+    setTimeout(() => btn.textContent = '📋 Copy', 2000)
+  })
+}
+
+function downloadResume() {
+  if (!window._rewrittenResume) return
+  const blob = new Blob([window._rewrittenResume], { type: 'text/plain' })
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(blob)
+  a.download = 'tailored-resume.txt'
+  a.click()
 }
 
 // ── MOCK INTERVIEW ──
