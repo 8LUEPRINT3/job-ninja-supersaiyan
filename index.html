@@ -460,10 +460,10 @@
   <!-- API Key -->
   <div class="coach-card" style="margin-bottom:18px">
     <h3>Kimi API Key</h3>
-    <p>Your key stays in your browser only — never sent anywhere except Groq directly.</p>
+    <p>Your key stays in your browser only — never sent anywhere except Moonshot directly.</p>
     <div class="api-key-row">
       <input type="password" id="kimi-key" placeholder="sk-..." />
-      <button class="btn btn-gold btn-sm" onclick="saveGroqKey()">Save</button>
+      <button class="btn btn-gold btn-sm" onclick="saveKimiKey()">Save</button>
       <span id="kimi-key-status" style="font-size:.75rem;color:var(--text-faint)"></span>
     </div>
   </div>
@@ -471,6 +471,8 @@
   <!-- Sub-tabs -->
   <div class="coach-tabs">
     <button class="coach-tab active" onclick="coachTab('ats',this)">ATS Scanner</button>
+    <button class="coach-tab" onclick="coachTab('resume-writer',this)">Resume Writer</button>
+    <button class="coach-tab" onclick="coachTab('cover-letter',this)">Cover Letter</button>
     <button class="coach-tab" onclick="coachTab('interview',this)">Mock Interview</button>
     <button class="coach-tab" onclick="coachTab('resume-guide',this)">Resume Guide</button>
   </div>
@@ -501,6 +503,86 @@
       <span id="ats-loading" style="font-size:.78rem;color:var(--text-soft);display:none">Analysing with AI...</span>
     </div>
     <div id="ats-result"></div>
+  </div>
+
+  <!-- RESUME WRITER PANEL -->
+  <div class="coach-panel" id="coach-resume-writer">
+    <div class="coach-card">
+      <h3>Resume Writer</h3>
+      <p>Describe your experience and target role — AI writes a tailored, ATS-friendly resume.</p>
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+        <div class="fg">
+          <label>Target Job Title</label>
+          <input id="rw-title" placeholder="e.g. Frontend Developer" />
+        </div>
+        <div class="fg">
+          <label>Company (optional)</label>
+          <input id="rw-company" placeholder="e.g. Shopify" />
+        </div>
+      </div>
+      
+      <div class="fg" style="margin-bottom:14px">
+        <label>Job Description (paste the posting)</label>
+        <textarea class="coach-textarea" id="rw-jd" placeholder="Paste the full job description here..." style="min-height:100px"></textarea>
+      </div>
+      
+      <div class="fg" style="margin-bottom:14px">
+        <label>Your Experience (free-form — jobs, projects, skills, education)</label>
+        <textarea class="coach-textarea" id="rw-experience" placeholder="e.g. 3 years as IT support at Acme Corp. Fixed 50+ tickets/week, reduced resolution time 30%. Skills: Python, SQL, Excel. BSc Computer Science, University of Toronto, 2022..." style="min-height:140px"></textarea>
+      </div>
+      
+      <div style="display:flex;gap:10px;align-items:center">
+        <button class="btn btn-primary" onclick="writeResume()" id="rw-btn">Write My Resume</button>
+        <span id="rw-loading" style="font-size:.78rem;color:var(--text-soft);display:none">Writing... this takes ~20 seconds</span>
+      </div>
+    </div>
+    <div id="rw-result"></div>
+  </div>
+
+  <!-- COVER LETTER PANEL -->
+  <div class="coach-panel" id="coach-cover-letter">
+    <div class="coach-card">
+      <h3>Cover Letter Writer</h3>
+      <p>AI writes a compelling cover letter tailored to the job and your background.</p>
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+        <div class="fg">
+          <label>Job Title</label>
+          <input id="cl-title" placeholder="e.g. Data Analyst" />
+        </div>
+        <div class="fg">
+          <label>Company</label>
+          <input id="cl-company" placeholder="e.g. Google" />
+        </div>
+      </div>
+      
+      <div class="fg" style="margin-bottom:14px">
+        <label>Job Description</label>
+        <textarea class="coach-textarea" id="cl-jd" placeholder="Paste the full job description here..." style="min-height:100px"></textarea>
+      </div>
+      
+      <div class="fg" style="margin-bottom:14px">
+        <label>Your Background (brief — key experience, skills, why you want this role)</label>
+        <textarea class="coach-textarea" id="cl-background" placeholder="e.g. 2 years data analysis at fintech startup. Built dashboards used by 200+ employees. Passionate about making data accessible. Excited about Google's mission because..." style="min-height:120px"></textarea>
+      </div>
+      
+      <div class="fg" style="margin-bottom:14px">
+        <label>Tone</label>
+        <select class="filter-sel" id="cl-tone" style="width:100%">
+          <option value="professional">Professional & polished</option>
+          <option value="conversational">Conversational & warm</option>
+          <option value="bold">Bold & confident</option>
+          <option value="enthusiastic">Enthusiastic & energetic</option>
+        </select>
+      </div>
+      
+      <div style="display:flex;gap:10px;align-items:center">
+        <button class="btn btn-primary" onclick="writeCoverLetter()" id="cl-btn">Write Cover Letter</button>
+        <span id="cl-loading" style="font-size:.78rem;color:var(--text-soft);display:none">Writing... this takes ~15 seconds</span>
+      </div>
+    </div>
+    <div id="cl-result"></div>
   </div>
 
   <!-- INTERVIEW PANEL -->
@@ -1402,6 +1484,159 @@ function downloadResume() {
   a.click()
 }
 
+// ── RESUME WRITER ──
+async function writeResume() {
+  const title = document.getElementById('rw-title').value.trim()
+  const company = document.getElementById('rw-company').value.trim()
+  const jd = document.getElementById('rw-jd').value.trim()
+  const experience = document.getElementById('rw-experience').value.trim()
+  
+  if (!title || !jd || !experience) { alert('Fill in job title, job description, and your experience'); return }
+  if (!getKimiKey()) { alert('Add your Kimi API key first'); return }
+
+  document.getElementById('rw-btn').disabled = true
+  document.getElementById('rw-loading').style.display = ''
+  document.getElementById('rw-result').innerHTML = ''
+
+  const prompt = `You are an elite resume writer. Write a complete, tailored resume for this candidate.
+
+TARGET ROLE: ${title}${company ? ' at ' + company : ''}
+
+JOB DESCRIPTION:
+${jd.slice(0, 2500)}
+
+CANDIDATE BACKGROUND:
+${experience.slice(0, 2500)}
+
+Write a complete resume with these sections:
+- PROFESSIONAL SUMMARY (3-4 sentences, tailored to this role)
+- SKILLS (bullet list, include keywords from job description)
+- EXPERIENCE (each role with company, title, dates, 3-5 bullet points with action verbs + measurable results)
+- EDUCATION
+
+Rules:
+- Use strong action verbs (Led, Built, Reduced, Increased, Delivered)
+- Include metrics and numbers wherever possible
+- Mirror keywords from the job description naturally
+- ATS-friendly: clean structure, no tables, no graphics
+- Truthful — reframe but never fabricate experience
+- If dates are unknown, use "20XX – Present" format
+
+Output the complete resume in clean plain text.`
+
+  try {
+    const result = await kimiChat([{ role:'user', content: prompt }], 'kimi-k2.5')
+    renderWriterResult('rw-result', result, 'resume')
+  } catch(e) {
+    document.getElementById('rw-result').innerHTML = `<div class="empty" style="margin-top:12px"><h3>Error</h3><p style="font-size:.8rem;margin-top:4px">${e.message}</p></div>`
+  }
+  document.getElementById('rw-btn').disabled = false
+  document.getElementById('rw-loading').style.display = 'none'
+}
+
+// ── COVER LETTER WRITER ──
+async function writeCoverLetter() {
+  const title = document.getElementById('cl-title').value.trim()
+  const company = document.getElementById('cl-company').value.trim()
+  const jd = document.getElementById('cl-jd').value.trim()
+  const background = document.getElementById('cl-background').value.trim()
+  const tone = document.getElementById('cl-tone').value
+  
+  if (!title || !company || !jd || !background) { alert('Fill in all fields'); return }
+  if (!getKimiKey()) { alert('Add your Kimi API key first'); return }
+
+  document.getElementById('cl-btn').disabled = true
+  document.getElementById('cl-loading').style.display = ''
+  document.getElementById('cl-result').innerHTML = ''
+
+  const toneGuide = {
+    professional: 'polished, formal, and precise. No contractions. Confident but restrained.',
+    conversational: 'warm, approachable, uses natural contractions. Like talking to a respected colleague.',
+    bold: 'confident, direct, takes ownership. Strong opening hook. Not afraid to stand out.',
+    enthusiastic: 'energetic, passionate, shows genuine excitement. Forward-looking and optimistic.'
+  }
+
+  const prompt = `You are an expert cover letter writer. Write a compelling cover letter for this candidate.
+
+ROLE: ${title} at ${company}
+
+JOB DESCRIPTION:
+${jd.slice(0, 2500)}
+
+CANDIDATE BACKGROUND:
+${background.slice(0, 2000)}
+
+TONE: ${toneGuide[tone] || toneGuide.professional}
+
+Structure:
+1. Opening hook — why this role, why this company (not "I am writing to apply...")
+2. Body paragraph 1 — most relevant experience with a specific result/achievement
+3. Body paragraph 2 — skills that match the job requirements, with evidence
+4. Closing — enthusiasm + call to action
+
+Rules:
+- 250-350 words max
+- Address to "Hiring Manager" unless a name is known
+- Reference something specific from the job description
+- Show personality — this should NOT sound like a template
+- End with a confident, forward-looking statement
+
+Output only the cover letter text, ready to send.`
+
+  try {
+    const result = await kimiChat([{ role:'user', content: prompt }], 'kimi-k2.5')
+    renderWriterResult('cl-result', result, 'cover-letter')
+  } catch(e) {
+    document.getElementById('cl-result').innerHTML = `<div class="empty" style="margin-top:12px"><h3>Error</h3><p style="font-size:.8rem;margin-top:4px">${e.message}</p></div>`
+  }
+  document.getElementById('cl-btn').disabled = false
+  document.getElementById('cl-loading').style.display = 'none'
+}
+
+// ── SHARED RENDER ──
+function renderWriterResult(elementId, text, type) {
+  const formatted = text
+    .replace(/^(PROFESSIONAL SUMMARY|SKILLS|EXPERIENCE|EDUCATION|CERTIFICATIONS|PROJECTS|SUMMARY|HIGHLIGHTS)(.*?)$/gm,
+      '<div class="ats-section-title" style="margin-top:18px;margin-bottom:8px;font-size:.76rem">$1$2</div>')
+    .replace(/\n\n/g, '<br><br>')
+    .replace(/\n/g, '<br>')
+
+  const label = type === 'resume' ? 'Your Resume' : 'Your Cover Letter'
+  const filename = type === 'resume' ? 'resume.txt' : 'cover-letter.txt'
+
+  document.getElementById(elementId).innerHTML = `
+  <div class="ats-result" style="margin-top:14px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div style="font-size:.9rem;font-weight:700;color:var(--text)">${label}</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost btn-sm" onclick="copyWriterText(this)">Copy</button>
+        <button class="btn btn-primary btn-sm" onclick="downloadWriterText('${filename}')">Download .txt</button>
+      </div>
+    </div>
+    <div style="font-size:.85rem;color:var(--text);line-height:1.8;white-space:pre-wrap;background:var(--surface);padding:20px;border-radius:8px;border:1px solid var(--border)">${formatted}</div>
+    <div style="margin-top:12px;font-size:.73rem;color:var(--text-faint)">Tip: Review and personalize before sending. Add specific details only you would know.</div>
+  </div>`
+
+  window._writerText = text
+}
+
+function copyWriterText(btn) {
+  if (!window._writerText) return
+  navigator.clipboard.writeText(window._writerText).then(() => {
+    btn.textContent = 'Copied!'
+    setTimeout(() => btn.textContent = 'Copy', 2000)
+  })
+}
+
+function downloadWriterText(filename) {
+  if (!window._writerText) return
+  const blob = new Blob([window._writerText], { type: 'text/plain' })
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(blob)
+  a.download = filename
+  a.click()
+}
+
 // ── MOCK INTERVIEW ──
 let ivMessages = []
 let ivQuestionCount = 0
@@ -1425,7 +1660,7 @@ function addMessage(role, text) {
 function setIVStatus(s) { document.getElementById('iv-status').textContent = s }
 
 async function startInterview() {
-  if (!getGroqKey()) { alert('Add your Groq API key first'); return }
+  if (!getKimiKey()) { alert('Add your Kimi API key first'); return }
   const role = document.getElementById('iv-role').value
   const level = document.getElementById('iv-level').value
   ivMessages = [{ role:'system', content: `You are a senior hiring manager conducting a ${level} ${role} interview. Ask ONE focused interview question at a time. Keep questions concise (1-2 sentences max). After the candidate answers, give brief encouraging feedback (1 sentence), then ask the next question. After 8 questions, say "That concludes our interview" and provide 3 bullet points of overall feedback. Never break character.` }]
