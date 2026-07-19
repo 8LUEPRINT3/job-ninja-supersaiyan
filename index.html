@@ -445,16 +445,16 @@
 <!-- AI COACH -->
 <div class="page" id="page-coach">
   <div style="margin-bottom:4px;font-size:1rem;font-weight:700">🎯 AI Career Coach</div>
-  <div style="font-size:.78rem;color:#555588;margin-bottom:16px">ATS resume scanner + AI mock interview. Powered by Groq (free). <a href="https://console.groq.com" target="_blank" style="color:#7c7cff">Get a free API key →</a></div>
+  <div style="font-size:.78rem;color:#555588;margin-bottom:16px">ATS resume scanner + AI mock interview. Powered by Kimi (free tier available). <a href="https://platform.moonshot.cn" target="_blank" style="color:#7c7cff">Get a free API key →</a></div>
 
   <!-- API Key -->
   <div class="coach-card" style="margin-bottom:18px">
     <h3>🔑 Groq API Key</h3>
     <p>Your key stays in your browser only — never sent anywhere except Groq directly.</p>
     <div class="api-key-row">
-      <input type="password" id="groq-key" placeholder="gsk_..." />
+      <input type="password" id="kimi-key" placeholder="sk-..." />
       <button class="btn btn-gold btn-sm" onclick="saveGroqKey()">Save</button>
-      <span id="groq-key-status" style="font-size:.75rem;color:#444466"></span>
+      <span id="kimi-key-status" style="font-size:.75rem;color:#444466"></span>
     </div>
   </div>
 
@@ -462,6 +462,7 @@
   <div class="coach-tabs">
     <button class="coach-tab active" onclick="coachTab('ats',this)">📄 ATS Resume Scanner</button>
     <button class="coach-tab" onclick="coachTab('interview',this)">🎤 Mock Interview</button>
+    <button class="coach-tab" onclick="coachTab('resume-guide',this)">📝 Resume Guide</button>
   </div>
 
   <!-- ATS PANEL -->
@@ -542,6 +543,121 @@
     <div id="iv-feedback" style="display:none" class="coach-card">
       <h3>📊 Interview Feedback</h3>
       <div id="iv-feedback-body" style="font-size:.82rem;color:#ccccee;line-height:1.7"></div>
+    </div>
+  </div>
+
+  <!-- RESUME GUIDE PANEL -->
+  <div class="coach-panel" id="coach-resume-guide">
+    <div class="coach-card">
+      <h3>📝 How to Format Resumes for Recruiters</h3>
+      <p>Based on recruiter insights — what actually gets your application read, not skipped.</p>
+      
+      <div style="margin-top:16px">
+        <div style="font-size:.8rem;font-weight:700;color:#7c7cff;margin-bottom:8px">✅ BEFORE YOU SEND CHECKLIST</div>
+        <div style="font-size:.78rem;color:#ccccee;line-height:1.7;background:#0a0a1a;padding:12px;border-radius:8px;border:1px solid #1e1e3a">
+          <div style="margin-bottom:6px"><b>Subject & Opening:</b></div>
+          <div style="margin-left:12px;margin-bottom:10px;color:#8888aa">
+            • Subject line matches the tone of the role (bold for sales/marketing, precise for finance/ops)<br>
+            • Opening line earns a read — no "I'm writing to express my interest"<br>
+            • Removed every bracket: [Your Name], X years, [Tech Stack], etc.
+          </div>
+          
+          <div style="margin-bottom:6px"><b>Body:</b></div>
+          <div style="margin-left:12px;margin-bottom:10px;color:#8888aa">
+            • States a real pain point the company likely has — not a generic one<br>
+            • Includes at least one verified number or result (no invented metrics)<br>
+            • Mentions the CV/portfolio attachment explicitly<br>
+            • Reads like you, not like a copy-pasted template
+          </div>
+          
+          <div style="margin-bottom:6px"><b>Attachments:</b></div>
+          <div style="margin-left:12px;margin-bottom:10px;color:#8888aa">
+            • CV is actually attached (check before hitting send)<br>
+            • Portfolio link works and is set to public/viewable<br>
+            • File names are professional (not "CV_final_final2.pdf")
+          </div>
+          
+          <div style="margin-bottom:6px"><b>Final Pass:</b></div>
+          <div style="margin-left:12px;color:#8888aa">
+            • Read it out loud once — if it sounds stiff, cut a sentence<br>
+            • Confirm the company name and role title are correct<br>
+            • Sent from a professional email address
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px">
+        <div style="font-size:.8rem;font-weight:700;color:#ff6666;margin-bottom:8px">❌ WHAT NOT TO DO</div>
+        <div style="font-size:.78rem;color:#ccccee;line-height:1.7;background:#0a0a1a;padding:12px;border-radius:8px;border:1px solid #1e1e3a">
+          <div style="margin-bottom:8px"><b>Don't open with filler.</b><br>
+          <span style="color:#ff8888">✗ "I'm writing to express my interest in the [Role] position at [Company]."</span><br>
+          <span style="color:#44ee88">✓ Lead with the pain point or the result — the role and company come naturally after.</span></div>
+          
+          <div style="margin-bottom:8px"><b>Don't list duties without outcomes.</b><br>
+          <span style="color:#ff8888">✗ "I managed social media accounts and created content."</span><br>
+          <span style="color:#44ee88">✓ "I grew a 12K-follower account to 40K and turned that into 200+ monthly enquiries."</span></div>
+          
+          <div style="margin-bottom:8px"><b>Don't oversell with no proof.</b><br>
+          <span style="color:#ff8888">✗ "I'm a hardworking, detail-oriented team player."</span><br>
+          <span style="color:#44ee88">✓ Let one specific result imply the trait — don't name it.</span></div>
+          
+          <div style="margin-bottom:8px"><b>Don't send the same template to every role.</b><br>
+          <span style="color:#ff8888">✗ Identical body copy for a Graphic Designer and Data Analyst role with just the title swapped.</span><br>
+          <span style="color:#44ee88">✓ Swap the pain point and result to match what that specific role actually solves.</span></div>
+          
+          <div style="margin-bottom:8px"><b>Don't fake numbers.</b><br>
+          <span style="color:#ff8888">✗ Rounding up or inventing metrics you can't speak to in an interview.</span><br>
+          <span style="color:#44ee88">✓ If you don't have a number, describe the outcome plainly instead of guessing one.</span></div>
+          
+          <div><b>Don't ignore the follow-up.</b><br>
+          <span style="color:#ff8888">✗ Sending once and assuming silence means rejection.</span><br>
+          <span style="color:#44ee88">✓ One polite follow-up after 5–7 business days is expected, not pushy.</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px">
+        <div style="font-size:.8rem;font-weight:700;color:#f5c842;margin-bottom:8px">🎯 THE FORMULA THAT WORKS</div>
+        <div style="font-size:.78rem;color:#ccccee;line-height:1.7;background:#0a0a1a;padding:12px;border-radius:8px;border:1px solid #1e1e3a">
+          <div style="margin-bottom:10px"><b>Your email body needs:</b></div>
+          <div style="margin-left:12px;color:#8888aa">
+            1. <b>A beginning line that gets them reading</b> — no "I'm writing to express"<br>
+            2. <b>Your responsibilities and results</b> — kept short, with numbers<br>
+            3. <b>A pain point</b> — every company has one. Find it, talk about it, position yourself as the person solving it.<br>
+            4. <b>List a result around that pain point</b> if you can
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px">
+        <div style="font-size:.8rem;font-weight:700;color:#44ee88;margin-bottom:8px">📧 SUBJECT LINE EXAMPLES BY ROLE</div>
+        <div style="font-size:.78rem;color:#ccccee;line-height:1.7;background:#0a0a1a;padding:12px;border-radius:8px;border:1px solid #1e1e3a">
+          <div style="margin-bottom:8px"><b>Social Media Manager:</b><br>
+          <span style="color:#8888aa">• "Stop Searching — Your Social Media Manager Just Applied"<br>
+          • "One Less Role to Fill"<br>
+          • "Before You Review Another Social Profile…"</span></div>
+          
+          <div style="margin-bottom:8px"><b>UI/UX Designer:</b><br>
+          <span style="color:#8888aa">• "Your Users Have Opinions About Your Products"<br>
+          • "Built for Better User Experiences"<br>
+          • "Your Product Needs Better Experience Design"</span></div>
+          
+          <div style="margin-bottom:8px"><b>Data Analyst:</b><br>
+          <span style="color:#8888aa">• "Your Data Is Already Telling You What to Do"<br>
+          • "Interpreting Data Beyond the Numbers"<br>
+          • "Where Data Becomes Direction"</span></div>
+          
+          <div><b>Virtual Assistant:</b><br>
+          <span style="color:#8888aa">• "Consider This One Less Thing on Your To-Do List"<br>
+          • "Because There Are Only 24 Hours in a Day"<br>
+          • "You Shouldn't Be Doing Everything Yourself"</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;padding:12px;background:#0a0a1a;border-radius:8px;border:1px solid #1e1e3a">
+        <div style="font-size:.75rem;color:#555588;font-style:italic">
+          💡 <b>Pro tip from a recruiter:</b> "90% of the time, your email application matters. I've seen candidates get responses within minutes by writing: 'You haven't heard the last of me.' Sometimes it matters."
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -1043,25 +1159,25 @@ document.querySelectorAll('.overlay').forEach(el => {
 
 // ─── AI COACH ──────────────────────────────────────────────────
 
-function saveGroqKey() {
-  const k = document.getElementById('groq-key').value.trim()
-  if (!k.startsWith('gsk_')) { alert('Key should start with gsk_'); return }
-  localStorage.setItem('groq_key', k)
-  document.getElementById('groq-key-status').textContent = '✅ Saved'
-  setTimeout(() => document.getElementById('groq-key-status').textContent = '', 2000)
+function saveKimiKey() {
+  const k = document.getElementById('kimi-key').value.trim()
+  if (!k.startsWith('sk-')) { alert('Key should start with sk-'); return }
+  localStorage.setItem('kimi_key', k)
+  document.getElementById('kimi-key-status').textContent = '✅ Saved'
+  setTimeout(() => document.getElementById('kimi-key-status').textContent = '', 2000)
 }
 
-function getGroqKey() {
-  return localStorage.getItem('groq_key') || ''
+function getKimiKey() {
+  return localStorage.getItem('kimi_key') || ''
 }
 
-async function groqChat(messages, model='llama-3.3-70b-versatile') {
-  const key = getGroqKey()
-  if (!key) throw new Error('No Groq API key set — add it above')
-  const r = await fetchWithTimeout('https://api.groq.com/openai/v1/chat/completions', 12000, {
+async function kimiChat(messages, model='kimi-k2.5') {
+  const key = getKimiKey()
+  if (!key) throw new Error('No Kimi API key set — add it above')
+  const r = await fetchWithTimeout('https://api.moonshot.cn/v1/chat/completions', 15000, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
-    body: JSON.stringify({ model, messages, temperature: 0.7, max_tokens: 1024 })
+    body: JSON.stringify({ model, messages, temperature: 0.7, max_tokens: 2048 })
   })
   if (!r.ok) { const e = await r.json(); throw new Error(e.error?.message || r.status) }
   const d = await r.json()
@@ -1149,7 +1265,7 @@ Respond ONLY with valid JSON in this exact format:
   "improvements": ["improvement1","improvement2","improvement3"],
   "formatting_issues": ["issue1"] 
 }`
-    const raw = await groqChat([{ role:'user', content: prompt }], 'llama-3.1-8b-instant')
+    const raw = await kimiChat([{ role:'user', content: prompt }], 'kimi-k2.5')
     const json = raw.match(/\{[\s\S]*\}/)
     if (!json) throw new Error('Could not parse AI response')
     const r = JSON.parse(json[0])
@@ -1224,7 +1340,7 @@ ${resume.slice(0, 2500)}
 Output the full rewritten resume in clean plain text with clear section headers (PROFESSIONAL SUMMARY, SKILLS, EXPERIENCE, EDUCATION). Make it compelling, specific, and laser-focused on this role.`
 
   try {
-    const result = await groqChat([{ role:'user', content: prompt }], 'llama-3.3-70b-versatile')
+    const result = await kimiChat([{ role:'user', content: prompt }], 'kimi-k2.5')
     renderRewriteResult(result)
   } catch(e) {
     document.getElementById('rewrite-result').innerHTML = `<div class="empty" style="margin-top:12px"><h3>⚠️ Rewrite failed</h3><p style="font-size:.8rem;margin-top:4px">${e.message}</p></div>`
@@ -1319,7 +1435,7 @@ async function askNextQuestion() {
   if (ivQuestionCount >= ivMaxQuestions) { await endInterview(); return }
   try {
     setIVStatus('AI is thinking...')
-    const reply = await groqChat(ivMessages)
+    const reply = await kimiChat(ivMessages)
     ivMessages.push({ role:'assistant', content: reply })
     ivQuestionCount++
     updateQCount()
@@ -1415,7 +1531,7 @@ async function endInterview() {
   document.getElementById('iv-room').style.display = 'none'
   if (ivMessages.length > 2) {
     try {
-      const fb = await groqChat([...ivMessages, { role:'user', content:'Give me a final performance summary with: overall score out of 10, top 3 strengths shown in this interview, and top 3 areas to improve. Format with clear sections.' }])
+      const fb = await kimiChat([...ivMessages, { role:'user', content:'Give me a final performance summary with: overall score out of 10, top 3 strengths shown in this interview, and top 3 areas to improve. Format with clear sections.' }])
       document.getElementById('iv-feedback').style.display = ''
       document.getElementById('iv-feedback-body').innerHTML = fb.replace(/\n/g,'<br>')
     } catch(e) {}
@@ -1423,8 +1539,8 @@ async function endInterview() {
 }
 
 function initCoach() {
-  const k = localStorage.getItem('groq_key')
-  if (k) { document.getElementById('groq-key').value = k; document.getElementById('groq-key-status').textContent = '✅ Key loaded' }
+  const k = localStorage.getItem('kimi_key')
+  if (k) { document.getElementById('kimi-key').value = k; document.getElementById('kimi-key-status').textContent = '✅ Key loaded' }
   speechSynthesis.getVoices() // preload voices
 }
 
