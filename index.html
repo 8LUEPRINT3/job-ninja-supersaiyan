@@ -458,12 +458,32 @@
   </div>
 </div>
 
+<!-- AI COMPANIES -->
+<div class="page" id="page-ai">
+  <div style="margin-bottom:18px">
+    <div style="font-size:1rem;font-weight:700;margin-bottom:4px">AI Companies Hiring</div>
+    <div style="font-size:.8rem;color:var(--text-soft)">Curated list of AI-first companies — many hire for annotation, RLHF, research, and remote roles.</div>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
+    <input id="ai-search" class="search-input" style="max-width:300px" placeholder="Search companies..." oninput="filterAI()" />
+    <select class="filter-sel" id="ai-cat" onchange="filterAI()">
+      <option value="">All Categories</option>
+      <option value="annotation">Data Annotation / RLHF</option>
+      <option value="research">Research &amp; Development</option>
+      <option value="saas">AI SaaS</option>
+      <option value="infra">AI Infrastructure</option>
+      <option value="health">AI Health</option>
+      <option value="other">Other</option>
+    </select>
+  </div>
+  <div id="ai-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px"></div>
+</div>
+
 <!-- AI COACH -->
 <div class="page" id="page-coach">
   <div style="margin-bottom:4px;font-size:1rem;font-weight:700">Career Tools</div>
   <div style="font-size:.78rem;color:var(--text-soft);margin-bottom:16px">ATS resume scanner + AI mock interview. Powered by Kimi (free tier available). <a href="https://platform.moonshot.cn" target="_blank" style="color:var(--accent)">Get a free API key →</a></div>
 
-  <!-- API Key -->
   <div class="coach-card" style="margin-bottom:18px">
     <h3>Kimi API Key</h3>
     <p>Your key stays in your browser only — never sent anywhere except Moonshot directly.</p>
@@ -474,7 +494,6 @@
     </div>
   </div>
 
-  <!-- Sub-tabs -->
   <div class="coach-tabs">
     <button class="coach-tab active" onclick="coachTab('ats',this)">ATS Scanner</button>
     <button class="coach-tab" onclick="coachTab('resume-writer',this)">Resume Writer</button>
@@ -516,28 +535,18 @@
     <div class="coach-card">
       <h3>Resume Writer</h3>
       <p>Describe your experience and target role — AI writes a tailored, ATS-friendly resume.</p>
-      
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
-        <div class="fg">
-          <label>Target Job Title</label>
-          <input id="rw-title" placeholder="e.g. Frontend Developer" />
-        </div>
-        <div class="fg">
-          <label>Company (optional)</label>
-          <input id="rw-company" placeholder="e.g. Shopify" />
-        </div>
+        <div class="fg"><label>Target Job Title</label><input id="rw-title" placeholder="e.g. Frontend Developer" /></div>
+        <div class="fg"><label>Company (optional)</label><input id="rw-company" placeholder="e.g. Shopify" /></div>
       </div>
-      
       <div class="fg" style="margin-bottom:14px">
         <label>Job Description (paste the posting)</label>
         <textarea class="coach-textarea" id="rw-jd" placeholder="Paste the full job description here..." style="min-height:100px"></textarea>
       </div>
-      
       <div class="fg" style="margin-bottom:14px">
         <label>Your Experience (free-form — jobs, projects, skills, education)</label>
         <textarea class="coach-textarea" id="rw-experience" placeholder="e.g. 3 years as IT support at Acme Corp. Fixed 50+ tickets/week, reduced resolution time 30%. Skills: Python, SQL, Excel. BSc Computer Science, University of Toronto, 2022..." style="min-height:140px"></textarea>
       </div>
-      
       <div style="display:flex;gap:10px;align-items:center">
         <button class="btn btn-primary" onclick="writeResume()" id="rw-btn">Write My Resume</button>
         <span id="rw-loading" style="font-size:.78rem;color:var(--text-soft);display:none">Writing... this takes ~20 seconds</span>
@@ -551,38 +560,27 @@
     <div class="coach-card">
       <h3>Cover Letter Writer</h3>
       <p>AI writes a compelling cover letter tailored to the job and your background.</p>
-      
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
-        <div class="fg">
-          <label>Job Title</label>
-          <input id="cl-title" placeholder="e.g. Data Analyst" />
-        </div>
-        <div class="fg">
-          <label>Company</label>
-          <input id="cl-company" placeholder="e.g. Google" />
-        </div>
+        <div class="fg"><label>Job Title</label><input id="cl-title" placeholder="e.g. Data Analyst" /></div>
+        <div class="fg"><label>Company</label><input id="cl-company" placeholder="e.g. Google" /></div>
       </div>
-      
       <div class="fg" style="margin-bottom:14px">
         <label>Job Description</label>
         <textarea class="coach-textarea" id="cl-jd" placeholder="Paste the full job description here..." style="min-height:100px"></textarea>
       </div>
-      
       <div class="fg" style="margin-bottom:14px">
         <label>Your Background (brief — key experience, skills, why you want this role)</label>
         <textarea class="coach-textarea" id="cl-background" placeholder="e.g. 2 years data analysis at fintech startup. Built dashboards used by 200+ employees. Passionate about making data accessible. Excited about Google's mission because..." style="min-height:120px"></textarea>
       </div>
-      
       <div class="fg" style="margin-bottom:14px">
         <label>Tone</label>
         <select class="filter-sel" id="cl-tone" style="width:100%">
-          <option value="professional">Professional & polished</option>
-          <option value="conversational">Conversational & warm</option>
-          <option value="bold">Bold & confident</option>
-          <option value="enthusiastic">Enthusiastic & energetic</option>
+          <option value="professional">Professional &amp; polished</option>
+          <option value="conversational">Conversational &amp; warm</option>
+          <option value="bold">Bold &amp; confident</option>
+          <option value="enthusiastic">Enthusiastic &amp; energetic</option>
         </select>
       </div>
-      
       <div style="display:flex;gap:10px;align-items:center">
         <button class="btn btn-primary" onclick="writeCoverLetter()" id="cl-btn">Write Cover Letter</button>
         <span id="cl-loading" style="font-size:.78rem;color:var(--text-soft);display:none">Writing... this takes ~15 seconds</span>
@@ -653,13 +651,12 @@
       <div style="margin-top:16px">
         <div style="font-size:.8rem;font-weight:700;color:var(--accent);margin-bottom:8px">BEFORE YOU SEND CHECKLIST</div>
         <div style="font-size:.78rem;color:var(--text);line-height:1.7;background:var(--surface-warm);padding:12px;border-radius:8px;border:1px solid var(--border)">
-          <div style="margin-bottom:6px"><b>Subject & Opening:</b></div>
+          <div style="margin-bottom:6px"><b>Subject &amp; Opening:</b></div>
           <div style="margin-left:12px;margin-bottom:10px;color:#8888aa">
             • Subject line matches the tone of the role (bold for sales/marketing, precise for finance/ops)<br>
             • Opening line earns a read — no "I'm writing to express my interest"<br>
             • Removed every bracket: [Your Name], X years, [Tech Stack], etc.
           </div>
-          
           <div style="margin-bottom:6px"><b>Body:</b></div>
           <div style="margin-left:12px;margin-bottom:10px;color:#8888aa">
             • States a real pain point the company likely has — not a generic one<br>
@@ -667,14 +664,12 @@
             • Mentions the CV/portfolio attachment explicitly<br>
             • Reads like you, not like a copy-pasted template
           </div>
-          
           <div style="margin-bottom:6px"><b>Attachments:</b></div>
           <div style="margin-left:12px;margin-bottom:10px;color:#8888aa">
             • CV is actually attached (check before hitting send)<br>
             • Portfolio link works and is set to public/viewable<br>
             • File names are professional (not "CV_final_final2.pdf")
           </div>
-          
           <div style="margin-bottom:6px"><b>Final Pass:</b></div>
           <div style="margin-left:12px;color:#8888aa">
             • Read it out loud once — if it sounds stiff, cut a sentence<br>
@@ -690,23 +685,18 @@
           <div style="margin-bottom:8px"><b>Don't open with filler.</b><br>
           <span style="color:#ff8888">✗ "I'm writing to express my interest in the [Role] position at [Company]."</span><br>
           <span style="color:var(--success)">✓ Lead with the pain point or the result — the role and company come naturally after.</span></div>
-          
           <div style="margin-bottom:8px"><b>Don't list duties without outcomes.</b><br>
           <span style="color:#ff8888">✗ "I managed social media accounts and created content."</span><br>
           <span style="color:var(--success)">✓ "I grew a 12K-follower account to 40K and turned that into 200+ monthly enquiries."</span></div>
-          
           <div style="margin-bottom:8px"><b>Don't oversell with no proof.</b><br>
           <span style="color:#ff8888">✗ "I'm a hardworking, detail-oriented team player."</span><br>
           <span style="color:var(--success)">✓ Let one specific result imply the trait — don't name it.</span></div>
-          
           <div style="margin-bottom:8px"><b>Don't send the same template to every role.</b><br>
           <span style="color:#ff8888">✗ Identical body copy for a Graphic Designer and Data Analyst role with just the title swapped.</span><br>
           <span style="color:var(--success)">✓ Swap the pain point and result to match what that specific role actually solves.</span></div>
-          
           <div style="margin-bottom:8px"><b>Don't fake numbers.</b><br>
           <span style="color:#ff8888">✗ Rounding up or inventing metrics you can't speak to in an interview.</span><br>
           <span style="color:var(--success)">✓ If you don't have a number, describe the outcome plainly instead of guessing one.</span></div>
-          
           <div><b>Don't ignore the follow-up.</b><br>
           <span style="color:#ff8888">✗ Sending once and assuming silence means rejection.</span><br>
           <span style="color:var(--success)">✓ One polite follow-up after 5–7 business days is expected, not pushy.</span></div>
@@ -733,17 +723,14 @@
           <span style="color:#8888aa">• "Stop Searching — Your Social Media Manager Just Applied"<br>
           • "One Less Role to Fill"<br>
           • "Before You Review Another Social Profile…"</span></div>
-          
           <div style="margin-bottom:8px"><b>UI/UX Designer:</b><br>
           <span style="color:#8888aa">• "Your Users Have Opinions About Your Products"<br>
           • "Built for Better User Experiences"<br>
           • "Your Product Needs Better Experience Design"</span></div>
-          
           <div style="margin-bottom:8px"><b>Data Analyst:</b><br>
           <span style="color:#8888aa">• "Your Data Is Already Telling You What to Do"<br>
           • "Interpreting Data Beyond the Numbers"<br>
           • "Where Data Becomes Direction"</span></div>
-          
           <div><b>Virtual Assistant:</b><br>
           <span style="color:#8888aa">• "Consider This One Less Thing on Your To-Do List"<br>
           • "Because There Are Only 24 Hours in a Day"<br>
@@ -758,30 +745,6 @@
       </div>
     </div>
   </div>
-</div>
-
-<!-- AI COMPANIES -->
-<div class="page" id="page-ai">
-  <div style="margin-bottom:18px">
-    <div style="font-size:1rem;font-weight:700;margin-bottom:4px">AI Companies Hiring</div>
-    <div style="font-size:.8rem;color:var(--text-soft)">Curated list of AI-first companies — many hire for annotation, RLHF, research, and remote roles.</div>
-  </div>
-
-  <!-- Filter bar -->
-  <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
-    <input id="ai-search" class="search-input" style="max-width:300px" placeholder="Search companies..." oninput="filterAI()" />
-    <select class="filter-sel" id="ai-cat" onchange="filterAI()">
-      <option value="">All Categories</option>
-      <option value="annotation">Data Annotation / RLHF</option>
-      <option value="research">Research & Development</option>
-      <option value="saas">AI SaaS</option>
-      <option value="infra">AI Infrastructure</option>
-      <option value="health">AI Health</option>
-      <option value="other">Other</option>
-    </select>
-  </div>
-
-  <div id="ai-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px"></div>
 </div>
 
 <!-- MODALS -->
@@ -893,15 +856,12 @@ const TAG_MAP = {
 
 function normalizeTag(q) {
   const lower = q.toLowerCase().trim()
-  return TAG_MAP[lower] || lower.split(' ')[0] // fallback to first word
+  return TAG_MAP[lower] || lower.split(' ')[0]
 }
 
 // ── JOB CACHE ───────────────────────────────────────────────
 let JOBS_CACHE = null
 let CACHE_UPDATED = null
-const SEED_JOBS = [{"id":"wwr-6459575912520369624","source":"WeWorkRemotely","title":"Customer Onboarding Specialist for Company Incorporations (Full Time)","company":"Flag Theory","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Customer Support","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> Remote\n    <br /><strong>URL:</strong> <a href=\"https://flagtheory.com/\">https://flagtheory.com/</a>\n</p>\n\n<p><strong>Job Responsibilities</strong></p>\n<ul>\n<li>\n<p>Own the post-sale customer journey for company incorporation services across multiple jurisdicti","url":"https://weworkremotely.com/remote-jobs/flag-theory-customer-onboarding-specialist-for-company-incorporations-full-time-2","remote":true,"date":"Wed, 28 Jan 2026 03:30:13 +0000","tags":[]},{"id":"wwr-2902926957145649554","source":"WeWorkRemotely","title":"Lead Frontend Engineer","company":"FINN","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0171/4556/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> Singapore\n    <br /><strong>URL:</strong> <a href=\"https://www.finn-app.com/\">https://www.finn-app.com/</a>\n</p>\n\n<p class=\"p1\"><st","url":"https://weworkremotely.com/remote-jobs/finn-lead-frontend-engineer","remote":true,"date":"Wed, 25 Mar 2026 21:35:33 +0000","tags":[]},{"id":"wwr-7944813096956306518","source":"WeWorkRemotely","title":"Senior Software Engineer","company":"Cue","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> Copenhagen, Denmark\n    <br /><strong>URL:</strong> <a href=\"https://getcue.com\">https://getcue.com</a>\n</p>\n\n<h1 class=\"text-text-100 mt-3 -mb-1 text-[1.375rem] font-bold\">Senior Software Engineer</h1>\n<h2 class=\"text-text-100 mt-3 -mb-1 text-[1.125rem] font-b","url":"https://weworkremotely.com/remote-jobs/cue-senior-software-engineer","remote":true,"date":"Wed, 25 Mar 2026 20:21:42 +0000","tags":[]},{"id":"wwr-3285402849266329490","source":"WeWorkRemotely","title":"Senior Software Engineer - Backend/Python - USA Only (100% Remote)","company":"Close","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> USA\n    <br /><strong>URL:</strong> <a href=\"http://www.close.com\">http://www.close.com</a>\n</p>\n\n<div><strong>About Us</strong></div>\n<div><a href=\"https://close.com/\">Close</a> is a bootstrapped, profitable, 100% remote, ~100 person team of thoughtful individ","url":"https://weworkremotely.com/remote-jobs/close-senior-software-engineer-backend-python-usa-only-100-remote-1","remote":true,"date":"Wed, 23 Jul 2025 14:31:54 +0000","tags":[]},{"id":"wwr-2771106176085261940","source":"WeWorkRemotely","title":"Senior Software Engineer","company":"Mangomint","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Programming","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0171/4529/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> Los Angeles, California\n    <br /><strong>URL:</strong> <a href=\"https://www.mangomint.com/\">https://www.mangomint.com/</a>\n</p>\n\n<","url":"https://weworkremotely.com/remote-jobs/mangomint-senior-software-engineer","remote":true,"date":"Wed, 18 Mar 2026 21:08:16 +0000","tags":[]},{"id":"wwr-1517704703919494151","source":"WeWorkRemotely","title":"Product Designer","company":"TimeZest","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Design","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0171/1012/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> Remote\n    <br /><strong>URL:</strong> <a href=\"https://timezest.com\">https://timezest.com</a>\n</p>\n\n<p><strong>Company</strong></p","url":"https://weworkremotely.com/remote-jobs/timezest-product-designer","remote":true,"date":"Wed, 18 Feb 2026 11:01:37 +0000","tags":[]},{"id":"wwr-233391408595985079","source":"WeWorkRemotely","title":"Software Engineer, Business Experience","company":"CodeSignal","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Programming","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0171/2586/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> San Francisco\n    <br /><strong>URL:</strong> <a href=\"https://codesignal.com/\">https://codesignal.com/</a>\n</p>\n\n<div>We are looki","url":"https://weworkremotely.com/remote-jobs/codesignal-software-engineer-business-experience-1","remote":true,"date":"Wed, 12 Nov 2025 08:56:02 +0000","tags":[]},{"id":"wwr-1151159438689311066","source":"WeWorkRemotely","title":"Junior Product Designer - AI Driven","company":"Cloudwalk","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Design","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> S\u00e3o Paulo\n</p>\n\nAbout CloudWalk:We are not just another fintech unicorn. We are a pack of dreamers, makers, and tech enthusiasts building the future of payments. With millions of happy customers and a hunger for innovation, we're now expanding our neural networ","url":"https://weworkremotely.com/remote-jobs/cloudwalk-junior-product-designer-ai-driven","remote":true,"date":"Wed, 11 Mar 2026 20:32:38 +0000","tags":[]},{"id":"wwr-1708833590974793013","source":"WeWorkRemotely","title":"Product Designer - AI Driven","company":"Cloudwalk","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Design","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> S\u00e3o Paulo\n</p>\n\nAbout CloudWalk:We are not just another fintech unicorn. We are a pack of dreamers, makers, and tech enthusiasts building the future of payments. With millions of happy customers and a hunger for innovation, we're now expanding our neural networ","url":"https://weworkremotely.com/remote-jobs/cloudwalk-product-designer-ai-driven","remote":true,"date":"Wed, 11 Mar 2026 20:32:33 +0000","tags":[]},{"id":"wwr-2823935984382422151","source":"WeWorkRemotely","title":"Senior Software Engineer II - Product Security","company":"Confluent","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Devops Sysadmin","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> Remote, Ontario, Canada\n</p>\n\nWe\u2019re not just building better tech. We\u2019re rewriting how data moves and what the world can do with it. With Confluent, data doesn\u2019t sit still. Our platform puts information in motion, streaming in near real-time so companies can re","url":"https://weworkremotely.com/remote-jobs/confluent-senior-software-engineer-ii-product-security","remote":true,"date":"Wed, 11 Mar 2026 20:32:20 +0000","tags":[]},{"id":"wwr-5397479885657271922","source":"WeWorkRemotely","title":"Senior Product Manager, Confluent Cloud Kafka","company":"Confluent","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Programming","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> CA Remote Ontario\n</p>\n\nWe\u2019re not just building better tech. We\u2019re rewriting how data moves and what the world can do with it. With Confluent, data doesn\u2019t sit still. Our platform puts information in motion, streaming in near real-time so companies can react fa","url":"https://weworkremotely.com/remote-jobs/confluent-senior-product-manager-confluent-cloud-kafka","remote":true,"date":"Wed, 11 Mar 2026 20:32:16 +0000","tags":[]},{"id":"wwr-3620288424571793406","source":"WeWorkRemotely","title":"Product Tech & Quality Expert (12 Month FTC)","company":"Booksy","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Customer Support","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> Poland\n</p>\n\nA career at Booksy means you\u2019re part of a global team focused on helping people around the world feel great about themselves, every day. From empowering entrepreneurs to build successful businesses, to supporting their customers arrange meaningful ","url":"https://weworkremotely.com/remote-jobs/booksy-product-tech-quality-expert-12-month-ftc","remote":true,"date":"Wed, 11 Mar 2026 20:32:03 +0000","tags":[]},{"id":"wwr-8923791189049058748","source":"WeWorkRemotely","title":"Azure DevOps Engineer","company":"Digital Forms","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Devops Sysadmin","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> Warsaw, 14, Poland\n</p>\n\nJob descriptionAs a DevOps Engineer at Digital Forms, you\u2019ll work at the heart of our digital transformation projects - designing robust infrastructure, shaping CI/CD pipelines, and ensuring smooth delivery of products used by companies","url":"https://weworkremotely.com/remote-jobs/digital-forms-azure-devops-engineer","remote":true,"date":"Wed, 11 Mar 2026 20:31:53 +0000","tags":[]},{"id":"wwr-4065290570855934239","source":"WeWorkRemotely","title":"DevOps Engineer (Remote/Thessaloniki)","company":"European Dynamics","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Devops Sysadmin","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> Thessaloniki, Central Macedonia, Greece\n</p>\n\nAre you a skilled DevOps Engineer looking to make an impact? We have an exciting opportunity for you to join our expanding development team in Thessaloniki or work fully remotely. Be part of a dynamic and innovative","url":"https://weworkremotely.com/remote-jobs/european-dynamics-devops-engineer-remote-thessaloniki","remote":true,"date":"Wed, 11 Mar 2026 20:31:49 +0000","tags":[]},{"id":"wwr-1231413303720351636","source":"WeWorkRemotely","title":"Junior Java Developer / DevOps Engineer (Remote/Thessaloniki)","company":"European Dynamics","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Devops Sysadmin","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> Thessaloniki, Central Macedonia, Greece\n</p>\n\nAre you a Junior Java Developer or DevOps Engineer looking for a dynamic role in a growing development team? Join us in Thessaloniki or work fully remotely, and become part of our innovative team implementing cuttin","url":"https://weworkremotely.com/remote-jobs/european-dynamics-junior-java-developer-devops-engineer-remote-thessaloniki","remote":true,"date":"Wed, 11 Mar 2026 20:31:43 +0000","tags":[]},{"id":"wwr-1352329438819705400","source":"WeWorkRemotely","title":".NET Full Stack Developer (Power Platform specialization)","company":"European Dynamics","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Programming","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> , None, Greece\n</p>\n\nWe are currently seeking a skilled .NET Full Stack Developer (Power Platform specialization) to design and build apps, flows, and data integrations using Power Apps, Power Automate, and Dataverse in Athens (or Heraklion, Rethymnon) or remot","url":"https://weworkremotely.com/remote-jobs/european-dynamics-net-full-stack-developer-power-platform-specialization","remote":true,"date":"Wed, 11 Mar 2026 20:31:42 +0000","tags":[]},{"id":"wwr-409644286584969668","source":"WeWorkRemotely","title":"Senior Full Stack Developer (Laravel + Vue.js)","company":"Microventures","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Programming","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> Texas\n</p>\n\nAbout the Role:We're seeking a Senior Full Stack Developer to join our engineering team. You'll work across the entire stack, crafting performant APIs with Laravel and building dynamic, responsive interfaces with Vue.js. This role requires someone w","url":"https://weworkremotely.com/remote-jobs/microventures-senior-full-stack-developer-laravel-vue-js","remote":true,"date":"Wed, 11 Mar 2026 20:31:37 +0000","tags":[]},{"id":"wwr-992678310174665203","source":"WeWorkRemotely","title":"Software Engineer, iOS Core Product","company":"Speechify Inc","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> Florida\n    <br /><strong>URL:</strong> <a href=\"http://www.speechify.com\">http://www.speechify.com</a>\n</p>\n\n<p><strong>Overview</strong></p>\n<p>With the growth of our iOS app, being the #18 productivity app in the App Store category and also our recent recogn","url":"https://weworkremotely.com/remote-jobs/speechify-inc-software-engineer-ios-core-product","remote":true,"date":"Wed, 09 Jul 2025 15:35:11 +0000","tags":[]},{"id":"wwr-7296755827790037345","source":"WeWorkRemotely","title":"Chief Operating Officer (COO) / Growth GM","company":"Prepterminal.com","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0171/4367/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> Tel Aviv, Israel \n    <br /><strong>URL:</strong> <a href=\"https://www.prepterminal.com\">https://www.prepterminal.com</a>\n</p>\n\n<p>","url":"https://weworkremotely.com/remote-jobs/prepterminal-com-chief-operating-officer-coo-growth-gm","remote":true,"date":"Wed, 04 Mar 2026 17:48:31 +0000","tags":[]},{"id":"wwr-6734249449521868910","source":"WeWorkRemotely","title":"Content Producer","company":"Ketone-IQ","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Design","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0171/1909/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> Los Angeles, CA, USA\n    <br /><strong>URL:</strong> <a href=\"https://ketone.com/\">https://ketone.com/</a>\n</p>\n\n<p><strong>The Rol","url":"https://weworkremotely.com/remote-jobs/ketone-iq-content-producer","remote":true,"date":"Wed, 01 Apr 2026 15:52:49 +0000","tags":[]},{"id":"wwr-2869919409827321829","source":"WeWorkRemotely","title":"Staff Product Designer, Districts","company":"Khan Academy","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Design","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> Mountain View, CA / Remote (Continental US + Hawaii + Canada Only)\n</p>\n\n<div class=\"job__description body\"><div><p><strong>ABOUT KHAN ACADEMY</strong></p><br><p>Khan Academy is a nonprofit with the mission to deliver a free, world-class education to anyone, an","url":"https://weworkremotely.com/remote-jobs/khan-academy-staff-product-designer-districts","remote":true,"date":"Tue, 31 Mar 2026 20:31:31 +0000","tags":[]},{"id":"wwr-8385488226629882992","source":"WeWorkRemotely","title":"Front End Engineer - Remote","company":"EventMobi","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0064/4101/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> 151 Yonge Street 11th Floor Toronto, Ontario M5C 2W7\n    <br /><strong>URL:</strong> <a href=\"https://www.eventmobi.com/\">https://w","url":"https://weworkremotely.com/remote-jobs/eventmobi-front-end-engineer-remote","remote":true,"date":"Tue, 31 Mar 2026 18:28:48 +0000","tags":[]},{"id":"wwr-7258540501421304011","source":"WeWorkRemotely","title":"Staff Design Systems Designer","company":"Ethos Life","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Design","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> Remote US\n</p>\n\n<div class=\"job__description body\"><div><h3><strong>About Ethos</strong></h3><br><p>Ethos was built to make it faster and easier to get life insurance for the next million families. Our approach blends industry expertise, technology, and the hum","url":"https://weworkremotely.com/remote-jobs/ethos-life-staff-design-systems-designer","remote":true,"date":"Tue, 24 Mar 2026 20:31:45 +0000","tags":[]},{"id":"wwr-7114906667698052724","source":"WeWorkRemotely","title":"Landing Page Designer, Conversion Focused","company":"Lucyd Media","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Design","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0171/4517/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> Remote\n    <br /><strong>URL:</strong> <a href=\"https://www.wearelucyd.com/\">https://www.wearelucyd.com/</a>\n</p>\n\n<p>Are you looki","url":"https://weworkremotely.com/remote-jobs/lucyd-media-landing-page-designer-conversion-focused","remote":true,"date":"Tue, 17 Mar 2026 21:44:17 +0000","tags":[]},{"id":"wwr-5469004900959583247","source":"WeWorkRemotely","title":"Director of Product Money Movement","company":"Mesh","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> United States - Remote\n</p>\n\nAbout MeshAt Mesh, our mission is to enable consumers to pay and be paid with any asset. Today, trillions of dollars in tokenized assets exist but remain largely unusable for everyday commerce. Mesh is bridging this gap by making cr","url":"https://weworkremotely.com/remote-jobs/mesh-director-of-product-money-movement","remote":true,"date":"Tue, 17 Mar 2026 20:31:34 +0000","tags":[]},{"id":"wwr-5722478826092227793","source":"WeWorkRemotely","title":"Associate Manager, German Customer Support","company":"Pearl","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Customer Support","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> Ukraine\n</p>\n\nAbout UsPearl is AI for professional services at global scale\u2014combining advanced AI with verified human expertise to deliver help that\u2019s accurate, accountable, and fast. Since 2003, our network has connected millions of customers with licensed pro","url":"https://weworkremotely.com/remote-jobs/pearl-associate-manager-german-customer-support","remote":true,"date":"Tue, 17 Mar 2026 20:31:26 +0000","tags":[]},{"id":"wwr-6423675829795500354","source":"WeWorkRemotely","title":"WordPress Support Engineer","company":"Yoko Co","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Programming","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0018/9650/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> McLean, VA\n    <br /><strong>URL:</strong> <a href=\"https://www.yokoco.com/\">https://www.yokoco.com/</a>\n</p>\n\n<p>We\u2019re seeking a W","url":"https://weworkremotely.com/remote-jobs/yoko-co-wordpress-support-engineer","remote":true,"date":"Tue, 17 Mar 2026 13:01:49 +0000","tags":[]},{"id":"wwr-6635304752741296372","source":"WeWorkRemotely","title":"Senior Software Engineer","company":"Strange Loop Labs","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Programming","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0171/4508/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> New York\n    <br /><strong>URL:</strong> <a href=\"https://www.strangelooplabs.ai/\">https://www.strangelooplabs.ai/</a>\n</p>\n\n<p>We\u2019","url":"https://weworkremotely.com/remote-jobs/strange-loop-labs-senior-software-engineer","remote":true,"date":"Tue, 17 Mar 2026 06:05:35 +0000","tags":[]},{"id":"wwr-3692303480232365828","source":"WeWorkRemotely","title":"Full-Stack Engineering Lead","company":"Rare Days","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Programming","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0171/3286/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> Vancouver\n    <br /><strong>URL:</strong> <a href=\"http://raredays.com\">http://raredays.com</a>\n</p>\n\n<h3><strong>About Rare Days</","url":"https://weworkremotely.com/remote-jobs/rare-days-full-stack-engineering-lead","remote":true,"date":"Tue, 17 Mar 2026 00:18:00 +0000","tags":[]},{"id":"wwr-3515249110331060889","source":"WeWorkRemotely","title":"Product Design","company":"Preql AI","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Design","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0171/4094/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> NYC\n    <br /><strong>URL:</strong> <a href=\"http://preql.ai\">http://preql.ai</a>\n</p>\n\n<h1>About Preql</h1>\n<p>Preql is building t","url":"https://weworkremotely.com/remote-jobs/preql-ai-product-design","remote":true,"date":"Tue, 17 Feb 2026 22:42:05 +0000","tags":[]},{"id":"wwr-922224667798100709","source":"WeWorkRemotely","title":"Customer Happiness Advocate (Remote - Canada, UK, Spain, Finland)","company":"Turtles","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Customer Support","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0171/4081/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> Finland\n    <br /><strong>URL:</strong> <a href=\"https://www.turtles.com/\">https://www.turtles.com/</a>\n</p>\n\n<p class=\"MsoNormal\">","url":"https://weworkremotely.com/remote-jobs/turtles-customer-happiness-advocate-remote-canada-uk-spain-finland","remote":true,"date":"Tue, 17 Feb 2026 18:09:17 +0000","tags":[]},{"id":"wwr-4317957593147430607","source":"WeWorkRemotely","title":"USA","company":"Porkbun","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Customer Support","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0064/5136/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> Oregon USA\n    <br /><strong>URL:</strong> <a href=\"https://porkbun.com\">https://porkbun.com</a>\n</p>\n\n<p><strong>Live Technical Su","url":"https://weworkremotely.com/remote-jobs/porkbun-live-technical-support-representative-full-time-40-hrs-week-sat-sun-required-40-000-year-benefits","remote":true,"date":"Tue, 14 Oct 2025 21:16:28 +0000","tags":[]},{"id":"wwr-3846884088062153528","source":"WeWorkRemotely","title":"RTL Design Engineer","company":"Niobium","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Design","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> Dayton, Ohio, United States\n</p>\n\nSoC Engineer&nbsp;At Niobium Microsystems, we develop high performance microelectronic products to enable the secure collection, processing, and distribution of critical data. We are a trusted partner for DoD and commercial cus","url":"https://weworkremotely.com/remote-jobs/niobium-rtl-design-engineer","remote":true,"date":"Tue, 10 Mar 2026 20:36:29 +0000","tags":[]},{"id":"wwr-5740381347086216930","source":"WeWorkRemotely","title":"Jr Product Administrator","company":"Workana","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Programming","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> Colombia\n</p>\n\nWorkana is the largest remote work platform for talent in Latin America. Our new segment, Workana Premium, focuses on matching the most exceptional professionals with leading and innovative companies around the globe. Enjoy competitive compensati","url":"https://weworkremotely.com/remote-jobs/workana-jr-product-administrator","remote":true,"date":"Tue, 10 Mar 2026 20:36:13 +0000","tags":[]},{"id":"wwr-1628525146049751903","source":"WeWorkRemotely","title":"Backend/DevOps Engineer","company":"Nick Ai","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Devops Sysadmin","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> United States\n</p>\n\nAbout NickAINickAI is revolutionizing cryptocurrency investing through AI-powered autonomous trading agents. Our platform enables users to create sophisticated AI agents that manage crypto portfolios 24/7, eliminating emotional trading decis","url":"https://weworkremotely.com/remote-jobs/nick-ai-backend-devops-engineer","remote":true,"date":"Tue, 10 Mar 2026 20:35:50 +0000","tags":[]},{"id":"wwr-4486217304791018186","source":"WeWorkRemotely","title":"(fluent Ukrainian) PPC Growth Specialist (AI SaaS Product)","company":"Supportyourapp","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Customer Support","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> Krak\u00f3w, Lesser Poland Voivodeship, Poland\n</p>\n\nSupportYourApp is an international Support-as-a-Service company that has been providing business process outsourcing services to other IT companies around the globe (technical and customer support, services to imp","url":"https://weworkremotely.com/remote-jobs/supportyourapp-fluent-ukrainian-ppc-growth-specialist-ai-saas-product","remote":true,"date":"Tue, 10 Mar 2026 20:35:36 +0000","tags":[]},{"id":"wwr-984763531595394774","source":"WeWorkRemotely","title":"Staff Product Backend Software Engineer, Core Sync","company":"Dropbox","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Programming","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> Remote - US: All locations\n</p>\n\nRole DescriptionAt Dropbox, we believe in simplifying the way people work together. Our engineers build the technology that powers seamless collaboration for hundreds of millions of users worldwide. As a Staff Engineer focused o","url":"https://weworkremotely.com/remote-jobs/dropbox-staff-product-backend-software-engineer-core-sync","remote":true,"date":"Tue, 10 Mar 2026 20:35:27 +0000","tags":[]},{"id":"wwr-2398734322189097182","source":"WeWorkRemotely","title":"Staff Product Designer, Clinical Experience","company":"Hone Health","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Design","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> Remote (US ONLY)\n</p>\n\nAbout HoneHone is an online medical clinic at the forefront of transforming healthcare and enhancing longevity. We use cutting-edge scientific advancements to empower men and women to take control of their health and unlock their full pot","url":"https://weworkremotely.com/remote-jobs/hone-health-staff-product-designer-clinical-experience","remote":true,"date":"Tue, 10 Mar 2026 20:35:16 +0000","tags":[]},{"id":"wwr-2355187146549097984","source":"WeWorkRemotely","title":"Full Stack Developer Intern (AI Focus | Class of 2025 | Conversion Opportunity)","company":"Abstrabit Technologies","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Programming","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> EPIP Zone Whitefield Rd, Phase 2, Brookefield, Bengaluru, Karnataka, India\n</p>\n\nCompany DescriptionWe are an innovative AI consulting company dedicated to developing cutting-edge AI solutions for our clients. Our services include creating custom chatbots, buil","url":"https://weworkremotely.com/remote-jobs/abstrabit-technologies-full-stack-developer-intern-ai-focus-class-of-2025-conversion-opportunity","remote":true,"date":"Tue, 10 Mar 2026 20:34:15 +0000","tags":[]},{"id":"wwr-3287194990934241146","source":"WeWorkRemotely","title":"Full Stack Developer (Python / Django / Next.js / Kubernetes) (Remote)","company":"Rhino Partners","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Devops Sysadmin","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> 11 Irving Place, #09-01, Singapore, 369551 Singapore\n</p>\n\nExperience: 3\u20136+ yearsRole OverviewWe are looking for experienced Full Stack Developers to join a product-focused engineering team building modern, scalable web platforms. You will work across backend A","url":"https://weworkremotely.com/remote-jobs/rhino-partners-full-stack-developer-python-django-next-js-kubernetes-remote","remote":true,"date":"Tue, 10 Mar 2026 20:33:57 +0000","tags":[]},{"id":"wwr-1734101139293342573","source":"WeWorkRemotely","title":"DevOps with French","company":"Oben Technology","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Devops Sysadmin","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> Bucharest Romania\n</p>\n\nABOUT COMPANY Oben stands ready to provide the IT Strategy and Consulting support for Global Leaders to help them steer their Organizations through Change. We leverage our functional and technology expertise, insights and industry know-h","url":"https://weworkremotely.com/remote-jobs/oben-technology-devops-with-french","remote":true,"date":"Tue, 10 Mar 2026 20:33:47 +0000","tags":[]},{"id":"wwr-1891001291568303273","source":"WeWorkRemotely","title":"Frontend Developer","company":"C4Media","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Programming","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0000/1595/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> Toronto, Ontario\n    <br /><strong>URL:</strong> <a href=\"https://www.c4media.com/\">https://www.c4media.com/</a>\n</p>\n\n<p>C4Media, ","url":"https://weworkremotely.com/remote-jobs/c4media-frontend-developer","remote":true,"date":"Tue, 10 Mar 2026 16:25:58 +0000","tags":[]},{"id":"wwr-3020574699288673243","source":"WeWorkRemotely","title":"Full Stack Engineer","company":"Ivy Tech","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Programming","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"\n\n<p>\n  <strong>Headquarters:</strong> United Kingdom, UK\n    <br /><strong>URL:</strong> <a href=\"https://www.ivy-tech.com/\">https://www.ivy-tech.com/</a>\n</p>\n\n<p>Senior Full Stack Software Engineer (.NET / Vue)</p>\n<p>Contract: 3 Months&nbsp;</p>\n<p>Location: Europe (Ideally Denmark / Northern Eu","url":"https://weworkremotely.com/remote-jobs/ivy-tech-full-stack-engineer","remote":true,"date":"Tue, 10 Mar 2026 13:52:50 +0000","tags":[]},{"id":"wwr-234014064394038221","source":"WeWorkRemotely","title":"Senior UX/UI Designer (Web) | Mapping Tech (Remote in Europe)","company":"MapTiler","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Design","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0171/4427/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> Zug, Switzerland\n    <br /><strong>URL:</strong> <a href=\"https://www.maptiler.com/\">https://www.maptiler.com/</a>\n</p>\n\n<ul>\n<li>F","url":"https://weworkremotely.com/remote-jobs/maptiler-senior-ux-ui-designer-web-mapping-tech-remote-in-europe","remote":true,"date":"Tue, 10 Mar 2026 09:40:39 +0000","tags":[]},{"id":"wwr-6171700943977280053","source":"WeWorkRemotely","title":"Senior Product Designer","company":"Search Dates","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"Design","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0171/2578/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> Europe \n    <br /><strong>URL:</strong> <a href=\"https://searchdates.com\">https://searchdates.com</a>\n</p>\n\n<p class=\"p1\"><strong>S","url":"https://weworkremotely.com/remote-jobs/search-dates-senior-product-designer-1","remote":true,"date":"Tue, 10 Mar 2026 03:28:32 +0000","tags":[]},{"id":"wwr-7656692237251688449","source":"WeWorkRemotely","title":"Full-stack/Backend developers LLM focused.","company":"CloudDevs","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0081/8410/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> San Francisco\n    <br /><strong>URL:</strong> <a href=\"https://clouddevs.com/\">https://clouddevs.com/</a>\n</p>\n\n<p><strong>Location","url":"https://weworkremotely.com/remote-jobs/clouddevs-full-stack-backend-developers-llm-focused","remote":true,"date":"Tue, 07 Apr 2026 17:04:23 +0000","tags":[]},{"id":"wwr-4325574384008633702","source":"WeWorkRemotely","title":"Remote Sales - $20/hr - United States","company":"Remote Talent Cloud","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0171/1817/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> Cheyenne, WY\n    <br /><strong>URL:</strong> <a href=\"https://remotetalentcloud.com/\">https://remotetalentcloud.com/</a>\n</p>\n\n<p c","url":"https://weworkremotely.com/remote-jobs/remote-talent-cloud-remote-sales-20-hr-united-states","remote":true,"date":"Tue, 07 Apr 2026 16:37:49 +0000","tags":[]},{"id":"wwr-1535616549074869524","source":"WeWorkRemotely","title":"Crypto Trader (Remote, Full Training Provided)","company":"Fox Global Assets Ltd","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0171/4723/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> Fox Global Assets Ltd\n    <br /><strong>URL:</strong> <a href=\"https://foxglobal.co/\">https://foxglobal.co/</a>\n</p>\n\n<p>Click the ","url":"https://weworkremotely.com/remote-jobs/fox-global-assets-ltd-crypto-trader-remote-full-training-provided","remote":true,"date":"Tue, 07 Apr 2026 14:56:01 +0000","tags":[]},{"id":"wwr-2114881948034946187","source":"WeWorkRemotely","title":"SaaS Product Specialist (German-speaking, EMEA)","company":"Creative Force","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0074/5226/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> Creative Force\n    <br /><strong>URL:</strong> <a href=\"https://www.creativeforce.team/\">https://www.creativeforce.team/</a>\n</p>\n\n","url":"https://weworkremotely.com/remote-jobs/creative-force-saas-product-specialist-german-speaking-emea-2","remote":true,"date":"Tue, 07 Apr 2026 08:46:32 +0000","tags":[]},{"id":"wwr-6353263522115539027","source":"WeWorkRemotely","title":"Senior Frontend Engineer","company":"Level","logo":"","location":"Worldwide","type":"Full-time","level":"","industry":"","salary_min":null,"salary_max":null,"salary_currency":"USD","excerpt":"<img src=\"https://we-work-remotely.imgix.net/logos/0016/4046/logo.gif?ixlib=rails-4.0.0&w=50&h=50&dpr=2&fit=fill&auto=compress\" />\n\n<p>\n  <strong>Headquarters:</strong> Asheville, NC\n    <br /><strong>URL:</strong> <a href=\"https://level.io\">https://level.io</a>\n</p>\n\n<div>Level is a modern RMM plat","url":"https://weworkremotely.com/remote-jobs/level-senior-frontend-engineer","remote":true,"date":"Tue, 03 Mar 2026 17:26:57 +0000","tags":[]}]
-
-// fetchWithTimeout defined below
 
 async function loadJobsCache() {
   if (JOBS_CACHE) return JOBS_CACHE
@@ -923,7 +883,6 @@ async function loadJobsCache() {
       console.warn('⚠️ jobs fetch failed:', url, e.message)
     }
   }
-  // All fetches failed — use inline seed
   console.warn('⚠️ Using inline seed jobs')
   JOBS_CACHE = SEED_JOBS
   return JOBS_CACHE
@@ -954,7 +913,6 @@ async function search() {
 
   el.innerHTML = '<div class="loading"><div class="spinner"></div><br>Hunting jobs...</div>'
 
-  // Try local cache first
   const cache = await loadJobsCache()
   if (cache && cache.length) {
     let results = searchCache(cache, rawQ, industry, geo, remoteOnly)
@@ -963,7 +921,6 @@ async function search() {
       renderResults(results, '', updatedStr)
       return
     }
-    // If geo filter caused 0 results, try without geo
     if (geo) {
       const noGeo = searchCache(cache, rawQ, industry, '', remoteOnly)
       if (noGeo.length) {
@@ -975,7 +932,7 @@ async function search() {
     return
   }
 
-  // Fallback: live API (with timeout)
+  // Fallback: live API
   const tag = rawQ ? normalizeTag(rawQ) : ''
   let url = 'https://jobicy.com/api/v2/remote-jobs?count=50'
   if (tag) url += '&tag=' + encodeURIComponent(tag)
@@ -1276,7 +1233,7 @@ async function kimiChat(messages, model='kimi-k2.5') {
   if (!key) throw new Error('No Kimi API key set — add it above')
   const r = await fetchWithTimeout('https://api.moonshot.cn/v1/chat/completions', 15000, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+    headers: { 'Content-Type': 'application/json', 'Authorization': '***' + key },
     body: JSON.stringify({ model, messages, temperature: 0.7, max_tokens: 2048 })
   })
   if (!r.ok) { const e = await r.json(); throw new Error(e.error?.message || r.status) }
@@ -1284,7 +1241,6 @@ async function kimiChat(messages, model='kimi-k2.5') {
   return d.choices[0].message.content
 }
 
-// Override fetchWithTimeout to support extra fetch options
 function fetchWithTimeout(url, ms, opts) {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => reject(new Error('timeout')), ms)
@@ -1414,82 +1370,33 @@ function renderATSResult(r) {
 async function rewriteResume() {
   const jd = document.getElementById('ats-jd').value.trim()
   const resume = document.getElementById('ats-resume').value.trim()
-  if (!jd || !resume) { alert('Make sure both job description and resume are filled in'); return }
-
+  if (!jd || !resume) { alert('Paste both a job description and resume first'); return }
   document.getElementById('rewrite-btn').disabled = true
   document.getElementById('rewrite-loading').style.display = ''
-  document.getElementById('rewrite-result').innerHTML = ''
-
-  const prompt = `You are an elite career coach and resume writer. Rewrite the candidate's resume tailored specifically to the job description below. Follow this exact methodology:
-
-1. DECONSTRUCT THE JOB: Extract mandatory technical skills, required tools, soft skills, tone, and the core problems this hire must solve.
-2. MAP EXPERIENCE: Find direct overlaps and transferable skills from the candidate's background.
-3. REWRITE STRATEGICALLY:
-   - Write a powerful 3-4 sentence Professional Summary that hooks the reader immediately
-   - Rewrite each work experience using strong action verbs + what was done + measurable result (e.g. "Reduced ticket resolution time by 30% by implementing...")
-   - Truthfully reframe existing experience — never fabricate
-   - Add a Skills section with keywords from the job description
-   - Keep it ATS-friendly: no columns, no graphics, clean structure
+  try {
+    const prompt = `You are an expert resume writer. Rewrite this resume to be perfectly tailored for the job description below. Make it ATS-friendly with relevant keywords, quantified achievements, and strong action verbs.
 
 JOB DESCRIPTION:
-${jd.slice(0, 2500)}
+${jd.slice(0, 3000)}
 
-CANDIDATE'S CURRENT RESUME:
-${resume.slice(0, 2500)}
+CURRENT RESUME:
+${resume.slice(0, 3000)}
 
-Output the full rewritten resume in clean plain text with clear section headers (PROFESSIONAL SUMMARY, SKILLS, EXPERIENCE, EDUCATION). Make it compelling, specific, and laser-focused on this role.`
-
-  try {
+Write the complete rewritten resume. Use clear sections: Summary, Experience, Skills, Education. Keep it to one page. Use bullet points with metrics where possible.`
     const result = await kimiChat([{ role:'user', content: prompt }], 'kimi-k2.5')
-    renderRewriteResult(result)
+    document.getElementById('rewrite-result').innerHTML = `
+      <div class="ats-result" style="margin-top:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div style="font-size:.82rem;font-weight:600;color:var(--text)">Your Rewritten Resume</div>
+          <button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.textContent)">Copy</button>
+        </div>
+        <div style="font-size:.82rem;color:var(--text);line-height:1.7;white-space:pre-wrap;background:var(--surface);padding:16px;border-radius:8px;border:1px solid var(--border)">${result}</div>
+      </div>`
   } catch(e) {
-    document.getElementById('rewrite-result').innerHTML = `<div class="empty" style="margin-top:12px"><h3>⚠️ Rewrite failed</h3><p style="font-size:.8rem;margin-top:4px">${e.message}</p></div>`
+    document.getElementById('rewrite-result').innerHTML = `<div class="empty" style="margin-top:12px"><h3>⚠️ Error</h3><p style="font-size:.8rem;margin-top:4px">${e.message}</p></div>`
   }
   document.getElementById('rewrite-btn').disabled = false
   document.getElementById('rewrite-loading').style.display = 'none'
-}
-
-function renderRewriteResult(text) {
-  // Format sections nicely
-  const formatted = text
-    .replace(/^(PROFESSIONAL SUMMARY|SKILLS|EXPERIENCE|EDUCATION|CERTIFICATIONS|PROJECTS|SUMMARY|HIGHLIGHTS)(.*?)$/gm,
-      '<div class="ats-section-title" style="margin-top:18px;margin-bottom:8px;font-size:.76rem">$1$2</div>')
-    .replace(/\n\n/g, '<br><br>')
-    .replace(/\n/g, '<br>')
-
-  document.getElementById('rewrite-result').innerHTML = `
-  <div class="ats-result" style="margin-top:14px">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <div style="font-size:.9rem;font-weight:700;color:var(--text)">Tailored Resume</div>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-ghost btn-sm" onclick="copyResume()">Copy</button>
-        <button class="btn btn-primary btn-sm" onclick="downloadResume()">Download .txt</button>
-      </div>
-    </div>
-    <div id="rewrite-text" style="font-size:.82rem;color:var(--text);line-height:1.7;white-space:pre-wrap;font-family:'Segoe UI',sans-serif;background:#070714;padding:16px;border-radius:8px;border:1px solid var(--border)">${formatted}</div>
-    <div style="margin-top:12px;font-size:.73rem;color:var(--text-faint)">💡 Tip: Copy this into Google Docs or Word, then format with your preferred style. All content is tailored to the job above.</div>
-  </div>`
-
-  // Store raw text for copy/download
-  window._rewrittenResume = text
-}
-
-function copyResume() {
-  if (!window._rewrittenResume) return
-  navigator.clipboard.writeText(window._rewrittenResume).then(() => {
-    const btn = event.target
-    btn.textContent = 'Copied!'
-    setTimeout(() => btn.textContent = 'Copy', 2000)
-  })
-}
-
-function downloadResume() {
-  if (!window._rewrittenResume) return
-  const blob = new Blob([window._rewrittenResume], { type: 'text/plain' })
-  const a = document.createElement('a')
-  a.href = URL.createObjectURL(blob)
-  a.download = 'tailored-resume.txt'
-  a.click()
 }
 
 // ── RESUME WRITER ──
@@ -1497,521 +1404,526 @@ async function writeResume() {
   const title = document.getElementById('rw-title').value.trim()
   const company = document.getElementById('rw-company').value.trim()
   const jd = document.getElementById('rw-jd').value.trim()
-  const experience = document.getElementById('rw-experience').value.trim()
-  
-  if (!title || !jd || !experience) { alert('Fill in job title, job description, and your experience'); return }
-  if (!getKimiKey()) { alert('Add your Kimi API key first'); return }
-
+  const exp = document.getElementById('rw-experience').value.trim()
+  if (!title || !exp) { alert('Fill in target job title and your experience'); return }
   document.getElementById('rw-btn').disabled = true
   document.getElementById('rw-loading').style.display = ''
-  document.getElementById('rw-result').innerHTML = ''
-
-  const prompt = `You are an elite resume writer. Write a complete, tailored resume for this candidate.
+  try {
+    const prompt = `You are an expert resume writer. Create a professional, ATS-friendly resume for this person.
 
 TARGET ROLE: ${title}${company ? ' at ' + company : ''}
+${jd ? 'JOB DESCRIPTION:\n' + jd.slice(0, 2000) : ''}
 
-JOB DESCRIPTION:
-${jd.slice(0, 2500)}
+CANDIDATE'S EXPERIENCE:
+${exp.slice(0, 3000)}
 
-CANDIDATE BACKGROUND:
-${experience.slice(0, 2500)}
+Write a complete, polished resume with these sections:
+- Professional Summary (2-3 sentences)
+- Core Competencies / Skills (bullet list)
+- Professional Experience (reverse chronological, with quantified achievements)
+- Education
+- Certifications (if relevant)
 
-Write a complete resume with these sections:
-- PROFESSIONAL SUMMARY (3-4 sentences, tailored to this role)
-- SKILLS (bullet list, include keywords from job description)
-- EXPERIENCE (each role with company, title, dates, 3-5 bullet points with action verbs + measurable results)
-- EDUCATION
-
-Rules:
-- Use strong action verbs (Led, Built, Reduced, Increased, Delivered)
-- Include metrics and numbers wherever possible
-- Mirror keywords from the job description naturally
-- ATS-friendly: clean structure, no tables, no graphics
-- Truthful — reframe but never fabricate experience
-- If dates are unknown, use "20XX – Present" format
-
-Output the complete resume in clean plain text.`
-
-  try {
+Use strong action verbs, include metrics where possible, and optimize for ATS keywords from the job description. Format cleanly with clear section headers.`
     const result = await kimiChat([{ role:'user', content: prompt }], 'kimi-k2.5')
-    renderWriterResult('rw-result', result, 'resume')
+    document.getElementById('rw-result').innerHTML = `
+      <div class="ats-result" style="margin-top:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div style="font-size:.82rem;font-weight:600;color:var(--text)">Your Tailored Resume</div>
+          <button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.textContent)">Copy</button>
+        </div>
+        <div style="font-size:.82rem;color:var(--text);line-height:1.7;white-space:pre-wrap;background:var(--surface);padding:16px;border-radius:8px;border:1px solid var(--border)">${result}</div>
+      </div>`
   } catch(e) {
-    document.getElementById('rw-result').innerHTML = `<div class="empty" style="margin-top:12px"><h3>Error</h3><p style="font-size:.8rem;margin-top:4px">${e.message}</p></div>`
+    document.getElementById('rw-result').innerHTML = `<div class="empty" style="margin-top:12px"><h3>⚠️ Error</h3><p style="font-size:.8rem;margin-top:4px">${e.message}</p></div>`
   }
   document.getElementById('rw-btn').disabled = false
   document.getElementById('rw-loading').style.display = 'none'
 }
 
-// ── COVER LETTER WRITER ──
+// ── COVER LETTER ──
 async function writeCoverLetter() {
   const title = document.getElementById('cl-title').value.trim()
   const company = document.getElementById('cl-company').value.trim()
   const jd = document.getElementById('cl-jd').value.trim()
-  const background = document.getElementById('cl-background').value.trim()
+  const bg = document.getElementById('cl-background').value.trim()
   const tone = document.getElementById('cl-tone').value
-  
-  if (!title || !company || !jd || !background) { alert('Fill in all fields'); return }
-  if (!getKimiKey()) { alert('Add your Kimi API key first'); return }
-
+  if (!title || !company || !bg) { alert('Fill in job title, company, and your background'); return }
   document.getElementById('cl-btn').disabled = true
   document.getElementById('cl-loading').style.display = ''
-  document.getElementById('cl-result').innerHTML = ''
-
-  const toneGuide = {
-    professional: 'polished, formal, and precise. No contractions. Confident but restrained.',
-    conversational: 'warm, approachable, uses natural contractions. Like talking to a respected colleague.',
-    bold: 'confident, direct, takes ownership. Strong opening hook. Not afraid to stand out.',
-    enthusiastic: 'energetic, passionate, shows genuine excitement. Forward-looking and optimistic.'
-  }
-
-  const prompt = `You are an expert cover letter writer. Write a compelling cover letter for this candidate.
-
-ROLE: ${title} at ${company}
-
-JOB DESCRIPTION:
-${jd.slice(0, 2500)}
-
-CANDIDATE BACKGROUND:
-${background.slice(0, 2000)}
-
-TONE: ${toneGuide[tone] || toneGuide.professional}
-
-Structure:
-1. Opening hook — why this role, why this company (not "I am writing to apply...")
-2. Body paragraph 1 — most relevant experience with a specific result/achievement
-3. Body paragraph 2 — skills that match the job requirements, with evidence
-4. Closing — enthusiasm + call to action
-
-Rules:
-- 250-350 words max
-- Address to "Hiring Manager" unless a name is known
-- Reference something specific from the job description
-- Show personality — this should NOT sound like a template
-- End with a confident, forward-looking statement
-
-Output only the cover letter text, ready to send.`
-
   try {
+    const toneDesc = {
+      professional: 'professional and polished',
+      conversational: 'conversational and warm',
+      bold: 'bold and confident',
+      enthusiastic: 'enthusiastic and energetic'
+    }[tone]
+    const prompt = `You are an expert cover letter writer. Write a compelling cover letter for this job application.
+
+JOB TITLE: ${title}
+COMPANY: ${company}
+${jd ? 'JOB DESCRIPTION:\n' + jd.slice(0, 2000) : ''}
+
+CANDIDATE'S BACKGROUND:
+${bg.slice(0, 2000)}
+
+TONE: ${toneDesc}
+
+Write a complete cover letter that:
+1. Opens with a strong hook (not "I am writing to express my interest")
+2. Highlights 2-3 relevant achievements with specific metrics
+3. Shows understanding of the company's needs/challenges
+4. Explains why this candidate is the right fit
+5. Closes with a confident call to action
+
+Keep it to 3-4 paragraphs, under 400 words. Match the requested tone.`
     const result = await kimiChat([{ role:'user', content: prompt }], 'kimi-k2.5')
-    renderWriterResult('cl-result', result, 'cover-letter')
+    document.getElementById('cl-result').innerHTML = `
+      <div class="ats-result" style="margin-top:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div style="font-size:.82rem;font-weight:600;color:var(--text)">Your Cover Letter</div>
+          <button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.textContent)">Copy</button>
+        </div>
+        <div style="font-size:.82rem;color:var(--text);line-height:1.7;white-space:pre-wrap;background:var(--surface);padding:16px;border-radius:8px;border:1px solid var(--border)">${result}</div>
+      </div>`
   } catch(e) {
-    document.getElementById('cl-result').innerHTML = `<div class="empty" style="margin-top:12px"><h3>Error</h3><p style="font-size:.8rem;margin-top:4px">${e.message}</p></div>`
+    document.getElementById('cl-result').innerHTML = `<div class="empty" style="margin-top:12px"><h3>⚠️ Error</h3><p style="font-size:.8rem;margin-top:4px">${e.message}</p></div>`
   }
   document.getElementById('cl-btn').disabled = false
   document.getElementById('cl-loading').style.display = 'none'
 }
 
-// ── SHARED RENDER ──
-function renderWriterResult(elementId, text, type) {
-  const formatted = text
-    .replace(/^(PROFESSIONAL SUMMARY|SKILLS|EXPERIENCE|EDUCATION|CERTIFICATIONS|PROJECTS|SUMMARY|HIGHLIGHTS)(.*?)$/gm,
-      '<div class="ats-section-title" style="margin-top:18px;margin-bottom:8px;font-size:.76rem">$1$2</div>')
-    .replace(/\n\n/g, '<br><br>')
-    .replace(/\n/g, '<br>')
-
-  const label = type === 'resume' ? 'Your Resume' : 'Your Cover Letter'
-  const filename = type === 'resume' ? 'resume.txt' : 'cover-letter.txt'
-
-  document.getElementById(elementId).innerHTML = `
-  <div class="ats-result" style="margin-top:14px">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <div style="font-size:.9rem;font-weight:700;color:var(--text)">${label}</div>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-ghost btn-sm" onclick="copyWriterText(this)">Copy</button>
-        <button class="btn btn-primary btn-sm" onclick="downloadWriterText('${filename}')">Download .txt</button>
-      </div>
-    </div>
-    <div style="font-size:.85rem;color:var(--text);line-height:1.8;white-space:pre-wrap;background:var(--surface);padding:20px;border-radius:8px;border:1px solid var(--border)">${formatted}</div>
-    <div style="margin-top:12px;font-size:.73rem;color:var(--text-faint)">Tip: Review and personalize before sending. Add specific details only you would know.</div>
-  </div>`
-
-  window._writerText = text
-}
-
-function copyWriterText(btn) {
-  if (!window._writerText) return
-  navigator.clipboard.writeText(window._writerText).then(() => {
-    btn.textContent = 'Copied!'
-    setTimeout(() => btn.textContent = 'Copy', 2000)
-  })
-}
-
-function downloadWriterText(filename) {
-  if (!window._writerText) return
-  const blob = new Blob([window._writerText], { type: 'text/plain' })
-  const a = document.createElement('a')
-  a.href = URL.createObjectURL(blob)
-  a.download = filename
-  a.click()
-}
-
 // ── MOCK INTERVIEW ──
-let ivMessages = []
-let ivQuestionCount = 0
-let ivMaxQuestions = 8
-let ivListening = false
-let ivRecognition = null
-let ivSpeaking = false
-
-function addMessage(role, text) {
-  ivMessages.push({ role, content: text })
-  const t = document.getElementById('iv-transcript')
-  const label = role === 'assistant' ? 'Interviewer' : 'You'
-  const cls = role === 'assistant' ? 'msg-ai' : 'msg-user'
-  const div = document.createElement('div')
-  div.className = 'msg ' + cls
-  div.innerHTML = `<div class="msg-label">${label}</div>${text}`
-  t.appendChild(div)
-  t.scrollTop = t.scrollHeight
-}
-
-function setIVStatus(s) { document.getElementById('iv-status').textContent = s }
-
-async function startInterview() {
-  if (!getKimiKey()) { alert('Add your Kimi API key first'); return }
-  const role = document.getElementById('iv-role').value
-  const level = document.getElementById('iv-level').value
-  ivMessages = [{ role:'system', content: `You are a senior hiring manager conducting a ${level} ${role} interview. Ask ONE focused interview question at a time. Keep questions concise (1-2 sentences max). After the candidate answers, give brief encouraging feedback (1 sentence), then ask the next question. After 8 questions, say "That concludes our interview" and provide 3 bullet points of overall feedback. Never break character.` }]
-  ivQuestionCount = 0
-  document.getElementById('iv-transcript').innerHTML = ''
-  document.getElementById('iv-room').style.display = ''
-  document.getElementById('iv-room-title').textContent = `${level} ${role} Interview`
-  document.getElementById('iv-start-btn').style.display = 'none'
-  document.getElementById('iv-end-btn').style.display = ''
-  document.getElementById('iv-feedback').style.display = 'none'
-  setIVStatus('AI is thinking...')
-  updateQCount()
-  await askNextQuestion()
-}
-
-async function askNextQuestion() {
-  if (ivQuestionCount >= ivMaxQuestions) { await endInterview(); return }
-  try {
-    setIVStatus('AI is thinking...')
-    const reply = await kimiChat(ivMessages)
-    ivMessages.push({ role:'assistant', content: reply })
-    ivQuestionCount++
-    updateQCount()
-    addMessage('assistant', reply)
-    speak(reply)
-  } catch(e) {
-    setIVStatus('⚠️ ' + e.message)
-  }
-}
-
-function updateQCount() {
-  document.getElementById('iv-q-count').textContent = `Q ${Math.min(ivQuestionCount, ivMaxQuestions)}/${ivMaxQuestions}`
-}
-
-function speak(text) {
-  if (!('speechSynthesis' in window)) return
-  window.speechSynthesis.cancel()
-  const utt = new SpeechSynthesisUtterance(text)
-  utt.rate = 0.95; utt.pitch = 1
-  const voices = speechSynthesis.getVoices()
-  const pref = voices.find(v => v.name.includes('Google') && v.lang.startsWith('en')) || voices.find(v => v.lang.startsWith('en'))
-  if (pref) utt.voice = pref
-  document.getElementById('mic-btn').className = 'mic-btn speaking'
-  document.getElementById('mic-btn').textContent = '🔊'
-  setIVStatus('AI is speaking...')
-  utt.onend = () => {
-    document.getElementById('mic-btn').className = 'mic-btn idle'
-    document.getElementById('mic-btn').textContent = '🎤'
-    setIVStatus('Your turn — press mic to answer')
-  }
-  speechSynthesis.speak(utt)
-}
-
-function toggleMic() {
-  if (ivSpeaking) return
-  if (ivListening) { stopMic(); return }
-  startMic()
-}
-
-function startMic() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition
-  if (!SR) { alert('Speech recognition not supported in this browser. Try Chrome.'); return }
-  ivRecognition = new SR()
-  ivRecognition.lang = 'en-US'
-  ivRecognition.continuous = false
-  ivRecognition.interimResults = true
-  ivRecognition.onstart = () => {
-    ivListening = true
-    document.getElementById('mic-btn').className = 'mic-btn listening'
-    document.getElementById('mic-btn').textContent = '⏹'
-    setIVStatus('Listening...')
-  }
-  ivRecognition.onresult = e => {
-    const transcript = Array.from(e.results).map(r => r[0].transcript).join('')
-    document.getElementById('iv-transcript-live').textContent = transcript
-    if (e.results[e.results.length-1].isFinal) { submitAnswer(transcript) }
-  }
-  ivRecognition.onerror = e => {
-    setIVStatus('Mic error: ' + e.error)
-    stopMic()
-  }
-  ivRecognition.onend = () => { ivListening = false }
-  ivRecognition.start()
-}
-
-function stopMic() {
-  if (ivRecognition) ivRecognition.stop()
-  ivListening = false
-  document.getElementById('mic-btn').className = 'mic-btn idle'
-  document.getElementById('mic-btn').textContent = '🎤'
-}
-
-async function submitAnswer(text) {
-  if (!text.trim()) return
-  stopMic()
-  document.getElementById('iv-transcript-live').textContent = ''
-  addMessage('user', text)
-  await askNextQuestion()
-}
-
-async function skipQuestion() {
-  window.speechSynthesis.cancel()
-  stopMic()
-  addMessage('user', '(skipped)')
-  await askNextQuestion()
-}
-
-async function endInterview() {
-  window.speechSynthesis.cancel()
-  stopMic()
-  document.getElementById('iv-start-btn').style.display = ''
-  document.getElementById('iv-end-btn').style.display = 'none'
-  document.getElementById('iv-room').style.display = 'none'
-  if (ivMessages.length > 2) {
-    try {
-      const fb = await kimiChat([...ivMessages, { role:'user', content:'Give me a final performance summary with: overall score out of 10, top 3 strengths shown in this interview, and top 3 areas to improve. Format with clear sections.' }])
-      document.getElementById('iv-feedback').style.display = ''
-      document.getElementById('iv-feedback-body').innerHTML = fb.replace(/\n/g,'<br>')
-    } catch(e) {}
-  }
+let ivState = {
+  active: false,
+  role: '',
+  level: '',
+  qCount: 0,
+  maxQ: 8,
+  transcript: [],
+  recognition: null,
+  isListening: false
 }
 
 function initCoach() {
-  const k = localStorage.getItem('kimi_key')
-  if (k) { document.getElementById('kimi-key').value = k; document.getElementById('kimi-key-status').textContent = 'Key loaded' }
-  speechSynthesis.getVoices() // preload voices
+  // Load saved API key
+  const savedKey = getKimiKey()
+  if (savedKey) document.getElementById('kimi-key').value = savedKey
 }
 
-// ─── AI COMPANIES ──────────────────────────────────────────────
+async function startInterview() {
+  const role = document.getElementById('iv-role').value
+  const level = document.getElementById('iv-level').value
+  ivState = { active: true, role, level, qCount: 0, maxQ: 8, transcript: [], recognition: null, isListening: false }
+  
+  document.getElementById('iv-room').style.display = 'block'
+  document.getElementById('iv-start-btn').style.display = 'none'
+  document.getElementById('iv-end-btn').style.display = ''
+  document.getElementById('iv-transcript').innerHTML = ''
+  document.getElementById('iv-feedback').style.display = 'none'
+  document.getElementById('iv-room-title').textContent = `${level} ${role} Interview`
+  document.getElementById('iv-status').textContent = 'AI is preparing...'
+  
+  // Setup speech recognition
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    ivState.recognition = new SpeechRecognition()
+    ivState.recognition.continuous = false
+    ivState.recognition.interimResults = true
+    ivState.recognition.lang = 'en-US'
+    
+    ivState.recognition.onresult = (e) => {
+      let final = '', interim = ''
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) final += e.results[i][0].transcript
+        else interim += e.results[i][0].transcript
+      }
+      document.getElementById('iv-transcript-live').textContent = interim
+      if (final) {
+        document.getElementById('iv-transcript-live').textContent = ''
+        submitAnswer(final)
+      }
+    }
+    
+    ivState.recognition.onend = () => {
+      ivState.isListening = false
+      updateMicButton()
+      document.getElementById('iv-mic-label').textContent = 'Press mic to answer'
+    }
+    
+    ivState.recognition.onerror = (e) => {
+      console.error('Speech error:', e.error)
+      ivState.isListening = false
+      updateMicButton()
+      document.getElementById('iv-mic-label').textContent = 'Error — try again'
+    }
+  }
+  
+  await nextQuestion()
+}
+
+function updateMicButton() {
+  const btn = document.getElementById('mic-btn')
+  if (ivState.isListening) {
+    btn.className = 'mic-btn listening'
+    btn.textContent = '⏹️'
+  } else {
+    btn.className = 'mic-btn idle'
+    btn.textContent = '🎤'
+  }
+}
+
+function toggleMic() {
+  if (!ivState.recognition) {
+    alert('Speech recognition not supported in this browser. Try Chrome.')
+    return
+  }
+  if (ivState.isListening) {
+    ivState.recognition.stop()
+    ivState.isListening = false
+  } else {
+    ivState.recognition.start()
+    ivState.isListening = true
+    document.getElementById('iv-mic-label').textContent = 'Listening... speak now'
+  }
+  updateMicButton()
+}
+
+async function nextQuestion() {
+  if (ivState.qCount >= ivState.maxQ) {
+    await endInterview()
+    return
+  }
+  
+  ivState.qCount++
+  document.getElementById('iv-q-count').textContent = `Q ${ivState.qCount}/${ivState.maxQ}`
+  document.getElementById('iv-status').textContent = 'AI is thinking...'
+  
+  const isFirst = ivState.qCount === 1
+  const prompt = isFirst 
+    ? `You are an experienced interviewer conducting a mock interview for a ${ivState.level} ${ivState.role} position. Start with a brief greeting and ask your first interview question. Keep it professional but friendly. Only output the greeting and question, nothing else.`
+    : `You are an experienced interviewer for a ${ivState.level} ${ivState.role} position. Based on the candidate's previous answer, ask a relevant follow-up question or move to the next topic. Be conversational and professional. Only output the question, nothing else.`
+  
+  try {
+    const messages = [
+      { role: 'system', content: 'You are a professional job interviewer. Ask one question at a time. Keep questions concise and relevant to the role.' },
+      ...ivState.transcript.flatMap(t => [
+        { role: 'assistant', content: t.q },
+        { role: 'user', content: t.a }
+      ]),
+      { role: 'user', content: prompt }
+    ]
+    
+    const question = await kimiChat(messages, 'kimi-k2.5')
+    addMessage('ai', question)
+    speakText(question)
+    document.getElementById('iv-status').textContent = 'Your turn to answer'
+  } catch(e) {
+    addMessage('ai', `Error: ${e.message}. Please check your API key.`)
+    document.getElementById('iv-status').textContent = 'Error occurred'
+  }
+}
+
+function addMessage(role, text) {
+  const div = document.createElement('div')
+  div.className = `msg msg-${role}`
+  div.innerHTML = `<div class="msg-label">${role === 'ai' ? 'Interviewer' : 'You'}</div>${text}`
+  document.getElementById('iv-transcript').appendChild(div)
+  document.getElementById('iv-transcript').scrollTop = document.getElementById('iv-transcript').scrollHeight
+}
+
+function speakText(text) {
+  if ('speechSynthesis' in window) {
+    const btn = document.getElementById('mic-btn')
+    btn.className = 'mic-btn speaking'
+    const utterance = new SpeechSynthesisUtterance(text)
+    utterance.rate = 0.95
+    utterance.pitch = 1
+    utterance.onend = () => { btn.className = 'mic-btn idle'; btn.textContent = '🎤' }
+    speechSynthesis.speak(utterance)
+  }
+}
+
+async function submitAnswer(answer) {
+  if (!answer.trim()) return
+  addMessage('user', answer)
+  ivState.transcript.push({ q: ivState.transcript.length > 0 ? ivState.transcript[ivState.transcript.length-1].q : 'Introduction', a: answer })
+  document.getElementById('iv-status').textContent = 'Processing your answer...'
+  await nextQuestion()
+}
+
+function skipQuestion() {
+  addMessage('user', '[Skipped]')
+  nextQuestion()
+}
+
+async function endInterview() {
+  ivState.active = false
+  if (ivState.recognition && ivState.isListening) {
+    ivState.recognition.stop()
+  }
+  speechSynthesis.cancel()
+  
+  document.getElementById('iv-room').style.display = 'none'
+  document.getElementById('iv-start-btn').style.display = ''
+  document.getElementById('iv-end-btn').style.display = 'none'
+  document.getElementById('iv-status').textContent = 'Generating feedback...'
+  
+  if (ivState.transcript.length === 0) {
+    document.getElementById('iv-feedback').style.display = 'block'
+    document.getElementById('iv-feedback-body').innerHTML = '<p style="color:var(--text-soft)">No answers recorded. Try the interview again and speak your answers.</p>'
+    return
+  }
+  
+  try {
+    const transcriptText = ivState.transcript.map((t, i) => `Q${i+1}: ${t.q}\nA${i+1}: ${t.a}`).join('\n\n')
+    const prompt = `You are an expert interview coach. Evaluate this mock interview for a ${ivState.level} ${ivState.role} position.
+
+TRANSCRIPT:
+${transcriptText}
+
+Provide detailed feedback in this exact JSON format:
+{
+  "communication": <score 1-10>,
+  "technical": <score 1-10>,
+  "problem_solving": <score 1-10>,
+  "cultural_fit": <score 1-10>,
+  "overall": <score 1-10>,
+  "strengths": ["strength1", "strength2", "strength3"],
+  "improvements": ["improvement1", "improvement2", "improvement3"],
+  "verdict": "<one sentence summary>"
+}`
+    
+    const raw = await kimiChat([{ role: 'user', content: prompt }], 'kimi-k2.5')
+    const json = raw.match(/\{[\s\S]*\}/)
+    if (!json) throw new Error('Could not parse feedback')
+    const fb = JSON.parse(json[0])
+    
+    const scoreBar = (label, score) => `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div style="width:120px;font-size:.78rem;color:var(--text-soft)">${label}</div>
+        <div style="flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden">
+          <div style="height:100%;width:${score*10}%;background:${score >= 7 ? 'var(--success)' : score >= 5 ? 'var(--warn)' : 'var(--error)'};border-radius:4px"></div>
+        </div>
+        <div style="width:30px;font-size:.82rem;font-weight:600;color:var(--text)">${score}/10</div>
+      </div>`
+    
+    document.getElementById('iv-feedback').style.display = 'block'
+    document.getElementById('iv-feedback-body').innerHTML = `
+      <div style="margin-bottom:16px">
+        ${scoreBar('Communication', fb.communication)}
+        ${scoreBar('Technical Knowledge', fb.technical)}
+        ${scoreBar('Problem Solving', fb.problem_solving)}
+        ${scoreBar('Cultural Fit', fb.cultural_fit)}
+        ${scoreBar('Overall', fb.overall)}
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+        <div>
+          <div style="font-size:.78rem;font-weight:600;color:var(--success);margin-bottom:6px">Strengths</div>
+          <ul style="font-size:.78rem;color:var(--text-soft);padding-left:14px;line-height:1.6">${(fb.strengths||[]).map(s=>`<li>${s}</li>`).join('')}</ul>
+        </div>
+        <div>
+          <div style="font-size:.78rem;font-weight:600;color:var(--error);margin-bottom:6px">Areas to Improve</div>
+          <ul style="font-size:.78rem;color:var(--text-soft);padding-left:14px;line-height:1.6">${(fb.improvements||[]).map(s=>`<li>${s}</li>`).join('')}</ul>
+        </div>
+      </div>
+      <div style="padding:12px;background:var(--surface-warm);border-radius:8px;border:1px solid var(--border);font-size:.82rem;color:var(--text)">
+        <b>Verdict:</b> ${fb.verdict}
+      </div>`
+  } catch(e) {
+    document.getElementById('iv-feedback').style.display = 'block'
+    document.getElementById('iv-feedback-body').innerHTML = `<p style="color:var(--error)">Error generating feedback: ${e.message}</p>`
+  }
+}
+
+// ── AI COMPANIES ──
 const AI_COMPANIES = [
-  // Data Annotation / RLHF
-  { name:'Alignerr', url:'https://www.alignerr.com/', emoji:'🎯', cat:'annotation',
-    desc:'AI training platform — hire human experts to review and rate AI outputs. Strong demand for annotators, domain experts, and RLHF trainers.',
-    tags:['annotation','RLHF','remote','flexible'], tagClass:'ann' },
-  { name:'Scale AI', url:'https://scale.com/jobs', emoji:'⚖️', cat:'annotation',
-    desc:'Powers AI training data for leading foundation model labs. Hires for data labeling, QA, and enterprise AI ops.',
-    tags:['annotation','data ops','remote'], tagClass:'ann' },
-  { name:'Remotasks', url:'https://www.remotasks.com/', emoji:'🌐', cat:'annotation',
-    desc:'Crowdsourced AI training tasks — annotate images, audio, text. Flexible hours, no experience needed to start.',
-    tags:['annotation','beginner-friendly','remote'], tagClass:'ann' },
-  { name:'Surge AI', url:'https://www.surgehq.ai/', emoji:'⚡', cat:'annotation',
-    desc:'High-quality human data labeling for ML teams. Focus on nuanced tasks: safety, sentiment, instruction tuning.',
-    tags:['annotation','RLHF','safety'], tagClass:'ann' },
-  { name:'Outlier AI', url:'https://outlier.ai/', emoji:'📐', cat:'annotation',
-    desc:'Freelance AI trainer marketplace. Pays well for coding, math, and writing experts to improve AI responses.',
-    tags:['annotation','RLHF','high pay','freelance'], tagClass:'ann' },
-  { name:'DataAnnotation', url:'https://www.dataannotation.tech/', emoji:'📝', cat:'annotation',
-    desc:'Ongoing contracts for AI model training — coding, creative writing, Q&A. $15–$30/hr range.',
-    tags:['annotation','coding','writing','remote'], tagClass:'ann' },
-
-  // Research & Development
-  { name:'SynapseMind', url:'http://synapsemind.io/', emoji:'🧠', cat:'research',
-    desc:'AI-native research and development company focused on cognitive AI systems and neural architecture innovation.',
-    tags:['research','AI','neural networks'], tagClass:'res' },
-  { name:'Tendem AI', url:'https://tendem.ai/', emoji:'🤝', cat:'research',
-    desc:'Collaborative AI platform focused on human-AI teaming and co-intelligence workflows for enterprise teams.',
-    tags:['research','enterprise','collaboration'], tagClass:'res' },
-  { name:'Anthropic', url:'https://www.anthropic.com/jobs', emoji:'🔬', cat:'research',
-    desc:'Safety-focused AI research company behind Claude. Hires ML researchers, engineers, policy analysts.',
-    tags:['research','safety','LLM'], tagClass:'res' },
-  { name:'OpenAI', url:'https://openai.com/jobs', emoji:'🌀', cat:'research',
-    desc:'Leading AI lab (GPT, DALL-E, Sora). Engineering, research, policy, and ops roles.',
-    tags:['research','LLM','top tier'], tagClass:'res' },
-  { name:'Mistral AI', url:'https://mistral.ai/jobs/', emoji:'🌬️', cat:'research',
-    desc:'European open-weights AI lab. Builds efficient, open-source language models. Growing team.',
-    tags:['research','open source','EU'], tagClass:'res' },
-
-  // AI SaaS
-  { name:'EvolvaAI', url:'http://evolvaai.io/', emoji:'🧬', cat:'saas',
-    desc:'AI-powered evolution platform — adaptive AI solutions for businesses. Remote-first startup looking for builders.',
-    tags:['saas','startup','remote'], tagClass:'saas' },
-  { name:'Jasper', url:'https://www.jasper.ai/jobs', emoji:'✍️', cat:'saas',
-    desc:'AI writing assistant for marketing teams. Hires for product, engineering, customer success.',
-    tags:['saas','marketing AI','remote'], tagClass:'saas' },
-  { name:'Harvey AI', url:'https://www.harvey.ai/careers', emoji:'⚖️', cat:'saas',
-    desc:'AI legal assistant backed by top law firms. Fast-growing, well-funded. Eng, legal ops, and research roles.',
-    tags:['saas','legal','high growth'], tagClass:'saas' },
-  { name:'Perplexity AI', url:'https://www.perplexity.ai/hub/careers', emoji:'🔍', cat:'saas',
-    desc:'AI-powered search engine. Hires ML engineers, product designers, and data scientists.',
-    tags:['saas','search','fast growing'], tagClass:'saas' },
-  { name:'Cohere', url:'https://cohere.com/about#careers', emoji:'🔗', cat:'saas',
-    desc:'Enterprise LLM platform. Hires applied ML engineers, solutions architects, and enterprise sales.',
-    tags:['saas','enterprise','LLM'], tagClass:'saas' },
-  { name:'Runway ML', url:'https://runwayml.com/careers', emoji:'🎬', cat:'saas',
-    desc:'Generative AI for video and creative media. Product, engineering, and creative tech roles.',
-    tags:['saas','video AI','creative'], tagClass:'saas' },
-
-  // AI Infrastructure
-  { name:'Together AI', url:'https://www.together.ai/careers', emoji:'🖥️', cat:'infra',
-    desc:'Cloud platform for training and running open-source AI models at scale. Infra and ML engineering roles.',
-    tags:['infra','cloud','open source'], tagClass:'infra' },
-  { name:'Replicate', url:'https://replicate.com/jobs', emoji:'♻️', cat:'infra',
-    desc:'Run ML models via API — deploy and scale AI models in the cloud. Small team, big impact.',
-    tags:['infra','API','ML ops'], tagClass:'infra' },
-  { name:'Modal Labs', url:'https://modal.com/careers', emoji:'☁️', cat:'infra',
-    desc:'Cloud compute platform built for AI/ML workloads. Fast, serverless GPU infrastructure.',
-    tags:['infra','serverless','GPU'], tagClass:'infra' },
-  { name:'Hugging Face', url:'https://huggingface.co/jobs', emoji:'🤗', cat:'infra',
-    desc:'The GitHub of AI — model hub, datasets, and tooling. ML engineers, DevRel, and community roles.',
-    tags:['infra','open source','community'], tagClass:'infra' },
-
-  // AI Health
-  { name:'Nabla', url:'https://www.nabla.com/careers/', emoji:'🏥', cat:'health',
-    desc:'AI medical assistant for clinicians. Real-time ambient AI for doctor notes and patient summaries.',
-    tags:['health','clinical AI','remote'], tagClass:'health' },
-  { name:'Abridge', url:'https://www.abridge.com/careers', emoji:'🩺', cat:'health',
-    desc:'AI-powered medical conversation platform. Converts clinical conversations into structured notes.',
-    tags:['health','NLP','enterprise'], tagClass:'health' },
+  { name: 'OpenAI', url: 'openai.com', logo: '🤖', desc: 'Creator of ChatGPT and GPT-4. Leading AI research lab focused on artificial general intelligence.', tags: ['research', 'saas'], careers: 'https://openai.com/careers' },
+  { name: 'Anthropic', url: 'anthropic.com', logo: '🧠', desc: 'AI safety company building Claude, a helpful, harmless, and honest AI assistant.', tags: ['research', 'saas'], careers: 'https://www.anthropic.com/careers' },
+  { name: 'Scale AI', url: 'scale.com', logo: '📊', desc: 'Data platform for AI, providing high-quality training data for machine learning models.', tags: ['annotation', 'infra'], careers: 'https://scale.com/careers' },
+  { name: 'Cohere', url: 'cohere.com', logo: '💬', desc: 'Enterprise AI platform providing LLMs for text generation, search, and classification.', tags: ['research', 'saas'], careers: 'https://cohere.com/careers' },
+  { name: 'Hugging Face', url: 'huggingface.co', logo: '🤗', desc: 'Open-source platform for machine learning models, datasets, and demo apps.', tags: ['research', 'infra'], careers: 'https://huggingface.co/jobs' },
+  { name: 'Dataiku', url: 'dataiku.com', logo: '📈', desc: 'Enterprise AI and machine learning platform for data teams.', tags: ['saas', 'infra'], careers: 'https://www.dataiku.com/careers/' },
+  { name: 'Palantir', url: 'palantir.com', logo: '🔮', desc: 'Big data analytics and AI platforms for government and commercial sectors.', tags: ['saas', 'infra'], careers: 'https://www.palantir.com/careers/' },
+  { name: 'Databricks', url: 'databricks.com', logo: '🧱', desc: 'Unified analytics platform for data engineering, data science, and machine learning.', tags: ['infra', 'saas'], careers: 'https://www.databricks.com/company/careers' },
+  { name: 'Snowflake', url: 'snowflake.com', logo: '❄️', desc: 'Cloud data platform with AI/ML capabilities for data warehousing and analytics.', tags: ['infra', 'saas'], careers: 'https://careers.snowflake.com/' },
+  { name: 'UiPath', url: 'uipath.com', logo: '🤖', desc: 'Robotic process automation (RPA) and AI-powered automation platform.', tags: ['saas', 'infra'], careers: 'https://www.uipath.com/company/careers' },
+  { name: 'Grammarly', url: 'grammarly.com', logo: '✍️', desc: 'AI-powered writing assistant for grammar, tone, and clarity.', tags: ['saas'], careers: 'https://www.grammarly.com/jobs' },
+  { name: 'Jasper', url: 'jasper.ai', logo: '🎨', desc: 'AI content platform for marketing teams and creators.', tags: ['saas'], careers: 'https://www.jasper.ai/careers' },
+  { name: 'Copy.ai', url: 'copy.ai', logo: '📝', desc: 'AI copywriting tool for marketing and sales content.', tags: ['saas'], careers: 'https://www.copy.ai/careers' },
+  { name: 'Surge AI', url: 'surgehq.ai', logo: '⚡', desc: 'Data labeling and RLHF services for AI companies.', tags: ['annotation'], careers: 'https://www.surgehq.ai/careers' },
+  { name: 'Snorkel AI', url: 'snorkel.ai', logo: '🤿', desc: 'Data-centric AI platform for programmatic data labeling.', tags: ['annotation', 'infra'], careers: 'https://snorkel.ai/careers/' },
+  { name: 'Labelbox', url: 'labelbox.com', logo: '🏷️', desc: 'Training data platform for computer vision and NLP.', tags: ['annotation', 'infra'], careers: 'https://labelbox.com/careers' },
+  { name: 'Weights & Biases', url: 'wandb.ai', logo: '⚖️', desc: 'MLOps platform for experiment tracking and model management.', tags: ['infra', 'saas'], careers: 'https://wandb.ai/site/careers' },
+  { name: 'Runway', url: 'runwayml.com', logo: '🎬', desc: 'AI-powered video editing and generation tools.', tags: ['saas', 'research'], careers: 'https://runwayml.com/careers' },
+  { name: 'Stability AI', url: 'stability.ai', logo: '🎭', desc: 'Open-source AI models for image, audio, and video generation.', tags: ['research'], careers: 'https://stability.ai/careers' },
+  { name: 'Midjourney', url: 'midjourney.com', logo: '🖼️', desc: 'AI image generation through Discord bot interface.', tags: ['research', 'saas'], careers: 'https://www.midjourney.com/careers' },
+  { name: 'Character AI', url: 'character.ai', logo: '💭', desc: 'Conversational AI platform for creating and chatting with AI characters.', tags: ['research', 'saas'], careers: 'https://character.ai/careers' },
+  { name: 'Perplexity', url: 'perplexity.ai', logo: '🔍', desc: 'AI-powered search engine with conversational answers.', tags: ['research', 'saas'], careers: 'https://www.perplexity.ai/careers' },
+  { name: 'You.com', url: 'you.com', logo: '💻', desc: 'AI search engine and productivity platform.', tags: ['research', 'saas'], careers: 'https://you.com/careers' },
+  { name: 'Glean', url: 'glean.com', logo: '🧹', desc: 'Enterprise AI search and knowledge discovery.', tags: ['saas', 'infra'], careers: 'https://www.glean.com/careers' },
+  { name: 'Hebbia', url: 'hebbia.ai', logo: '📚', desc: 'AI platform for document analysis and knowledge work.', tags: ['saas', 'research'], careers: 'https://www.hebbia.ai/careers' },
+  { name: 'Harvey', url: 'harvey.ai', logo: '⚖️', desc: 'AI copilot for legal professionals.', tags: ['saas', 'research'], careers: 'https://www.harvey.ai/careers' },
+  { name: 'EvenUp', url: 'evenuplaw.com', logo: '📋', desc: 'AI-powered legal tech for personal injury law.', tags: ['saas', 'health'], careers: 'https://www.evenuplaw.com/careers' },
+  { name: 'Abridge', url: 'abridge.com', logo: '🏥', desc: 'AI for clinical documentation in healthcare.', tags: ['health', 'saas'], careers: 'https://www.abridge.com/careers' },
+  { name: 'Nuance', url: 'nuance.com', logo: '🎙️', desc: 'Conversational AI and speech recognition for healthcare.', tags: ['health', 'saas'], careers: 'https://www.nuance.com/about-us/careers.html' },
+  { name: 'Tempus', url: 'tempus.com', logo: '🧬', desc: 'AI-powered precision medicine and clinical data.', tags: ['health', 'research'], careers: 'https://www.tempus.com/careers/' },
+  { name: 'PathAI', url: 'pathai.com', logo: '🔬', desc: 'AI-powered pathology for disease diagnosis.', tags: ['health', 'research'], careers: 'https://www.pathai.com/careers/' },
+  { name: 'Insitro', url: 'insitro.com', logo: '🧪', desc: 'Machine learning for drug discovery and development.', tags: ['health', 'research'], careers: 'https://www.insitro.com/careers/' },
+  { name: 'Recursion', url: 'recursion.com', logo: '💊', desc: 'AI-enabled drug discovery and development platform.', tags: ['health', 'research'], careers: 'https://www.recursion.com/careers' },
+  { name: 'DeepMind', url: 'deepmind.com', logo: '🧠', desc: 'AI research lab, creator of AlphaGo and AlphaFold.', tags: ['research'], careers: 'https://www.deepmind.com/careers' },
+  { name: 'xAI', url: 'x.ai', logo: '✖️', desc: 'AI company building Grok, focused on understanding the universe.', tags: ['research'], careers: 'https://x.ai/careers' },
+  { name: 'Mistral AI', url: 'mistral.ai', logo: '🌬️', desc: 'Open-weight LLMs and AI research.', tags: ['research'], careers: 'https://mistral.ai/careers/' },
+  { name: 'Cerebras', url: 'cerebras.net', logo: '🧮', desc: 'AI hardware and software for deep learning.', tags: ['infra', 'research'], careers: 'https://www.cerebras.net/careers/' },
+  { name: 'SambaNova', url: 'sambanova.ai', logo: '💃', desc: 'AI chips and systems for enterprise AI.', tags: ['infra'], careers: 'https://sambanova.ai/careers/' },
+  { name: 'Groq', url: 'groq.com', logo: '⚡', desc: 'LPU inference engine for fast AI inference.', tags: ['infra'], careers: 'https://groq.com/careers/' },
+  { name: 'Together AI', url: 'together.ai', logo: '🤝', desc: 'Cloud platform for open-source AI models.', tags: ['infra', 'saas'], careers: 'https://www.together.ai/careers' },
+  { name: 'Fireworks AI', url: 'fireworks.ai', logo: '🎆', desc: 'Fast inference platform for generative AI.', tags: ['infra', 'saas'], careers: 'https://www.fireworks.ai/careers' },
+  { name: 'Replicate', url: 'replicate.com', logo: '🔄', desc: 'Cloud API for running open-source AI models.', tags: ['infra', 'saas'], careers: 'https://replicate.com/careers' },
+  { name: 'Modal', url: 'modal.com', logo: '☁️', desc: 'Cloud infrastructure for AI and data teams.', tags: ['infra'], careers: 'https://modal.com/careers' },
+  { name: 'LangChain', url: 'langchain.com', logo: '⛓️', desc: 'Framework for building LLM-powered applications.', tags: ['infra', 'saas'], careers: 'https://www.langchain.com/careers' },
+  { name: 'Pinecone', url: 'pinecone.io', logo: '🌲', desc: 'Vector database for AI applications.', tags: ['infra'], careers: 'https://www.pinecone.io/careers/' },
+  { name: 'Weaviate', url: 'weaviate.io', logo: '🕸️', desc: 'Open-source vector database for AI.', tags: ['infra'], careers: 'https://weaviate.io/company/careers' },
+  { name: 'Chroma', url: 'trychroma.com', logo: '🎨', desc: 'Open-source embedding database for AI.', tags: ['infra'], careers: 'https://www.trychroma.com/careers' },
+  { name: 'Qdrant', url: 'qdrant.tech', logo: '🎯', desc: 'Vector similarity search engine.', tags: ['infra'], careers: 'https://qdrant.tech/careers/' },
+  { name: 'Milvus', url: 'milvus.io', logo: '🐮', desc: 'Open-source vector database for AI.', tags: ['infra'], careers: 'https://milvus.io/careers' },
 ]
 
-let aiFiltered = [...AI_COMPANIES]
-
-function renderAI(list) {
-  const grid = document.getElementById('ai-grid')
-  if (!list.length) { grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><h3>No companies found</h3></div>'; return }
-  grid.innerHTML = list.map(c => `
-  <div class="ai-card" data-cat="${c.cat}">
-    <div class="ai-card-top">
-      <div class="ai-logo">${c.emoji}</div>
-      <div>
-        <div class="ai-name">${c.name}</div>
-        <div class="ai-url">${c.url.replace(/https?:\/\//,'')}</div>
-      </div>
-    </div>
-    <div class="ai-desc">${c.desc}</div>
-    <div class="ai-tags">${c.tags.map(t=>`<span class="ai-tag ${c.tagClass}">${t}</span>`).join('')}</div>
-    <div class="ai-actions">
-      <a href="${c.url}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">🔗 Visit & Apply</a>
-    </div>
-  </div>`).join('')
+let aiInitialized = false
+function initAI() {
+  if (aiInitialized) return
+  aiInitialized = true
+  renderAI(AI_COMPANIES)
 }
 
 function filterAI() {
   const q = document.getElementById('ai-search').value.toLowerCase()
   const cat = document.getElementById('ai-cat').value
-  aiFiltered = AI_COMPANIES.filter(c => {
-    const matchQ = !q || c.name.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q) || c.tags.some(t=>t.includes(q))
-    const matchCat = !cat || c.cat === cat
-    return matchQ && matchCat
+  const filtered = AI_COMPANIES.filter(c => {
+    if (q && !`${c.name} ${c.desc} ${c.url}`.toLowerCase().includes(q)) return false
+    if (cat && !c.tags.includes(cat)) return false
+    return true
   })
-  renderAI(aiFiltered)
+  renderAI(filtered)
 }
 
-// Init AI section once on first nav
-let aiInit = false
-function initAI() { if (!aiInit) { renderAI(AI_COMPANIES); aiInit = true } }
-
-// ─── END AI COMPANIES ──────────────────────────────────────────
-
-// ─── USER PROFILE ──────────────────────────────────────────────
-function getProfile() {
-  try { return JSON.parse(localStorage.getItem('jnss_profile') || 'null') } catch { return null }
+function renderAI(list) {
+  const grid = document.getElementById('ai-grid')
+  if (!list.length) {
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><h3>No companies found</h3><p>Try a different search or category</p></div>'
+    return
+  }
+  grid.innerHTML = list.map(c => `
+    <div class="ai-card">
+      <div class="ai-card-top">
+        <div class="ai-logo">${c.logo}</div>
+        <div>
+          <div class="ai-name">${c.name}</div>
+          <div class="ai-url">${c.url}</div>
+        </div>
+      </div>
+      <div class="ai-desc">${c.desc}</div>
+      <div class="ai-tags">${c.tags.map(t => `<span class="ai-tag ${t}">${t}</span>`).join('')}</div>
+      <div class="ai-actions">
+        <a href="https://${c.url}" target="_blank" class="btn btn-ghost btn-sm">Visit Site</a>
+        <a href="${c.careers}" target="_blank" class="btn btn-gold btn-sm">Careers ↗</a>
+      </div>
+    </div>`).join('')
 }
-function saveProfile(p) { localStorage.setItem('jnss_profile', JSON.stringify(p)) }
 
+// ── PROFILE ──
 function openProfile() {
-  const p = getProfile()
-  if (p) {
+  const profile = JSON.parse(localStorage.getItem('jobninja_profile') || 'null')
+  if (profile) {
     document.getElementById('profile-view-login').style.display = 'none'
-    document.getElementById('profile-view-main').style.display = ''
-    document.getElementById('p-display-name').textContent = p.name || p.email
-    document.getElementById('p-pref-keywords').value = p.prefs?.keywords || ''
-    document.getElementById('p-pref-geo').value = p.prefs?.geo || ''
-    document.getElementById('p-pref-remote').checked = p.prefs?.remote || false
-    // Populate industry select
-    const ind = document.getElementById('p-pref-industry')
-    ind.innerHTML = document.getElementById('industry').innerHTML
-    ind.value = p.prefs?.industry || ''
+    document.getElementById('profile-view-main').style.display = 'block'
+    document.getElementById('p-display-name').textContent = profile.name
+    document.getElementById('p-pref-keywords').value = profile.keywords || ''
+    document.getElementById('p-pref-industry').value = profile.industry || ''
+    document.getElementById('p-pref-geo').value = profile.geo || ''
+    document.getElementById('p-pref-remote').checked = profile.remoteOnly || false
   } else {
-    document.getElementById('profile-view-login').style.display = ''
+    document.getElementById('profile-view-login').style.display = 'block'
     document.getElementById('profile-view-main').style.display = 'none'
   }
-  document.getElementById('profile-modal').classList.add('active')
+  // Populate industry dropdown
+  const industrySel = document.getElementById('p-pref-industry')
+  if (!industrySel.options.length) {
+    const industries = document.getElementById('industry').querySelectorAll('option')
+    industrySel.innerHTML = '<option value="">Any</option>' + Array.from(industries).slice(1).map(o => `<option value="${o.value}">${o.textContent}</option>`).join('')
+  }
+  document.getElementById('profile-modal').classList.add('open')
 }
 
 function profileLogin() {
   const name = document.getElementById('p-name').value.trim()
   const email = document.getElementById('p-email').value.trim()
-  if (!name && !email) { alert('Enter at least a name or email'); return }
-  saveProfile({ name, email, prefs: {} })
-  updateLoginBtn()
-  // Switch to main view
-  document.getElementById('profile-view-login').style.display = 'none'
-  document.getElementById('profile-view-main').style.display = ''
-  document.getElementById('p-display-name').textContent = name || email
-  document.getElementById('p-pref-industry').innerHTML = document.getElementById('industry').innerHTML
+  if (!name || !email) return alert('Name and email required')
+  const profile = { name, email, keywords: '', industry: '', geo: '', remoteOnly: false }
+  localStorage.setItem('jobninja_profile', JSON.stringify(profile))
+  closeModal('profile-modal')
+  updateLoginButton()
 }
 
 function profileLogout() {
-  localStorage.removeItem('jnss_profile')
-  updateLoginBtn()
+  localStorage.removeItem('jobninja_profile')
   closeModal('profile-modal')
+  updateLoginButton()
 }
 
 function savePrefs() {
-  const p = getProfile() || {}
-  p.prefs = {
-    keywords: document.getElementById('p-pref-keywords').value.trim(),
-    industry: document.getElementById('p-pref-industry').value,
-    geo: document.getElementById('p-pref-geo').value,
-    remote: document.getElementById('p-pref-remote').checked
-  }
-  saveProfile(p)
+  const profile = JSON.parse(localStorage.getItem('jobninja_profile') || '{}')
+  profile.keywords = document.getElementById('p-pref-keywords').value
+  profile.industry = document.getElementById('p-pref-industry').value
+  profile.geo = document.getElementById('p-pref-geo').value
+  profile.remoteOnly = document.getElementById('p-pref-remote').checked
+  localStorage.setItem('jobninja_profile', JSON.stringify(profile))
+  
   // Apply to search
-  document.getElementById('q').value = p.prefs.keywords
-  document.getElementById('industry').value = p.prefs.industry
-  document.getElementById('geo').value = p.prefs.geo
-  document.getElementById('remote-only').checked = p.prefs.remote
+  if (profile.keywords) document.getElementById('q').value = profile.keywords
+  if (profile.industry) document.getElementById('industry').value = profile.industry
+  if (profile.geo) document.getElementById('geo').value = profile.geo
+  document.getElementById('remote-only').checked = profile.remoteOnly
+  
   closeModal('profile-modal')
   search()
 }
 
-function updateLoginBtn() {
-  const p = getProfile()
-  const btn = document.getElementById('login-btn')
-  if (p) {
-    btn.textContent = (p.name || p.email).split(' ')[0]
-    btn.style.color = 'var(--accent)'
-    btn.style.borderColor = '#3333aa'
-  } else {
-    btn.textContent = 'Sign In'
-    btn.style.color = ''
-    btn.style.borderColor = ''
-  }
+function updateLoginButton() {
+  const profile = JSON.parse(localStorage.getItem('jobninja_profile') || 'null')
+  document.getElementById('login-btn').textContent = profile ? profile.name.split(' ')[0] : 'Sign In'
 }
 
-function applyProfilePrefs() {
-  const p = getProfile()
-  if (!p?.prefs) return
-  if (p.prefs.keywords) document.getElementById('q').value = p.prefs.keywords
-  if (p.prefs.industry) document.getElementById('industry').value = p.prefs.industry
-  if (p.prefs.geo) document.getElementById('geo').value = p.prefs.geo
-  if (p.prefs.remote) document.getElementById('remote-only').checked = true
-}
-// ─── END USER PROFILE ──────────────────────────────────────────
+// ── SEED JOBS (fallback when jobs.json unavailable) ──
+const SEED_JOBS = [
+  {id:'seed-1',source:'WeWorkRemotely',title:'Customer Onboarding Specialist',company:'Flag Theory',logo:'',location:'Worldwide',type:'Full-time',level:'',industry:'Customer Support',salary_min:null,salary_max:null,salary_currency:'USD',excerpt:'Own the post-sale customer journey for company incorporation services across multiple jurisdictions. Work with international clients.',url:'https://weworkremotely.com',remote:true,date:'2026-01-15',tags:[]},
+  {id:'seed-2',source:'WeWorkRemotely',title:'Lead Frontend Engineer',company:'FINN',logo:'',location:'Worldwide',type:'Full-time',level:'Senior',industry:'Software Engineering',salary_min:null,salary_max:null,salary_currency:'USD',excerpt:'Lead frontend development for a fintech platform. React, TypeScript, design systems experience required.',url:'https://weworkremotely.com',remote:true,date:'2026-01-14',tags:[]},
+  {id:'seed-3',source:'WeWorkRemotely',title:'Senior Software Engineer',company:'Cue',logo:'',location:'Worldwide',type:'Full-time',level:'Senior',industry:'Software Engineering',salary_min:null,salary_max:null,salary_currency:'USD',excerpt:'Build and scale backend systems for a productivity platform. Python, Go, distributed systems.',url:'https://weworkremotely.com',remote:true,date:'2026-01-13',tags:[]},
+  {id:'seed-4',source:'WeWorkRemotely',title:'Senior Backend Engineer (Python)',company:'Close',logo:'',location:'USA',type:'Full-time',level:'Senior',industry:'Software Engineering',salary_min:null,salary_max:null,salary_currency:'USD',excerpt:'100% remote. Bootstrapped, profitable company. Build CRM features used by thousands of businesses.',url:'https://weworkremotely.com',remote:true,date:'2026-01-12',tags:[]},
+  {id:'seed-5',source:'WeWorkRemotely',title:'Product Designer',company:'TimeZest',logo:'',location:'Worldwide',type:'Full-time',level:'',industry:'Design',salary_min:null,salary_max:null,salary_currency:'USD',excerpt:'Design scheduling and appointment experiences for service businesses. Figma, user research.',url:'https://weworkremotely.com',remote:true,date:'2026-01-11',tags:[]},
+  {id:'seed-6',source:'WeWorkRemotely',title:'Software Engineer, Business Experience',company:'CodeSignal',logo:'',location:'Worldwide',type:'Full-time',level:'',industry:'Software Engineering',salary_min:null,salary_max:null,salary_currency:'USD',excerpt:'Build assessment platform features. Full-stack development with modern frameworks.',url:'https://weworkremotely.com',remote:true,date:'2026-01-10',tags:[]},
+  {id:'seed-7',source:'WeWorkRemotely',title:'Junior Product Designer - AI Driven',company:'Cloudwalk',logo:'',location:'Worldwide',type:'Full-time',level:'Junior',industry:'Design',salary_min:null,salary_max:null,salary_currency:'USD',excerpt:'Design AI-powered payment experiences. Work with a fintech unicorn building the future of payments.',url:'https://weworkremotely.com',remote:true,date:'2026-01-09',tags:[]},
+  {id:'seed-8',source:'WeWorkRemotely',title:'Senior Software Engineer II - Product Security',company:'Confluent',logo:'',location:'Worldwide',type:'Full-time',level:'Senior',industry:'Cybersecurity',salary_min:null,salary_max:null,salary_currency:'USD',excerpt:'Build security features for data streaming platform. Work on authentication, authorization, encryption.',url:'https://weworkremotely.com',remote:true,date:'2026-01-08',tags:[]},
+  {id:'seed-9',source:'WeWorkRemotely',title:'Azure DevOps Engineer',company:'Digital Forms',logo:'',location:'Worldwide',type:'Full-time',level:'',industry:'DevOps',salary_min:null,salary_max:null,salary_currency:'USD',excerpt:'Design CI/CD pipelines, manage Azure infrastructure, ensure smooth delivery of products.',url:'https://weworkremotely.com',remote:true,date:'2026-01-07',tags:[]},
+  {id:'seed-10',source:'WeWorkRemotely',title:'DevOps Engineer (Remote)',company:'European Dynamics',logo:'',location:'Worldwide',type:'Full-time',level:'',industry:'DevOps',salary_min:null,salary_max:null,salary_currency:'USD',excerpt:'Join expanding development team. Work with cutting-edge technologies in a dynamic environment.',url:'https://weworkremotely.com',remote:true,date:'2026-01-06',tags:[]},
+  {id:'seed-11',source:'WeWorkRemotely',title:'WordPress Support Engineer',company:'Yoko Co',logo:'',location:'Worldwide',type:'Full-time',level:'',industry:'Technical Support',salary_min:null,salary_max:null,salary_currency:'USD',excerpt:'Provide WordPress support for clients. Troubleshoot issues, optimize performance, ensure security.',url:'https://weworkremotely.com',remote:true,date:'2026-01-05',tags:[]},
+  {id:'seed-12',source:'WeWorkRemotely',title:'Staff Product Designer',company:'Khan Academy',logo:'',location:'USA',type:'Full-time',level:'Staff',industry:'Design',salary_min:null,salary_max:null,salary_currency:'USD',excerpt:'Design educational experiences used by millions. Mission-driven nonprofit with free world-class education.',url:'https://weworkremotely.com',remote:true,date:'2026-01-04',tags:[]},
+  {id:'seed-13',source:'WeWorkRemotely',title:'Front End Engineer - Remote',company:'EventMobi',logo:'',location:'Canada',type:'Full-time',level:'',industry:'Software Engineering',salary_min:null,salary_max:null,salary_currency:'USD',excerpt:'Build event management platform features. React, TypeScript, modern frontend development.',url:'https://weworkremotely.com',remote:true,date:'2026-01-03',tags:[]},
+  {id:'seed-14',source:'WeWorkRemotely',title:'Staff Product Backend Engineer',company:'Dropbox',logo:'',location:'USA',type:'Full-time',level:'Staff',industry:'Software Engineering',salary_min:null,salary_max:null,salary_currency:'USD',excerpt:'Build core sync infrastructure. Work on systems used by hundreds of millions of users.',url:'https://weworkremotely.com',remote:true,date:'2026-01-02',tags:[]},
+  {id:'seed-15',source:'WeWorkRemotely',title:'Customer Happiness Advocate',company:'Turtles',logo:'',location:'Canada',type:'Full-time',level:'',industry:'Customer Support',salary_min:null,salary_max:null,salary_currency:'USD',excerpt:'Provide exceptional customer support. Remote position for Canada, UK, Spain, Finland.',url:'https://weworkremotely.com',remote:true,date:'2026-01-01',tags:[]},
+  {id:'seed-16',source:'WeWorkRemotely',title:'Live Technical Support Representative',company:'Porkbun',logo:'',location:'USA',type:'Full-time',level:'',industry:'Technical Support',salary_min:40000,salary_max:40000,salary_currency:'USD',excerpt:'Provide technical support for domain registrar. $40,000/year + benefits. Weekend availability required.',url:'https://weworkremotely.com',remote:true,date:'2025-12-31',tags:[]},
+  {id:'seed-17',source:'WeWorkRemotely',title:'Content Producer',company:'Ketone-IQ',logo:'',location:'USA',type:'Full-time',level:'',industry:'Content',salary_min:null,salary_max:null,salary_currency:'USD',excerpt:'Create content for health and wellness brand. Video, social media, blog content.',url:'https://weworkremotely.com',remote:true,date:'2025-12-30',tags:[]},
+  {id:'seed-18',source:'WeWorkRemotely',title:'Data Analyst',company:'Mesh',logo:'',location:'USA',type:'Full-time',level:'',industry:'Data Analysis',salary_min:null,salary_max:null,salary_currency:'USD',excerpt:'Analyze payment data, build dashboards, derive insights for product decisions.',url:'https://weworkremotely.com',remote:true,date:'2025-12-29',tags:[]},
+  {id:'seed-19',source:'WeWorkRemotely',title:'Cybersecurity Analyst',company:'Niobium',logo:'',location:'USA',type:'Full-time',level:'',industry:'Cybersecurity',salary_min:null,salary_max:null,salary_currency:'USD',excerpt:'Monitor security threats, implement protections, ensure compliance for microelectronics company.',url:'https://weworkremotely.com',remote:true,date:'2025-12-28',tags:[]},
+  {id:'seed-20',source:'WeWorkRemotely',title:'AI/ML Engineer',company:'Strange Loop Labs',logo:'',location:'USA',type:'Full-time',level:'Senior',industry:'AI / ML',salary_min:null,salary_max:null,salary_currency:'USD',excerpt:'Build machine learning models for production systems. Python, TensorFlow, PyTorch.',url:'https://weworkremotely.com',remote:true,date:'2025-12-27',tags:[]},
+]
 
-// Init
+// ── INIT ──
 initDims()
-renderTracker()
 updateNav()
-updateLoginBtn()
-applyProfilePrefs()
-search() // auto-load on open
+updateLoginButton()
+search()
+
 </script>
 </body>
 </html>
