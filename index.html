@@ -915,7 +915,8 @@ async function loadJobsCache() {
 function searchCache(jobs, q, industry, geo, remoteOnly) {
   const qLow = q.toLowerCase()
   return jobs.filter(j => {
-    const text = `${j.title} ${j.company} ${j.industry} ${j.tags?.join(' ')||''}`.toLowerCase()
+    const tags = Array.isArray(j.tags) ? j.tags.join(' ') : (typeof j.tags === 'string' ? j.tags : '')
+    const text = `${j.title} ${j.company} ${j.industry} ${tags}`.toLowerCase()
     if (q && !text.includes(qLow)) return false
     if (industry && !`${j.industry} ${j.title}`.toLowerCase().includes(industry.toLowerCase())) return false
     if (geo) {
