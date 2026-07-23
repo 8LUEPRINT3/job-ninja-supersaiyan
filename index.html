@@ -6,169 +6,219 @@
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate"/>
   <meta http-equiv="Pragma" content="no-cache"/>
   <title>Job Ninja</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     :root{
-      --bg:#faf9f7; --surface:#ffffff; --surface-warm:#f5f3f0;
-      --text:#2c2a26; --text-soft:#6b6760; --text-faint:#9a958c;
-      --border:#e5e1db; --border-soft:#efede8;
-      --accent:#8a7a5c; --accent-soft:#a89b7d; --accent-bg:#f0ebe0;
-      --success:#5a7a5a; --success-bg:#e8f0e8;
-      --warn:#b8956a; --warn-bg:#f5efe5;
-      --error:#a86a5a; --error-bg:#f5e8e5;
-      --shadow:0 1px 3px rgba(44,42,38,.06),0 4px 12px rgba(44,42,38,.04);
-      --shadow-lg:0 4px 16px rgba(44,42,38,.08),0 12px 32px rgba(44,42,38,.06);
-      --radius:12px; --radius-sm:8px;
+      --cream:#FAF6EC;
+      --cream-dark:#F0EBDF;
+      --gold:#C9A227;
+      --gold-light:#E0C76B;
+      --gold-dark:#A6851C;
+      --ink:#2B2620;
+      --ink-soft:#4A443C;
+      --ink-faint:#8A8278;
+      --surface:#FFFFFF;
+      --surface-warm:#F5F0E6;
+      --border:#E5DDD0;
+      --border-soft:#EFEBE2;
+      --success:#5A7A5A;
+      --success-bg:#E8F0E8;
+      --warn:#B8956A;
+      --warn-bg:#F5EFE5;
+      --error:#A86A5A;
+      --error-bg:#F5E8E5;
+      --shadow:0 1px 3px rgba(43,38,32,.06),0 4px 12px rgba(43,38,32,.04);
+      --shadow-lg:0 4px 16px rgba(43,38,32,.08),0 12px 32px rgba(43,38,32,.06);
+      --radius:12px;
+      --radius-sm:8px;
+      --font-display:'Fraunces',Georgia,serif;
+      --font-body:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
     }
-    body{background:var(--bg);color:var(--text);font-family:Georgia,'Times New Roman',serif;min-height:100vh;line-height:1.6}
-    input,select,textarea,button{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+    body{background:var(--cream);color:var(--ink);font-family:var(--font-body);min-height:100vh;line-height:1.6}
+    input,select,textarea,button{font-family:var(--font-body)}
 
-    /* Nav */
-    nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;gap:20px;height:64px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
-    .nav-brand{font-size:1.1rem;font-weight:600;color:var(--text);margin-right:8px;letter-spacing:-.01em}
-    .nav-tabs{display:flex;gap:2px}
-    .nav-tab{background:none;border:none;padding:8px 14px;color:var(--text-soft);font-size:.88rem;cursor:pointer;border-radius:var(--radius-sm);transition:all .2s;border-bottom:2px solid transparent;font-family:inherit}
-    .nav-tab:hover{color:var(--text);background:var(--surface-warm)}
-    .nav-tab.active{color:var(--text);border-color:var(--accent);background:var(--surface-warm)}
+    /* ── Blade Divider ── */
+    .blade-divider{width:100%;height:48px;background:var(--gold);clip-path:polygon(0 100%,100% 0,100% 100%);margin:0}
+    .blade-divider.ink{background:var(--ink)}
+    .blade-divider.cream{background:var(--cream-dark)}
+
+    /* ── Nav ── */
+    nav{background:rgba(250,246,236,.85);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;gap:20px;height:64px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+    .nav-brand{font-size:1.25rem;font-weight:700;color:var(--ink);margin-right:8px;letter-spacing:-.02em;font-family:var(--font-display)}
+    .nav-brand span{color:var(--gold)}
+    .nav-tabs{display:flex;gap:4px}
+    .nav-tab{background:none;border:none;padding:8px 14px;color:var(--ink-faint);font-size:.88rem;font-weight:500;cursor:pointer;border-radius:var(--radius-sm);transition:all .25s;font-family:inherit;position:relative}
+    .nav-tab:hover{color:var(--ink)}
+    .nav-tab.active{color:var(--ink);font-weight:600}
+    .nav-tab::after{content:'';position:absolute;bottom:-2px;left:14px;right:14px;height:2px;background:var(--gold);border-radius:2px;transform:scaleX(0);transition:transform .25s}
+    .nav-tab.active::after{transform:scaleX(1)}
     .nav-spacer{flex:1}
-    .nav-stat{font-size:.78rem;color:var(--text-faint);background:var(--surface-warm);padding:6px 14px;border-radius:100px;border:1px solid var(--border-soft)}
-    .nav-stat b{color:var(--accent)}
+    .nav-stat{font-size:.78rem;color:var(--ink-faint);background:var(--surface-warm);padding:6px 14px;border-radius:100px;border:1px solid var(--border-soft);font-weight:500}
+    .nav-stat b{color:var(--gold);font-weight:700}
 
-    /* Layout */
+    /* ── Layout ── */
     .page{display:none;max-width:1000px;margin:0 auto;padding:32px 24px}
     .page.active{display:block}
+    .block{padding:48px 0}
+    .block-sm{padding:24px 0}
 
-    /* Stats */
+    /* ── Hero (Search page top) ── */
+    .hero{background:linear-gradient(135deg,var(--ink) 0%,#3D3528 100%);color:var(--cream);padding:48px 24px 32px;margin:-32px -24px 24px;border-radius:0 0 var(--radius) var(--radius);position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;top:0;right:0;width:300px;height:300px;background:radial-gradient(circle,rgba(201,162,39,.15) 0%,transparent 70%);pointer-events:none}
+    .hero h1{font-family:var(--font-display);font-size:2rem;font-weight:700;margin-bottom:8px;letter-spacing:-.02em}
+    .hero p{font-size:.95rem;color:var(--cream-dark);opacity:.9}
+
+    /* ── Stats ── */
     .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin-bottom:32px}
-    .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
-    .stat-val{font-size:2rem;font-weight:600;color:var(--accent);font-family:Georgia,serif}
-    .stat-label{font-size:.8rem;color:var(--text-faint);margin-top:6px;text-transform:uppercase;letter-spacing:.04em}
+    .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .stat::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(--gold) 0%,var(--gold-light) 100%);border-radius:var(--radius) 0 0 var(--radius)}
+    .stat-val{font-size:2.2rem;font-weight:700;color:var(--gold);font-family:var(--font-display);line-height:1}
+    .stat-label{font-size:.75rem;color:var(--ink-faint);margin-top:8px;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
 
-    /* Search bar */
+    /* ── Search bar ── */
     .search-row{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
-    .search-input{flex:1;min-width:220px;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:12px 16px;border-radius:var(--radius-sm);font-size:.92rem;outline:none;transition:all .2s;box-shadow:var(--shadow)}
-    .search-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
-    .search-input::placeholder{color:var(--text-faint)}
-    select.filter-sel{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:12px 14px;border-radius:var(--radius-sm);font-size:.88rem;outline:none;cursor:pointer;box-shadow:var(--shadow)}
+    .search-input{flex:1;min-width:220px;background:var(--surface);border:1px solid var(--border);color:var(--ink);padding:12px 16px;border-radius:var(--radius-sm);font-size:.92rem;outline:none;transition:all .2s;box-shadow:var(--shadow)}
+    .search-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,39,.12)}
+    .search-input::placeholder{color:var(--ink-faint)}
+    select.filter-sel{background:var(--surface);border:1px solid var(--border);color:var(--ink);padding:12px 14px;border-radius:var(--radius-sm);font-size:.88rem;outline:none;cursor:pointer;box-shadow:var(--shadow)}
 
-    /* Buttons */
-    .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:var(--radius-sm);font-size:.88rem;font-weight:500;cursor:pointer;border:none;text-decoration:none;transition:all .2s;font-family:inherit}
-    .btn-primary{background:var(--text);color:var(--bg)}
-    .btn-primary:hover{background:#4a4740}
-    .btn-gold{background:var(--accent);color:#fff}
-    .btn-gold:hover{background:var(--accent-soft)}
-    .btn-ghost{background:var(--surface);color:var(--text-soft);border:1px solid var(--border)}
-    .btn-ghost:hover{border-color:var(--accent);color:var(--text)}
+    /* ── Buttons ── */
+    .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:var(--radius-sm);font-size:.88rem;font-weight:600;cursor:pointer;border:none;text-decoration:none;transition:all .2s;font-family:inherit}
+    .btn-primary{background:var(--ink);color:var(--cream)}
+    .btn-primary:hover{background:#1a1714;transform:translateY(-1px)}
+    .btn-gold{background:var(--gold);color:#fff}
+    .btn-gold:hover{background:var(--gold-dark);transform:translateY(-1px)}
+    .btn-ghost{background:var(--surface);color:var(--ink-soft);border:1px solid var(--border)}
+    .btn-ghost:hover{border-color:var(--gold);color:var(--ink);transform:translateY(-1px)}
     .btn-sm{padding:6px 14px;font-size:.8rem}
     .btn-green{background:var(--success);color:#fff}
-    .btn-green:hover{background:#6a8a6a}
+    .btn-green:hover{background:#6a8a6a;transform:translateY(-1px)}
     .btn-red{background:var(--error);color:#fff}
+    .btn-red:hover{background:#b87a6a;transform:translateY(-1px)}
 
-    /* Job cards */
+    /* ── Cards with left gold border ── */
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);position:relative;overflow:hidden;transition:all .25s}
+    .card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(--gold) 0%,var(--gold-light) 100%);border-radius:var(--radius) 0 0 var(--radius);transform:scaleY(0);transform-origin:top;transition:transform .3s ease}
+    .card:hover::before{transform:scaleY(1)}
+    .card:hover{border-color:var(--gold);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+
+    /* ── Job cards ── */
     .jobs-list{display:flex;flex-direction:column;gap:16px}
-    .job-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:all .2s;box-shadow:var(--shadow)}
-    .job-card:hover{border-color:var(--accent);box-shadow:var(--shadow-lg)}
+    .job-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:all .25s;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .job-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(--gold) 0%,var(--gold-light) 100%);border-radius:var(--radius) 0 0 var(--radius);transform:scaleY(0);transform-origin:top;transition:transform .3s ease}
+    .job-card:hover::before{transform:scaleY(1)}
+    .job-card:hover{border-color:var(--gold);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
     .job-card-top{display:flex;flex-direction:column;gap:16px}
     .job-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
-    .job-title{font-size:1.15rem;font-weight:600;color:var(--text);margin-bottom:6px;font-family:Georgia,serif;line-height:1.3;word-wrap:break-word;overflow-wrap:break-word}
-    .job-company{font-size:.92rem;color:var(--text-soft);margin-bottom:12px}
+    .job-title{font-size:1.15rem;font-weight:700;color:var(--ink);margin-bottom:6px;font-family:var(--font-display);line-height:1.3;word-wrap:break-word;overflow-wrap:break-word}
+    .job-company{font-size:.92rem;color:var(--ink-soft);margin-bottom:12px;font-weight:500}
     .job-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:0}
     .job-actions{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap}
-    .job-excerpt{font-size:.85rem;color:var(--text-soft);margin-top:16px;line-height:1.6;padding-top:16px;border-top:1px solid var(--border-soft)}
+    .job-excerpt{font-size:.85rem;color:var(--ink-faint);margin-top:16px;line-height:1.6;padding-top:16px;border-top:1px solid var(--border-soft)}
 
-    /* Pills */
-    .pill{font-size:.72rem;font-weight:500;padding:4px 12px;border-radius:100px;border:1px solid var(--border);color:var(--text-soft);background:var(--surface-warm)}
+    /* ── Pills ── */
+    .pill{font-size:.72rem;font-weight:600;padding:4px 12px;border-radius:100px;border:1px solid var(--border);color:var(--ink-faint);background:var(--surface-warm)}
     .pill-remote{color:var(--success);border-color:var(--success);background:var(--success-bg)}
     .pill-salary{color:var(--warn);border-color:var(--warn);background:var(--warn-bg)}
-    .pill-level{color:var(--accent);border-color:var(--accent);background:var(--accent-bg)}
+    .pill-level{color:var(--gold);border-color:var(--gold);background:rgba(201,162,39,.08)}
 
-    /* Badges */
-    .badge{display:inline-block;padding:4px 12px;border-radius:var(--radius-sm);font-size:.72rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+    /* ── Badges ── */
+    .badge{display:inline-block;padding:4px 12px;border-radius:var(--radius-sm);font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
     .badge-A{background:var(--success-bg);color:var(--success)}
-    .badge-B{background:var(--accent-bg);color:var(--accent)}
+    .badge-B{background:rgba(201,162,39,.12);color:var(--gold-dark)}
     .badge-C{background:var(--warn-bg);color:var(--warn)}
     .badge-D{background:var(--warn-bg);color:var(--warn)}
     .badge-F{background:var(--error-bg);color:var(--error)}
 
-    /* Score bar */
+    /* ── Score bar ── */
     .score-bar{display:flex;align-items:center;gap:8px}
     .score-track{width:60px;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
-    .score-fill{height:100%;border-radius:3px;background:var(--accent)}
-    .score-num{font-size:.8rem;color:var(--text-soft);min-width:36px}
+    .score-fill{height:100%;border-radius:3px;background:var(--gold)}
+    .score-num{font-size:.8rem;color:var(--ink-faint);min-width:36px;font-weight:600}
 
-    /* Kanban */
+    /* ── Kanban ── */
     .kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;min-height:400px}
     .k-col{background:var(--surface-warm);border:1px solid var(--border);border-radius:var(--radius);display:flex;flex-direction:column;overflow:hidden}
     .k-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface)}
-    .k-title{font-size:.82rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--text-soft)}
-    .k-count{font-size:.75rem;background:var(--surface-warm);border:1px solid var(--border);color:var(--text-faint);padding:2px 10px;border-radius:100px}
+    .k-title{font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-faint);font-family:var(--font-body)}
+    .k-count{font-size:.75rem;background:var(--surface-warm);border:1px solid var(--border);color:var(--ink-faint);padding:2px 10px;border-radius:100px;font-weight:600}
     .k-body{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
-    .k-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;cursor:pointer;transition:all .2s;box-shadow:var(--shadow)}
-    .k-card:hover{border-color:var(--accent);box-shadow:var(--shadow-lg)}
-    .k-card-title{font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:4px}
-    .k-card-company{font-size:.78rem;color:var(--text-soft)}
+    .k-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;cursor:pointer;transition:all .25s;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .k-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(--gold) 0%,var(--gold-light) 100%);border-radius:var(--radius-sm) 0 0 var(--radius-sm);transform:scaleY(0);transform-origin:top;transition:transform .3s ease}
+    .k-card:hover::before{transform:scaleY(1)}
+    .k-card:hover{border-color:var(--gold);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+    .k-card-title{font-size:.88rem;font-weight:700;color:var(--ink);margin-bottom:4px;font-family:var(--font-display)}
+    .k-card-company{font-size:.78rem;color:var(--ink-soft)}
     .k-card-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
-    .k-card-date{font-size:.7rem;color:var(--text-faint)}
-    .col-applied .k-title{color:var(--accent)}
+    .k-card-date{font-size:.7rem;color:var(--ink-faint)}
+    .col-applied .k-title{color:var(--gold)}
     .col-interview .k-title{color:var(--warn)}
     .col-offer .k-title{color:var(--success)}
     .col-rejected .k-title{color:var(--error)}
 
-    /* Scorer */
+    /* ── Scorer ── */
     .scorer-wrap{max-width:680px;margin:0 auto}
-    .scorer-h{font-size:1.4rem;font-weight:600;margin-bottom:8px;font-family:Georgia,serif}
-    .scorer-sub{font-size:.92rem;color:var(--text-soft);margin-bottom:32px}
-    .input-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px;box-shadow:var(--shadow)}
-    .s-label{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-faint);margin-bottom:16px}
+    .scorer-h{font-size:1.6rem;font-weight:700;margin-bottom:8px;font-family:var(--font-display);color:var(--ink)}
+    .scorer-sub{font-size:.92rem;color:var(--ink-faint);margin-bottom:32px}
+    .input-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .input-section::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(--gold) 0%,var(--gold-light) 100%);border-radius:var(--radius) 0 0 var(--radius)}
+    .s-label{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:16px}
     .input-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
     .fg{display:flex;flex-direction:column;gap:6px}
-    .fg label{font-size:.82rem;color:var(--text-soft)}
-    .fg input,.fg select,.fg textarea{background:var(--surface-warm);border:1px solid var(--border);color:var(--text);padding:12px 14px;border-radius:var(--radius-sm);font-size:.9rem;outline:none;transition:all .2s;font-family:inherit;resize:none}
-    .fg input:focus,.fg select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+    .fg label{font-size:.82rem;color:var(--ink-soft);font-weight:500}
+    .fg input,.fg select,.fg textarea{background:var(--surface-warm);border:1px solid var(--border);color:var(--ink);padding:12px 14px;border-radius:var(--radius-sm);font-size:.9rem;outline:none;transition:all .2s;font-family:inherit;resize:none}
+    .fg input:focus,.fg select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,39,.12)}
     .dim-row{display:flex;align-items:center;gap:16px;padding:12px 0;border-bottom:1px solid var(--border-soft)}
     .dim-info{width:180px;flex-shrink:0}
-    .dim-name{font-size:.9rem;font-weight:500;color:var(--text)}
-    .dim-desc{font-size:.76rem;color:var(--text-faint)}
+    .dim-name{font-size:.9rem;font-weight:600;color:var(--ink)}
+    .dim-desc{font-size:.76rem;color:var(--ink-faint)}
     .dim-slider{flex:1;-webkit-appearance:none;height:6px;background:var(--border);border-radius:3px;outline:none}
-    .dim-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent);cursor:pointer;border:3px solid var(--surface);box-shadow:var(--shadow)}
-    .dim-val{width:32px;text-align:right;font-size:.88rem;font-weight:600;color:var(--accent)}
-    .score-result{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:40px;text-align:center;margin-top:20px;box-shadow:var(--shadow-lg)}
-    .big-grade{font-size:5rem;font-weight:600;line-height:1;margin-bottom:12px;font-family:Georgia,serif}
-    .grade-A{color:var(--success)}.grade-B{color:var(--accent)}.grade-C{color:var(--warn)}.grade-D{color:var(--warn)}.grade-F{color:var(--error)}
-    .score-avg{font-size:1rem;color:var(--text-soft);margin-bottom:16px}
-    .verdict{display:inline-block;padding:8px 24px;border-radius:100px;font-size:.9rem;font-weight:500}
+    .dim-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--gold);cursor:pointer;border:3px solid var(--surface);box-shadow:var(--shadow)}
+    .dim-val{width:32px;text-align:right;font-size:.88rem;font-weight:700;color:var(--gold)}
+    .score-result{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:40px;text-align:center;margin-top:20px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
+    .score-result::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--gold) 0%,var(--gold-light) 100%)}
+    .big-grade{font-size:5rem;font-weight:700;line-height:1;margin-bottom:12px;font-family:var(--font-display)}
+    .grade-A{color:var(--success)}.grade-B{color:var(--gold)}.grade-C{color:var(--warn)}.grade-D{color:var(--warn)}.grade-F{color:var(--error)}
+    .score-avg{font-size:1rem;color:var(--ink-faint);margin-bottom:16px;font-weight:500}
+    .verdict{display:inline-block;padding:8px 24px;border-radius:100px;font-size:.9rem;font-weight:600}
     .verdict-apply{background:var(--success-bg);color:var(--success)}
     .verdict-consider{background:var(--warn-bg);color:var(--warn)}
     .verdict-skip{background:var(--error-bg);color:var(--error)}
 
-    /* AI Coach */
+    /* ── AI Coach ── */
     .coach-tabs{display:flex;gap:8px;margin-bottom:24px;border-bottom:1px solid var(--border);padding-bottom:16px}
-    .coach-tab{background:none;border:none;padding:10px 20px;color:var(--text-soft);font-size:.9rem;font-weight:500;cursor:pointer;border-radius:var(--radius-sm);transition:all .2s;font-family:inherit}
-    .coach-tab:hover{color:var(--text);background:var(--surface-warm)}
-    .coach-tab.active{color:var(--text);background:var(--surface-warm);border:1px solid var(--border)}
+    .coach-tab{background:none;border:none;padding:10px 20px;color:var(--ink-faint);font-size:.9rem;font-weight:600;cursor:pointer;border-radius:var(--radius-sm);transition:all .2s;font-family:inherit;position:relative}
+    .coach-tab:hover{color:var(--ink)}
+    .coach-tab.active{color:var(--ink);background:var(--surface-warm);border:1px solid var(--border)}
     .coach-panel{display:none}
     .coach-panel.active{display:block}
-    .coach-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px;box-shadow:var(--shadow)}
-    .coach-card h3{font-size:1rem;font-weight:600;margin-bottom:8px;color:var(--text);font-family:Georgia,serif}
-    .coach-card p{font-size:.88rem;color:var(--text-soft);margin-bottom:16px;line-height:1.6}
-    .coach-textarea{width:100%;background:var(--surface-warm);border:1px solid var(--border);color:var(--text);padding:14px 16px;border-radius:var(--radius-sm);font-size:.9rem;resize:vertical;min-height:120px;font-family:inherit;outline:none;transition:all .2s}
-    .coach-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+    .coach-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .coach-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(--gold) 0%,var(--gold-light) 100%);border-radius:var(--radius) 0 0 var(--radius);transform:scaleY(0);transform-origin:top;transition:transform .3s ease}
+    .coach-card:hover::before{transform:scaleY(1)}
+    .coach-card:hover{border-color:var(--gold);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+    .coach-card h3{font-size:1.05rem;font-weight:700;margin-bottom:8px;color:var(--ink);font-family:var(--font-display)}
+    .coach-card p{font-size:.88rem;color:var(--ink-faint);margin-bottom:16px;line-height:1.6}
+    .coach-textarea{width:100%;background:var(--surface-warm);border:1px solid var(--border);color:var(--ink);padding:14px 16px;border-radius:var(--radius-sm);font-size:.9rem;resize:vertical;min-height:120px;font-family:inherit;outline:none;transition:all .2s}
+    .coach-textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,39,.12)}
     .ats-result{background:var(--surface-warm);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-top:20px}
     .ats-score-ring{width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;margin:0 auto 20px;border:4px solid var(--border);position:relative;background:var(--surface)}
-    .ats-score-num{font-size:1.8rem;font-weight:600;line-height:1;font-family:Georgia,serif}
-    .ats-score-label{font-size:.65rem;color:var(--text-faint);text-transform:uppercase;letter-spacing:.08em}
+    .ats-score-num{font-size:1.8rem;font-weight:700;line-height:1;font-family:var(--font-display);color:var(--gold)}
+    .ats-score-label{font-size:.65rem;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
     .ats-section{margin-top:16px}
-    .ats-section-title{font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-faint);margin-bottom:10px}
-    .ats-tag{display:inline-block;padding:4px 12px;border-radius:100px;font-size:.78rem;margin:3px;border:1px solid}
+    .ats-section-title{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint);margin-bottom:10px}
+    .ats-tag{display:inline-block;padding:4px 12px;border-radius:100px;font-size:.78rem;margin:3px;border:1px solid;font-weight:500}
     .ats-missing{color:var(--error);border-color:var(--error);background:var(--error-bg)}
     .ats-good{color:var(--success);border-color:var(--success);background:var(--success-bg)}
     .interview-room{background:var(--surface-warm);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
     .interview-header{background:var(--surface);padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
     .interview-transcript{height:360px;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px}
     .msg{max-width:80%;padding:14px 18px;border-radius:var(--radius);font-size:.9rem;line-height:1.6}
-    .msg-ai{background:var(--surface);border:1px solid var(--border);color:var(--text);align-self:flex-start;border-radius:var(--radius) var(--radius) var(--radius) 4px}
-    .msg-user{background:var(--accent);border:1px solid var(--accent);color:#fff;align-self:flex-end;border-radius:var(--radius) var(--radius) 4px var(--radius)}
-    .msg-label{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;opacity:.7}
+    .msg-ai{background:var(--surface);border:1px solid var(--border);color:var(--ink);align-self:flex-start;border-radius:var(--radius) var(--radius) var(--radius) 4px}
+    .msg-user{background:var(--gold);border:1px solid var(--gold);color:#fff;align-self:flex-end;border-radius:var(--radius) var(--radius) 4px var(--radius)}
+    .msg-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;opacity:.7}
     .interview-controls{padding:16px 20px;border-top:1px solid var(--border);display:flex;align-items:center;gap:14px;background:var(--surface)}
     .mic-btn{width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.4rem;transition:all .2s;flex-shrink:0}
     .mic-btn.idle{background:var(--surface-warm);border:2px solid var(--border)}
@@ -177,50 +227,65 @@
     .mic-btn.speaking{background:var(--success-bg);border:2px solid var(--success);animation:pulse2 1.2s infinite}
     @keyframes pulse2{0%,100%{box-shadow:0 0 0 0 rgba(90,122,90,.3)} 50%{box-shadow:0 0 0 10px rgba(90,122,90,0)}}
     .api-key-row{display:flex;gap:10px;align-items:center;margin-bottom:16px}
-    .api-key-row input{flex:1;background:var(--surface-warm);border:1px solid var(--border);color:var(--text);padding:12px 16px;border-radius:var(--radius-sm);font-size:.9rem;outline:none;font-family:monospace}
-    .api-key-row input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+    .api-key-row input{flex:1;background:var(--surface-warm);border:1px solid var(--border);color:var(--ink);padding:12px 16px;border-radius:var(--radius-sm);font-size:.9rem;outline:none;font-family:monospace}
+    .api-key-row input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,39,.12)}
 
-    /* AI Companies */
-    .ai-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;display:flex;flex-direction:column;gap:14px;transition:all .2s;box-shadow:var(--shadow)}
-    .ai-card:hover{border-color:var(--accent);box-shadow:var(--shadow-lg)}
+    /* ── AI Companies ── */
+    .ai-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;display:flex;flex-direction:column;gap:14px;transition:all .25s;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .ai-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(--gold) 0%,var(--gold-light) 100%);border-radius:var(--radius) 0 0 var(--radius);transform:scaleY(0);transform-origin:top;transition:transform .3s ease}
+    .ai-card:hover::before{transform:scaleY(1)}
+    .ai-card:hover{border-color:var(--gold);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
     .ai-card-top{display:flex;align-items:flex-start;gap:14px}
     .ai-logo{width:48px;height:48px;border-radius:var(--radius-sm);background:var(--surface-warm);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
-    .ai-name{font-size:1rem;font-weight:600;color:var(--text);margin-bottom:4px;font-family:Georgia,serif}
-    .ai-url{font-size:.78rem;color:var(--text-faint)}
-    .ai-desc{font-size:.88rem;color:var(--text-soft);line-height:1.6}
+    .ai-name{font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:4px;font-family:var(--font-display)}
+    .ai-url{font-size:.78rem;color:var(--ink-faint)}
+    .ai-desc{font-size:.88rem;color:var(--ink-soft);line-height:1.6}
     .ai-tags{display:flex;flex-wrap:wrap;gap:6px}
-    .ai-tag{font-size:.7rem;font-weight:500;padding:3px 10px;border-radius:100px;background:var(--surface-warm);border:1px solid var(--border);color:var(--text-soft);text-transform:uppercase;letter-spacing:.04em}
+    .ai-tag{font-size:.7rem;font-weight:600;padding:3px 10px;border-radius:100px;background:var(--surface-warm);border:1px solid var(--border);color:var(--ink-faint);text-transform:uppercase;letter-spacing:.04em}
     .ai-tag.ann{color:var(--success);border-color:var(--success);background:var(--success-bg)}
-    .ai-tag.res{color:var(--accent);border-color:var(--accent);background:var(--accent-bg)}
-    .ai-tag.saas{color:var(--accent);border-color:var(--accent);background:var(--accent-bg)}
+    .ai-tag.res{color:var(--gold);border-color:var(--gold);background:rgba(201,162,39,.08)}
+    .ai-tag.saas{color:var(--gold);border-color:var(--gold);background:rgba(201,162,39,.08)}
     .ai-tag.infra{color:var(--warn);border-color:var(--warn);background:var(--warn-bg)}
     .ai-tag.health{color:var(--error);border-color:var(--error);background:var(--error-bg)}
     .ai-actions{display:flex;gap:8px;margin-top:auto}
 
-    /* Stats page */
-    .grade-breakdown{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+    /* ── Stats page ── */
+    .grade-breakdown{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .grade-breakdown::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(--gold) 0%,var(--gold-light) 100%);border-radius:var(--radius) 0 0 var(--radius)}
     .g-bar-row{display:flex;align-items:center;gap:14px;margin-bottom:12px}
-    .g-bar-label{width:24px;font-weight:600;font-size:.9rem;font-family:Georgia,serif}
+    .g-bar-label{width:24px;font-weight:700;font-size:.9rem;font-family:var(--font-display)}
     .g-bar-track{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden}
     .g-bar-fill{height:100%;border-radius:4px;transition:width .5s}
-    .g-bar-count{width:28px;font-size:.82rem;color:var(--text-faint);text-align:right}
+    .g-bar-count{width:28px;font-size:.82rem;color:var(--ink-faint);text-align:right;font-weight:600}
 
-    /* Modal */
-    .overlay{display:none;position:fixed;inset:0;background:rgba(44,42,38,.4);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+    /* ── Modal ── */
+    .overlay{display:none;position:fixed;inset:0;background:rgba(43,38,32,.4);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
     .overlay.open{display:flex}
-    .modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px;width:480px;max-width:95vw;box-shadow:var(--shadow-lg)}
-    .modal-title{font-size:1.1rem;font-weight:600;margin-bottom:24px;color:var(--text);font-family:Georgia,serif}
+    .modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px;width:480px;max-width:95vw;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
+    .modal::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--gold) 0%,var(--gold-light) 100%)}
+    .modal-title{font-size:1.2rem;font-weight:700;margin-bottom:24px;color:var(--ink);font-family:var(--font-display)}
     .modal-form{display:flex;flex-direction:column;gap:14px}
     .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:24px}
 
-    /* Loading */
-    .loading{text-align:center;padding:60px;color:var(--text-faint)}
-    .spinner{display:inline-block;width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px}
+    /* ── Loading ── */
+    .loading{text-align:center;padding:60px;color:var(--ink-faint)}
+    .spinner{display:inline-block;width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px}
     @keyframes spin{to{transform:rotate(360deg)}}
-    .empty{text-align:center;padding:60px;color:var(--text-faint)}
-    .empty h3{color:var(--text-soft);margin-bottom:8px;font-size:1rem;font-family:Georgia,serif}
+    .empty{text-align:center;padding:60px;color:var(--ink-faint)}
+    .empty h3{color:var(--ink-soft);margin-bottom:8px;font-size:1rem;font-family:var(--font-display);font-weight:700}
 
     .divider{height:1px;background:var(--border);margin:16px 0}
+
+    /* ── Footer ── */
+    footer{background:var(--ink);color:var(--cream-dark);padding:40px 24px;margin-top:48px}
+    .footer-inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+    .footer-brand{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--cream)}
+    .footer-brand span{color:var(--gold)}
+    .footer-copy{font-size:.8rem;color:var(--ink-faint)}
+
+    /* ── Section headers ── */
+    .section-header{font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:16px;font-family:var(--font-display)}
+    .section-sub{font-size:.85rem;color:var(--ink-faint);margin-bottom:18px;line-height:1.5}
 
     @media(max-width:900px){.kanban{grid-template-columns:1fr 1fr}}
     @media(max-width:600px){
@@ -245,13 +310,15 @@
       .modal-form .fg input,.modal-form .fg select{font-size:16px;min-height:48px}
       .coach-tabs{flex-wrap:wrap}
       .coach-tab{flex:1;min-width:calc(50% - 4px);text-align:center}
+      .hero h1{font-size:1.5rem}
+      .footer-inner{flex-direction:column;text-align:center}
     }
   </style>
 </head>
 <body>
 
 <nav>
-  <span class="nav-brand">Job Ninja</span>
+  <span class="nav-brand">Job <span>Ninja</span></span>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="nav('search',this)">Search</button>
     <button class="nav-tab" onclick="nav('scorer',this)">Scorer</button>
@@ -271,11 +338,11 @@
   <div class="modal" style="max-width:420px">
     <div id="profile-view-login">
       <div class="modal-title">Your Profile</div>
-      <p style="font-size:.8rem;color:var(--text-soft);margin-bottom:14px">Sign in to save your job preferences across sessions.</p>
+      <p style="font-size:.8rem;color:var(--ink-faint);margin-bottom:14px">Sign in to save your job preferences across sessions.</p>
       <div class="modal-form">
         <div class="fg"><label>Display Name</label><input id="p-name" placeholder="e.g. Asauce" /></div>
         <div class="fg"><label>Email (used as your ID)</label><input id="p-email" type="email" placeholder="you@example.com" /></div>
-        <div style="font-size:.72rem;color:var(--text-faint);margin-top:4px">No password needed — your data stays in your browser.</div>
+        <div style="font-size:.72rem;color:var(--ink-faint);margin-top:4px">No password needed — your data stays in your browser.</div>
       </div>
       <div class="modal-actions" style="margin-top:14px">
         <button class="btn btn-ghost" onclick="closeModal('profile-modal')">Cancel</button>
@@ -303,7 +370,7 @@
           </select>
         </div>
         <div class="fg" style="display:flex;align-items:center;gap:8px;flex-direction:row">
-          <input type="checkbox" id="p-pref-remote" style="accent-color:var(--accent);width:15px;height:15px" />
+          <input type="checkbox" id="p-pref-remote" style="accent-color:var(--gold);width:15px;height:15px" />
           <label style="font-weight:400;cursor:pointer" for="p-pref-remote">Remote jobs only</label>
         </div>
       </div>
@@ -317,6 +384,10 @@
 
 <!-- SEARCH -->
 <div class="page active" id="page-search">
+  <div class="hero">
+    <h1>Find Your Next Remote Job</h1>
+    <p>Search thousands of remote positions across tech, business, creative, and more.</p>
+  </div>
   <div class="search-row">
     <input class="search-input" id="q" placeholder="Search — e.g. IT support, security, devops, data analyst..." onkeydown="if(event.key==='Enter')search()" />
     <select class="filter-sel" id="industry">
@@ -373,7 +444,7 @@
   </div>
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;font-size:.8rem;color:#555577">
     <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
-      <input type="checkbox" id="remote-only" style="accent-color:var(--accent);width:15px;height:15px" onchange="search()" />
+      <input type="checkbox" id="remote-only" style="accent-color:var(--gold);width:15px;height:15px" onchange="search()" />
       Remote only
     </label>
     <span id="cache-status" style="color:#333355"></span>
@@ -382,6 +453,8 @@
     <div class="loading"><div class="spinner"></div><br>Loading jobs...</div>
   </div>
 </div>
+
+<div class="blade-divider"></div>
 
 <!-- SCORER -->
 <div class="page" id="page-scorer">
@@ -419,12 +492,14 @@
   </div>
 </div>
 
+<div class="blade-divider"></div>
+
 <!-- TRACKER -->
 <div class="page" id="page-tracker">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
     <div>
-      <div style="font-size:1rem;font-weight:700">Application Tracker</div>
-      <div style="font-size:.8rem;color:#555577;margin-top:2px">Click any card to manage it</div>
+      <div class="section-header">Application Tracker</div>
+      <div style="font-size:.8rem;color:var(--ink-faint);margin-top:2px">Click any card to manage it</div>
     </div>
     <button class="btn btn-gold" onclick="openAddModal()">+ Add Job</button>
   </div>
@@ -448,9 +523,11 @@
   </div>
 </div>
 
+<div class="blade-divider"></div>
+
 <!-- STATS -->
 <div class="page" id="page-stats">
-  <div style="font-size:1rem;font-weight:700;margin-bottom:16px">Your Stats</div>
+  <div class="section-header">Your Stats</div>
   <div class="stats" id="stats-cards"></div>
   <div class="grade-breakdown" id="grade-bars"></div>
   <div style="margin-top:12px;display:flex;gap:8px">
@@ -459,11 +536,13 @@
   </div>
 </div>
 
+<div class="blade-divider"></div>
+
 <!-- AI COMPANIES -->
 <div class="page" id="page-ai">
   <div style="margin-bottom:18px">
-    <div style="font-size:1rem;font-weight:700;margin-bottom:4px">AI Companies Hiring</div>
-    <div style="font-size:.8rem;color:var(--text-soft)">Curated list of AI-first companies — many hire for annotation, RLHF, research, and remote roles.</div>
+    <div class="section-header">AI Companies Hiring</div>
+    <div class="section-sub">Curated list of AI-first companies — many hire for annotation, RLHF, research, and remote roles.</div>
   </div>
   <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
     <input id="ai-search" class="search-input" style="max-width:300px" placeholder="Search companies..." oninput="filterAI()" />
@@ -480,11 +559,13 @@
   <div id="ai-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px"></div>
 </div>
 
+<div class="blade-divider"></div>
+
 <!-- RESOURCES -->
 <div class="page" id="page-resources">
   <div style="margin-bottom:18px">
-    <div style="font-size:1rem;font-weight:700;margin-bottom:4px">Remote Work Resources</div>
-    <div style="font-size:.8rem;color:var(--text-soft)">Curated job boards, tools, and guides for remote workers. Sourced from <a href="https://github.com/lukasz-madon/awesome-remote-job" target="_blank" style="color:var(--accent)">awesome-remote-job</a>.</div>
+    <div class="section-header">Remote Work Resources</div>
+    <div class="section-sub">Curated job boards, tools, and guides for remote workers. Sourced from <a href="https://github.com/lukasz-madon/awesome-remote-job" target="_blank" style="color:var(--gold)">awesome-remote-job</a>.</div>
   </div>
   <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
     <input id="res-search" class="search-input" style="max-width:300px" placeholder="Search resources..." oninput="filterResources()" />
@@ -500,10 +581,12 @@
   <div id="res-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px"></div>
 </div>
 
+<div class="blade-divider"></div>
+
 <!-- AI COACH -->
 <div class="page" id="page-coach">
-  <div style="margin-bottom:4px;font-size:1rem;font-weight:700">Career Tools</div>
-  <div style="font-size:.78rem;color:var(--text-soft);margin-bottom:16px">ATS resume scanner + AI mock interview. Powered by Kimi (free tier available). <a href="https://platform.moonshot.cn" target="_blank" style="color:var(--accent)">Get a free API key →</a></div>
+  <div style="margin-bottom:4px" class="section-header">Career Tools</div>
+  <div style="font-size:.78rem;color:var(--ink-faint);margin-bottom:16px">ATS resume scanner + AI mock interview. Powered by Kimi (free tier available). <a href="https://platform.moonshot.cn" target="_blank" style="color:var(--gold)">Get a free API key →</a></div>
 
   <div class="coach-card" style="margin-bottom:18px">
     <h3>Kimi API Key</h3>
@@ -511,7 +594,7 @@
     <div class="api-key-row">
       <input type="password" id="kimi-key" placeholder="sk-..." />
       <button class="btn btn-gold btn-sm" onclick="saveKimiKey()">Save</button>
-      <span id="kimi-key-status" style="font-size:.75rem;color:var(--text-faint)"></span>
+      <span id="kimi-key-status" style="font-size:.75rem;color:var(--ink-faint)"></span>
     </div>
   </div>
 
@@ -536,17 +619,17 @@
         <p>Paste your resume text, or upload a PDF below.</p>
         <textarea class="coach-textarea" id="ats-resume" placeholder="Paste resume text here..."></textarea>
         <div style="margin-top:8px;display:flex;align-items:center;gap:8px">
-          <label style="cursor:pointer;font-size:.75rem;color:var(--accent)">
+          <label style="cursor:pointer;font-size:.75rem;color:var(--gold)">
             Upload PDF
             <input type="file" id="ats-pdf" accept=".pdf" style="display:none" onchange="parsePDF(this)" />
           </label>
-          <span id="pdf-status" style="font-size:.73rem;color:var(--text-faint)"></span>
+          <span id="pdf-status" style="font-size:.73rem;color:var(--ink-faint)"></span>
         </div>
       </div>
     </div>
     <div style="margin-top:14px;display:flex;gap:10px;align-items:center">
       <button class="btn btn-primary" onclick="runATS()" id="ats-btn">Analyse Resume</button>
-      <span id="ats-loading" style="font-size:.78rem;color:var(--text-soft);display:none">Analysing with AI...</span>
+      <span id="ats-loading" style="font-size:.78rem;color:var(--ink-faint);display:none">Analysing with AI...</span>
     </div>
     <div id="ats-result"></div>
   </div>
@@ -570,7 +653,7 @@
       </div>
       <div style="display:flex;gap:10px;align-items:center">
         <button class="btn btn-primary" onclick="writeResume()" id="rw-btn">Write My Resume</button>
-        <span id="rw-loading" style="font-size:.78rem;color:var(--text-soft);display:none">Writing... this takes ~20 seconds</span>
+        <span id="rw-loading" style="font-size:.78rem;color:var(--ink-faint);display:none">Writing... this takes ~20 seconds</span>
       </div>
     </div>
     <div id="rw-result"></div>
@@ -604,7 +687,7 @@
       </div>
       <div style="display:flex;gap:10px;align-items:center">
         <button class="btn btn-primary" onclick="writeCoverLetter()" id="cl-btn">Write Cover Letter</button>
-        <span id="cl-loading" style="font-size:.78rem;color:var(--text-soft);display:none">Writing... this takes ~15 seconds</span>
+        <span id="cl-loading" style="font-size:.78rem;color:var(--ink-faint);display:none">Writing... this takes ~15 seconds</span>
       </div>
     </div>
     <div id="cl-result"></div>
@@ -641,17 +724,17 @@
     <div class="interview-room" id="iv-room" style="display:none">
       <div class="interview-header">
         <div>
-          <span style="font-size:.8rem;font-weight:700;color:var(--text)" id="iv-room-title">Mock Interview</span>
-          <span style="font-size:.7rem;color:var(--text-soft);margin-left:8px" id="iv-status">Starting...</span>
+          <span style="font-size:.8rem;font-weight:700;color:var(--ink)" id="iv-room-title">Mock Interview</span>
+          <span style="font-size:.7rem;color:var(--ink-faint);margin-left:8px" id="iv-status">Starting...</span>
         </div>
-        <span id="iv-q-count" style="font-size:.72rem;color:var(--text-faint)">Q 0/8</span>
+        <span id="iv-q-count" style="font-size:.72rem;color:var(--ink-faint)">Q 0/8</span>
       </div>
       <div class="interview-transcript" id="iv-transcript"></div>
       <div class="interview-controls">
         <button class="mic-btn idle" id="mic-btn" onclick="toggleMic()">🎤</button>
         <div style="flex:1">
-          <div id="iv-mic-label" style="font-size:.78rem;color:var(--text-soft)">Press mic to answer</div>
-          <div id="iv-transcript-live" style="font-size:.75rem;color:var(--accent);min-height:16px;margin-top:2px"></div>
+          <div id="iv-mic-label" style="font-size:.78rem;color:var(--ink-faint)">Press mic to answer</div>
+          <div id="iv-transcript-live" style="font-size:.75rem;color:var(--gold);min-height:16px;margin-top:2px"></div>
         </div>
         <button class="btn btn-ghost btn-sm" onclick="skipQuestion()" id="iv-skip">Skip →</button>
       </div>
@@ -659,7 +742,7 @@
 
     <div id="iv-feedback" style="display:none" class="coach-card">
       <h3>Interview Feedback</h3>
-      <div id="iv-feedback-body" style="font-size:.82rem;color:var(--text);line-height:1.7"></div>
+      <div id="iv-feedback-body" style="font-size:.82rem;color:var(--ink);line-height:1.7"></div>
     </div>
   </div>
 
@@ -670,29 +753,29 @@
       <p>Based on recruiter insights — what actually gets your application read, not skipped.</p>
       
       <div style="margin-top:16px">
-        <div style="font-size:.8rem;font-weight:700;color:var(--accent);margin-bottom:8px">BEFORE YOU SEND CHECKLIST</div>
-        <div style="font-size:.78rem;color:var(--text);line-height:1.7;background:var(--surface-warm);padding:12px;border-radius:8px;border:1px solid var(--border)">
+        <div style="font-size:.8rem;font-weight:700;color:var(--gold);margin-bottom:8px">BEFORE YOU SEND CHECKLIST</div>
+        <div style="font-size:.78rem;color:var(--ink);line-height:1.7;background:var(--surface-warm);padding:12px;border-radius:8px;border:1px solid var(--border)">
           <div style="margin-bottom:6px"><b>Subject &amp; Opening:</b></div>
-          <div style="margin-left:12px;margin-bottom:10px;color:#8888aa">
+          <div style="margin-left:12px;margin-bottom:10px;color:var(--ink-faint)">
             • Subject line matches the tone of the role (bold for sales/marketing, precise for finance/ops)<br>
             • Opening line earns a read — no "I'm writing to express my interest"<br>
             • Removed every bracket: [Your Name], X years, [Tech Stack], etc.
           </div>
           <div style="margin-bottom:6px"><b>Body:</b></div>
-          <div style="margin-left:12px;margin-bottom:10px;color:#8888aa">
+          <div style="margin-left:12px;margin-bottom:10px;color:var(--ink-faint)">
             • States a real pain point the company likely has — not a generic one<br>
             • Includes at least one verified number or result (no invented metrics)<br>
             • Mentions the CV/portfolio attachment explicitly<br>
             • Reads like you, not like a copy-pasted template
           </div>
           <div style="margin-bottom:6px"><b>Attachments:</b></div>
-          <div style="margin-left:12px;margin-bottom:10px;color:#8888aa">
+          <div style="margin-left:12px;margin-bottom:10px;color:var(--ink-faint)">
             • CV is actually attached (check before hitting send)<br>
             • Portfolio link works and is set to public/viewable<br>
             • File names are professional (not "CV_final_final2.pdf")
           </div>
           <div style="margin-bottom:6px"><b>Final Pass:</b></div>
-          <div style="margin-left:12px;color:#8888aa">
+          <div style="margin-left:12px;color:var(--ink-faint)">
             • Read it out loud once — if it sounds stiff, cut a sentence<br>
             • Confirm the company name and role title are correct<br>
             • Sent from a professional email address
@@ -702,7 +785,7 @@
 
       <div style="margin-top:16px">
         <div style="font-size:.8rem;font-weight:700;color:var(--error);margin-bottom:8px">WHAT NOT TO DO</div>
-        <div style="font-size:.78rem;color:var(--text);line-height:1.7;background:var(--surface-warm);padding:12px;border-radius:8px;border:1px solid var(--border)">
+        <div style="font-size:.78rem;color:var(--ink);line-height:1.7;background:var(--surface-warm);padding:12px;border-radius:8px;border:1px solid var(--border)">
           <div style="margin-bottom:8px"><b>Don't open with filler.</b><br>
           <span style="color:#ff8888">✗ "I'm writing to express my interest in the [Role] position at [Company]."</span><br>
           <span style="color:var(--success)">✓ Lead with the pain point or the result — the role and company come naturally after.</span></div>
@@ -726,9 +809,9 @@
 
       <div style="margin-top:16px">
         <div style="font-size:.8rem;font-weight:700;color:var(--warn);margin-bottom:8px">THE FORMULA THAT WORKS</div>
-        <div style="font-size:.78rem;color:var(--text);line-height:1.7;background:var(--surface-warm);padding:12px;border-radius:8px;border:1px solid var(--border)">
+        <div style="font-size:.78rem;color:var(--ink);line-height:1.7;background:var(--surface-warm);padding:12px;border-radius:8px;border:1px solid var(--border)">
           <div style="margin-bottom:10px"><b>Your email body needs:</b></div>
-          <div style="margin-left:12px;color:#8888aa">
+          <div style="margin-left:12px;color:var(--ink-faint)">
             1. <b>A beginning line that gets them reading</b> — no "I'm writing to express"<br>
             2. <b>Your responsibilities and results</b> — kept short, with numbers<br>
             3. <b>A pain point</b> — every company has one. Find it, talk about it, position yourself as the person solving it.<br>
@@ -739,28 +822,28 @@
 
       <div style="margin-top:16px">
         <div style="font-size:.8rem;font-weight:700;color:var(--success);margin-bottom:8px">SUBJECT LINE EXAMPLES BY ROLE</div>
-        <div style="font-size:.78rem;color:var(--text);line-height:1.7;background:var(--surface-warm);padding:12px;border-radius:8px;border:1px solid var(--border)">
+        <div style="font-size:.78rem;color:var(--ink);line-height:1.7;background:var(--surface-warm);padding:12px;border-radius:8px;border:1px solid var(--border)">
           <div style="margin-bottom:8px"><b>Social Media Manager:</b><br>
-          <span style="color:#8888aa">• "Stop Searching — Your Social Media Manager Just Applied"<br>
+          <span style="color:var(--ink-faint)">• "Stop Searching — Your Social Media Manager Just Applied"<br>
           • "One Less Role to Fill"<br>
           • "Before You Review Another Social Profile…"</span></div>
           <div style="margin-bottom:8px"><b>UI/UX Designer:</b><br>
-          <span style="color:#8888aa">• "Your Users Have Opinions About Your Products"<br>
+          <span style="color:var(--ink-faint)">• "Your Users Have Opinions About Your Products"<br>
           • "Built for Better User Experiences"<br>
           • "Your Product Needs Better Experience Design"</span></div>
           <div style="margin-bottom:8px"><b>Data Analyst:</b><br>
-          <span style="color:#8888aa">• "Your Data Is Already Telling You What to Do"<br>
+          <span style="color:var(--ink-faint)">• "Your Data Is Already Telling You What to Do"<br>
           • "Interpreting Data Beyond the Numbers"<br>
           • "Where Data Becomes Direction"</span></div>
           <div><b>Virtual Assistant:</b><br>
-          <span style="color:#8888aa">• "Consider This One Less Thing on Your To-Do List"<br>
+          <span style="color:var(--ink-faint)">• "Consider This One Less Thing on Your To-Do List"<br>
           • "Because There Are Only 24 Hours in a Day"<br>
           • "You Shouldn't Be Doing Everything Yourself"</span></div>
         </div>
       </div>
 
       <div style="margin-top:16px;padding:12px;background:var(--surface-warm);border-radius:8px;border:1px solid var(--border)">
-        <div style="font-size:.75rem;color:var(--text-soft);font-style:italic">
+        <div style="font-size:.75rem;color:var(--ink-faint);font-style:italic">
           💡 <b>Pro tip from a recruiter:</b> "90% of the time, your email application matters. I've seen candidates get responses within minutes by writing: 'You haven't heard the last of me.' Sometimes it matters."
         </div>
       </div>
@@ -809,9 +892,10 @@
 <div class="overlay" id="detail-modal">
   <div class="modal">
     <div class="modal-title" id="d-title"></div>
-    <div id="d-body" style="font-size:.82rem;color:var(--text-soft);line-height:1.7;margin-bottom:.75rem"></div>
+    <div id="d-body" style="font-size:.82rem;color:var(--ink-faint);line-height:1.7;margin-bottom:.75rem"></div>
     <div class="divider"></div>
-    <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);margin-bottom:8px">Move to</div>
+
+    <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:8px">Move to</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.75rem">
       <button class="btn btn-ghost btn-sm" onclick="move('applied')">Applied</button>
       <button class="btn btn-ghost btn-sm" onclick="move('interview')">Interview</button>
@@ -824,6 +908,13 @@
     </div>
   </div>
 </div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Job <span>Ninja</span></div>
+    <div class="footer-copy">Built for job hunters. No tracking, no servers — your data stays in your browser.</div>
+  </div>
+</footer>
 
 <script>
 // ── SEED JOBS (fallback when jobs.json unavailable) ──
@@ -1035,7 +1126,7 @@ function renderResults(list, note, cacheInfo) {
     return
   }
   const noteHTML = note ? `<div style="font-size:.75rem;color:#888844;margin-bottom:10px;padding:6px 10px;background:#1a1a0a;border-radius:6px;border-left:3px solid #aaaa33">⚠️ ${note}</div>` : ''
-  el.innerHTML = noteHTML + `<div style="font-size:.75rem;color:var(--text-faint);margin-bottom:8px">${list.length} jobs found</div>` + '<div class="jobs-list">' + list.map(jobCard).join('') + '</div>'
+  el.innerHTML = noteHTML + `<div style="font-size:.75rem;color:var(--ink-faint);margin-bottom:8px">${list.length} jobs found</div>` + '<div class="jobs-list">' + list.map(jobCard).join('') + '</div>'
 }
 
 function jobCard(j) {
@@ -1048,7 +1139,7 @@ function jobCard(j) {
   const geoColor = isCanada ? 'color:var(--success);border-color:rgba(68,204,136,.3);background:rgba(68,204,136,.08)' : isUSA ? 'color:#6688ff;border-color:rgba(102,136,255,.3);background:rgba(102,136,255,.08)' : ''
   const remotePill = j.remote ? '<span class="pill pill-remote">🌍 Remote</span>' : ''
   const geo = `<span class="pill" style="${geoColor}">📍 ${loc}</span>`
-  const src = j.source ? `<span class="pill" style="color:var(--text-faint)">${j.source}</span>` : ''
+  const src = j.source ? `<span class="pill" style="color:var(--ink-faint)">${j.source}</span>` : ''
   const date = j.date ? new Date(j.date).toLocaleDateString('en-CA',{month:'short',day:'numeric'}) : ''
   const t = (j.title||'').replace(/'/g,"\\'").replace(/"/g,'&quot;')
   const c = (j.company||'').replace(/'/g,"\\'").replace(/"/g,'&quot;')
@@ -1194,7 +1285,7 @@ function openDetail(id) {
     j.salary && `<b>Salary:</b> ${j.salary}`,
     j.location && `<b>Location:</b> ${j.location}`,
     j.grade && `<b>Score:</b> <span class="badge badge-${j.grade}">${j.grade}</span>`,
-    j.url && `<b>URL:</b> <a href="${j.url}" target="_blank" style="color:var(--accent)">${j.url.slice(0,50)}...</a>`,
+    j.url && `<b>URL:</b> <a href="${j.url}" target="_blank" style="color:var(--gold)">${j.url.slice(0,50)}...</a>`,
     `<b>Added:</b> ${new Date(j.createdAt).toLocaleDateString()}`
   ].filter(Boolean).join('<br>')
   document.getElementById('detail-modal').classList.add('open')
@@ -1221,7 +1312,7 @@ function renderStats() {
   const offers = jobs.filter(j => j.status === 'offer').length
   const rate = total ? Math.round(interviews/total*100) : 0
   document.getElementById('stats-cards').innerHTML = [
-    ['Total', total, 'var(--accent)'],
+    ['Total', total, 'var(--gold)'],
     ['Interviews', interviews, 'var(--warn)'],
     ['Offers', offers, 'var(--success)'],
     ['Interview Rate', rate+'%', '#6688ff']
@@ -1230,9 +1321,9 @@ function renderStats() {
   const grades = {A:0,B:0,C:0,D:0,F:0}
   jobs.forEach(j => { if (j.grade && grades[j.grade]!==undefined) grades[j.grade]++ })
   const mx = Math.max(...Object.values(grades), 1)
-  const colors = {A:'var(--success)',B:'#6688ff',C:'var(--warn)',D:'#ff9944',F:'#ff5555'}
+  const colors = {A:'var(--success)',B:'var(--gold)',C:'var(--warn)',D:'#ff9944',F:'#ff5555'}
   document.getElementById('grade-bars').innerHTML =
-    '<div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);margin-bottom:12px">Score Distribution</div>' +
+    '<div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:12px">Score Distribution</div>' +
     Object.entries(grades).map(([g,n]) => `<div class="g-bar-row">
       <div class="g-bar-label" style="color:${colors[g]}">${g}</div>
       <div class="g-bar-track"><div class="g-bar-fill" style="width:${(n/mx)*100}%;background:${colors[g]}"></div></div>
@@ -1380,8 +1471,8 @@ Respond ONLY with valid JSON in this exact format:
 }
 
 function renderATSResult(r) {
-  const colors = {A:'var(--success)',B:'#6688ff',C:'#cccc44',D:'#ff9944',F:'#ff5555'}
-  const c = colors[r.grade] || 'var(--accent)'
+  const colors = {A:'var(--success)',B:'var(--gold)',C:'#cccc44',D:'#ff9944',F:'#ff5555'}
+  const c = colors[r.grade] || 'var(--gold)'
   const missHTML = (r.missing_keywords||[]).map(k=>`<span class="ats-tag ats-missing">${k}</span>`).join('')
   const matchHTML = (r.matched_keywords||[]).map(k=>`<span class="ats-tag ats-good">${k}</span>`).join('')
   const impHTML = (r.improvements||[]).map(i=>`<li style="margin-bottom:4px">${i}</li>`).join('')
@@ -1400,13 +1491,13 @@ function renderATSResult(r) {
     ${matchHTML ? `<div class="ats-section"><div class="ats-section-title">Matched Keywords</div>${matchHTML}</div>` : ''}
     ${missHTML ? `<div class="ats-section" style="margin-top:10px"><div class="ats-section-title">Missing Keywords</div>${missHTML}</div>` : ''}
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
-      <div><div class="ats-section-title">Strengths</div><ul style="font-size:.78rem;color:var(--text-soft);padding-left:14px;line-height:1.6">${strHTML}</ul></div>
-      <div><div class="ats-section-title">Improve</div><ul style="font-size:.78rem;color:var(--text-soft);padding-left:14px;line-height:1.6">${impHTML}</ul></div>
+      <div><div class="ats-section-title">Strengths</div><ul style="font-size:.78rem;color:var(--ink-faint);padding-left:14px;line-height:1.6">${strHTML}</ul></div>
+      <div><div class="ats-section-title">Improve</div><ul style="font-size:.78rem;color:var(--ink-faint);padding-left:14px;line-height:1.6">${impHTML}</ul></div>
     </div>
     <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border)">
-      <div style="font-size:.78rem;color:var(--text-soft);margin-bottom:10px">Ready to level up? Let AI rewrite your resume — tailored to this exact job, ATS-optimised, impact-driven bullet points.</div>
+      <div style="font-size:.78rem;color:var(--ink-faint);margin-bottom:10px">Ready to level up? Let AI rewrite your resume — tailored to this exact job, ATS-optimised, impact-driven bullet points.</div>
       <button class="btn btn-gold" onclick="rewriteResume()" id="rewrite-btn">Rewrite My Resume for This Job</button>
-      <span id="rewrite-loading" style="font-size:.78rem;color:var(--text-soft);display:none;margin-left:10px">Rewriting... this takes ~15 seconds</span>
+      <span id="rewrite-loading" style="font-size:.78rem;color:var(--ink-faint);display:none;margin-left:10px">Rewriting... this takes ~15 seconds</span>
     </div>
   </div>
   <div id="rewrite-result"></div>`
@@ -1433,10 +1524,10 @@ Write the complete rewritten resume. Use clear sections: Summary, Experience, Sk
     document.getElementById('rewrite-result').innerHTML = `
       <div class="ats-result" style="margin-top:16px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-          <div style="font-size:.82rem;font-weight:600;color:var(--text)">Your Rewritten Resume</div>
+          <div style="font-size:.82rem;font-weight:700;color:var(--ink)">Your Rewritten Resume</div>
           <button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.textContent)">Copy</button>
         </div>
-        <div style="font-size:.82rem;color:var(--text);line-height:1.7;white-space:pre-wrap;background:var(--surface);padding:16px;border-radius:8px;border:1px solid var(--border)">${result}</div>
+        <div style="font-size:.82rem;color:var(--ink);line-height:1.7;white-space:pre-wrap;background:var(--surface);padding:16px;border-radius:8px;border:1px solid var(--border)">${result}</div>
       </div>`
   } catch(e) {
     document.getElementById('rewrite-result').innerHTML = `<div class="empty" style="margin-top:12px"><h3>⚠️ Error</h3><p style="font-size:.8rem;margin-top:4px">${e.message}</p></div>`
@@ -1475,10 +1566,10 @@ Use strong action verbs, include metrics where possible, and optimize for ATS ke
     document.getElementById('rw-result').innerHTML = `
       <div class="ats-result" style="margin-top:16px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-          <div style="font-size:.82rem;font-weight:600;color:var(--text)">Your Tailored Resume</div>
+          <div style="font-size:.82rem;font-weight:700;color:var(--ink)">Your Tailored Resume</div>
           <button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.textContent)">Copy</button>
         </div>
-        <div style="font-size:.82rem;color:var(--text);line-height:1.7;white-space:pre-wrap;background:var(--surface);padding:16px;border-radius:8px;border:1px solid var(--border)">${result}</div>
+        <div style="font-size:.82rem;color:var(--ink);line-height:1.7;white-space:pre-wrap;background:var(--surface);padding:16px;border-radius:8px;border:1px solid var(--border)">${result}</div>
       </div>`
   } catch(e) {
     document.getElementById('rw-result').innerHTML = `<div class="empty" style="margin-top:12px"><h3>⚠️ Error</h3><p style="font-size:.8rem;margin-top:4px">${e.message}</p></div>`
@@ -1527,10 +1618,10 @@ Keep it to 3-4 paragraphs, under 400 words. Match the requested tone.`
     document.getElementById('cl-result').innerHTML = `
       <div class="ats-result" style="margin-top:16px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-          <div style="font-size:.82rem;font-weight:600;color:var(--text)">Your Cover Letter</div>
+          <div style="font-size:.82rem;font-weight:700;color:var(--ink)">Your Cover Letter</div>
           <button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.textContent)">Copy</button>
         </div>
-        <div style="font-size:.82rem;color:var(--text);line-height:1.7;white-space:pre-wrap;background:var(--surface);padding:16px;border-radius:8px;border:1px solid var(--border)">${result}</div>
+        <div style="font-size:.82rem;color:var(--ink);line-height:1.7;white-space:pre-wrap;background:var(--surface);padding:16px;border-radius:8px;border:1px solid var(--border)">${result}</div>
       </div>`
   } catch(e) {
     document.getElementById('cl-result').innerHTML = `<div class="empty" style="margin-top:12px"><h3>⚠️ Error</h3><p style="font-size:.8rem;margin-top:4px">${e.message}</p></div>`
@@ -1717,7 +1808,7 @@ async function endInterview() {
   
   if (ivState.transcript.length === 0) {
     document.getElementById('iv-feedback').style.display = 'block'
-    document.getElementById('iv-feedback-body').innerHTML = '<p style="color:var(--text-soft)">No answers recorded. Try the interview again and speak your answers.</p>'
+    document.getElementById('iv-feedback-body').innerHTML = '<p style="color:var(--ink-faint)">No answers recorded. Try the interview again and speak your answers.</p>'
     return
   }
   
@@ -1747,11 +1838,11 @@ Provide detailed feedback in this exact JSON format:
     
     const scoreBar = (label, score) => `
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-        <div style="width:120px;font-size:.78rem;color:var(--text-soft)">${label}</div>
+        <div style="width:120px;font-size:.78rem;color:var(--ink-faint)">${label}</div>
         <div style="flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden">
           <div style="height:100%;width:${score*10}%;background:${score >= 7 ? 'var(--success)' : score >= 5 ? 'var(--warn)' : 'var(--error)'};border-radius:4px"></div>
         </div>
-        <div style="width:30px;font-size:.82rem;font-weight:600;color:var(--text)">${score}/10</div>
+        <div style="width:30px;font-size:.82rem;font-weight:700;color:var(--ink)">${score}/10</div>
       </div>`
     
     document.getElementById('iv-feedback').style.display = 'block'
@@ -1765,15 +1856,15 @@ Provide detailed feedback in this exact JSON format:
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
         <div>
-          <div style="font-size:.78rem;font-weight:600;color:var(--success);margin-bottom:6px">Strengths</div>
-          <ul style="font-size:.78rem;color:var(--text-soft);padding-left:14px;line-height:1.6">${(fb.strengths||[]).map(s=>`<li>${s}</li>`).join('')}</ul>
+          <div style="font-size:.78rem;font-weight:700;color:var(--success);margin-bottom:6px">Strengths</div>
+          <ul style="font-size:.78rem;color:var(--ink-faint);padding-left:14px;line-height:1.6">${(fb.strengths||[]).map(s=>`<li>${s}</li>`).join('')}</ul>
         </div>
         <div>
-          <div style="font-size:.78rem;font-weight:600;color:var(--error);margin-bottom:6px">Areas to Improve</div>
-          <ul style="font-size:.78rem;color:var(--text-soft);padding-left:14px;line-height:1.6">${(fb.improvements||[]).map(s=>`<li>${s}</li>`).join('')}</ul>
+          <div style="font-size:.78rem;font-weight:700;color:var(--error);margin-bottom:6px">Areas to Improve</div>
+          <ul style="font-size:.78rem;color:var(--ink-faint);padding-left:14px;line-height:1.6">${(fb.improvements||[]).map(s=>`<li>${s}</li>`).join('')}</ul>
         </div>
       </div>
-      <div style="padding:12px;background:var(--surface-warm);border-radius:8px;border:1px solid var(--border);font-size:.82rem;color:var(--text)">
+      <div style="padding:12px;background:var(--surface-warm);border-radius:8px;border:1px solid var(--border);font-size:.82rem;color:var(--ink)">
         <b>Verdict:</b> ${fb.verdict}
       </div>`
   } catch(e) {
@@ -1886,8 +1977,7 @@ function initAI() {
   if (aiInitialized) return
   aiInitialized = true
   renderAI(AI_COMPANIES)
-}
-
+}\n
 function filterResources() {
   const q = document.getElementById('res-search').value.toLowerCase()
   const cat = document.getElementById('res-cat').value
