@@ -259,6 +259,7 @@
     <button class="nav-tab" onclick="nav('stats',this)">Stats</button>
     <button class="nav-tab" onclick="nav('ai',this)">Companies</button>
     <button class="nav-tab" onclick="nav('coach',this)">Tools</button>
+    <button class="nav-tab" onclick="nav('resources',this)">Resources</button>
   </div>
   <div class="nav-spacer"></div>
   <div class="nav-stat">Tracked: <b id="total-count">0</b> &nbsp;|&nbsp; Offers: <b id="offer-count">0</b></div>
@@ -477,6 +478,26 @@
     </select>
   </div>
   <div id="ai-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px"></div>
+</div>
+
+<!-- RESOURCES -->
+<div class="page" id="page-resources">
+  <div style="margin-bottom:18px">
+    <div style="font-size:1rem;font-weight:700;margin-bottom:4px">Remote Work Resources</div>
+    <div style="font-size:.8rem;color:var(--text-soft)">Curated job boards, tools, and guides for remote workers. Sourced from <a href="https://github.com/lukasz-madon/awesome-remote-job" target="_blank" style="color:var(--accent)">awesome-remote-job</a>.</div>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
+    <input id="res-search" class="search-input" style="max-width:300px" placeholder="Search resources..." oninput="filterResources()" />
+    <select class="filter-sel" id="res-cat" onchange="filterResources()">
+      <option value="">All Categories</option>
+      <option value="job-board">Job Boards</option>
+      <option value="aggregator">Aggregators</option>
+      <option value="company">Remote-First Companies</option>
+      <option value="tool">Tools</option>
+      <option value="guide">Guides & Articles</option>
+    </select>
+  </div>
+  <div id="res-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px"></div>
 </div>
 
 <!-- AI COACH -->
@@ -1762,6 +1783,54 @@ Provide detailed feedback in this exact JSON format:
 }
 
 // ── AI COMPANIES ──
+const REMOTE_RESOURCES = [
+  { name: 'We Work Remotely', url: 'weworkremotely.com', logo: '🌐', desc: 'The largest remote work community in the world. 4.5M+ monthly visitors.', category: 'job-board' },
+  { name: 'Remote OK', url: 'remoteok.com', logo: '👌', desc: 'Scrapes many job board feeds for remote positions. Daily updated.', category: 'aggregator' },
+  { name: 'Working Nomads', url: 'workingnomads.com', logo: '🏝️', desc: 'Curated remote jobs for digital nomads. Delivered to your inbox.', category: 'job-board' },
+  { name: 'Remotive', url: 'remotive.com', logo: '💼', desc: 'Remote jobs in tech, marketing, customer support, and design.', category: 'job-board' },
+  { name: 'Wellfound (AngelList)', url: 'wellfound.com', logo: '🚀', desc: 'Startup jobs. Filter by "Remote OK" for remote-friendly positions.', category: 'job-board' },
+  { name: 'JustRemote', url: 'justremote.co', logo: '🔍', desc: 'Hand-picked remote jobs from companies around the world.', category: 'job-board' },
+  { name: 'Jobspresso', url: 'jobspresso.co', logo: '☕', desc: 'High-quality remote positions that are open and legitimate.', category: 'job-board' },
+  { name: 'Daily Remote', url: 'dailyremote.com', logo: '📅', desc: 'Filter and find remote jobs for every role.', category: 'job-board' },
+  { name: 'NODESK', url: 'nodesk.co', logo: '📡', desc: 'Remote jobs and resources for digital nomads.', category: 'job-board' },
+  { name: 'Power to Fly', url: 'powertofly.com', logo: '💪', desc: 'Remote jobs specific to women and underrepresented groups.', category: 'job-board' },
+  { name: '4 Day Week', url: '4dayweek.io', logo: '🗓️', desc: 'Software jobs with a better work/life balance.', category: 'job-board' },
+  { name: 'Dribbble Jobs', url: 'dribbble.com/jobs', logo: '🎨', desc: 'Design jobs with remote filter.', category: 'job-board' },
+  { name: 'Upwork', url: 'upwork.com', logo: '💻', desc: 'Find remote freelance jobs in any category.', category: 'job-board' },
+  { name: 'Crypto Jobs List', url: 'cryptojobslist.com', logo: '₿', desc: '#1 job board for crypto, bitcoin and blockchain jobs.', category: 'job-board' },
+  { name: 'Web3Jobs', url: 'web3.career', logo: '⛓️', desc: 'Remote Web3 and blockchain jobs.', category: 'job-board' },
+  { name: 'Career Vault', url: 'careervault.io', logo: '🏦', desc: 'Hundreds of remote jobs added daily from thousands of company career pages.', category: 'aggregator' },
+  { name: 'Findwork', url: 'findwork.dev', logo: '🔎', desc: 'Crawls multiple job boards with Glassdoor and Crunchbase data.', category: 'aggregator' },
+  { name: 'Remote 4 Me', url: 'remote4me.com', logo: '🌍', desc: 'Aggregator for remote jobs in tech and non-tech.', category: 'aggregator' },
+  { name: 'JS Remotely', url: 'javascript.jobs', logo: '📜', desc: 'All remote JavaScript jobs on one board.', category: 'aggregator' },
+  { name: 'Remote Python', url: 'remotepython.com', logo: '🐍', desc: 'Job board and aggregator specifically for remote Python jobs.', category: 'aggregator' },
+  { name: 'GitLab', url: 'about.gitlab.com', logo: '🦊', desc: 'Fully remote company. All-remote playbook and job openings.', category: 'company' },
+  { name: 'Automattic', url: 'automattic.com', logo: '📝', desc: 'WordPress.com parent company. Distributed workforce since 2005.', category: 'company' },
+  { name: 'Zapier', url: 'zapier.com', logo: '⚡', desc: 'Fully remote automation platform. Remote work guides and jobs.', category: 'company' },
+  { name: 'Buffer', url: 'buffer.com', logo: '📱', desc: 'Social media tools. Transparent salaries, fully remote.', category: 'company' },
+  { name: 'Doist', url: 'doist.com', logo: '✅', desc: 'Todoist and Twist. Async-first, fully remote team.', category: 'company' },
+  { name: 'Toggl', url: 'toggl.com', logo: '⏱️', desc: 'Time tracking tools. Remote-first with flexible hours.', category: 'company' },
+  { name: 'Toptal', url: 'toptal.com', logo: '🎯', desc: 'Elite freelance network. Remote work resources and guides.', category: 'company' },
+  { name: 'X-Team', url: 'x-team.com', logo: '🎮', desc: 'Remote developers for hire. Remote work blog and community.', category: 'company' },
+  { name: 'Help Scout', url: 'helpscout.com', logo: '📮', desc: 'Customer support software. Remote-first culture.', category: 'company' },
+  { name: 'Hotjar', url: 'hotjar.com', logo: '🔥', desc: 'Behavior analytics. Fully distributed team.', category: 'company' },
+  { name: 'Slack', url: 'slack.com', logo: '💬', desc: 'Team communication platform. Remote work resources.', category: 'tool' },
+  { name: 'Notion', url: 'notion.so', logo: '📓', desc: 'All-in-one workspace for notes, docs, and collaboration.', category: 'tool' },
+  { name: 'Loom', url: 'loom.com', logo: '📹', desc: 'Async video messaging. Essential for remote teams.', category: 'tool' },
+  { name: 'Miro', url: 'miro.com', logo: '🎨', desc: 'Online collaborative whiteboard platform.', category: 'tool' },
+  { name: 'Around', url: 'around.co', logo: '🔊', desc: 'Voice-only collaboration for remote dev teams.', category: 'tool' },
+  { name: 'Tuple', url: 'tuple.app', logo: '👥', desc: 'Remote pair programming tool for developers.', category: 'tool' },
+  { name: 'Krisp', url: 'krisp.ai', logo: '🔇', desc: 'AI noise cancellation for calls and meetings.', category: 'tool' },
+  { name: 'Clockify', url: 'clockify.me', logo: '🕐', desc: 'Free time tracker for teams.', category: 'tool' },
+  { name: 'Timezone.io', url: 'timezone.io', logo: '🌎', desc: 'Keep track of your remote team time zones.', category: 'tool' },
+  { name: 'Remote: Office Not Required', url: 'basecamp.com/books/remote', logo: '📚', desc: 'Book by Jason Fried & DHH. The remote work bible.', category: 'guide' },
+  { name: 'GitLab Remote Playbook', url: 'about.gitlab.com/company/culture/all-remote', logo: '📖', desc: 'The definitive guide to remote work from the largest all-remote company.', category: 'guide' },
+  { name: 'Zapier Guide to Remote Work', url: 'zapier.com/resources/guides/remote-work', logo: '📘', desc: 'Ultimate guide to remote work with practical tips.', category: 'guide' },
+  { name: 'Remote.co', url: 'remote.co', logo: '🏠', desc: 'Q&A, articles, and resources for remote workers and companies.', category: 'guide' },
+  { name: 'NoDesk', url: 'nodesk.co', logo: '📡', desc: 'Articles, guides, and resources for remote workers.', category: 'guide' },
+  { name: 'Hacker News: Who is Hiring', url: 'hnhiring.me', logo: '🟧', desc: 'Monthly remote job thread aggregator from HN.', category: 'aggregator' }
+]
+
 const AI_COMPANIES = [
   { name: 'OpenAI', url: 'openai.com', logo: '🤖', desc: 'Creator of ChatGPT and GPT-4. Leading AI research lab focused on artificial general intelligence.', tags: ['research', 'saas'], careers: 'https://openai.com/careers' },
   { name: 'Anthropic', url: 'anthropic.com', logo: '🧠', desc: 'AI safety company building Claude, a helpful, harmless, and honest AI assistant.', tags: ['research', 'saas'], careers: 'https://www.anthropic.com/careers' },
@@ -1817,6 +1886,41 @@ function initAI() {
   if (aiInitialized) return
   aiInitialized = true
   renderAI(AI_COMPANIES)
+}
+
+function filterResources() {
+  const q = document.getElementById('res-search').value.toLowerCase()
+  const cat = document.getElementById('res-cat').value
+  const filtered = REMOTE_RESOURCES.filter(r => {
+    if (q && !`${r.name} ${r.desc} ${r.url}`.toLowerCase().includes(q)) return false
+    if (cat && r.category !== cat) return false
+    return true
+  })
+  renderResources(filtered)
+}
+
+function renderResources(list) {
+  const grid = document.getElementById('res-grid')
+  if (!list.length) {
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><h3>No resources found</h3><p>Try a different search or category</p></div>'
+    return
+  }
+  grid.innerHTML = list.map(r => `
+    <div class="ai-card">
+      <div class="ai-card-top">
+        <div class="ai-logo">${r.logo}</div>
+        <div style="flex:1">
+          <div class="ai-name">${r.name}</div>
+          <div class="ai-url">${r.url}</div>
+        </div>
+      </div>
+      <div class="ai-desc">${r.desc}</div>
+      <div style="margin-top:12px;display:flex;gap:8px">
+        <span class="pill">${r.category.replace('-', ' ')}</span>
+        <a href="https://${r.url}" target="_blank" class="btn btn-gold btn-sm" style="margin-left:auto">Visit ↗</a>
+      </div>
+    </div>
+  `).join('')
 }
 
 function filterAI() {
@@ -1921,6 +2025,7 @@ function updateLoginButton() {
 initDims()
 updateNav()
 updateLoginButton()
+renderResources(REMOTE_RESOURCES)
 search()
 
 </script>
